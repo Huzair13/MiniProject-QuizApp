@@ -1,0 +1,50 @@
+Quiz App
+
+Login or Signup
+
+If already they have account means - Login and generate token to keep logged in 
+If they dont have account means Signup - Get user details and create a new user and rdirect to login and then login 
+
+Signup 
+Get the User Role - Student or Teacher
+If the user is Student - get his educational Qualification for user creation
+
+If the use is teacher - get his Designation or Qualification for user creation
+
+Students Usage :
+when Student login a token will be generated for authentication and authorization
+
+--Students will be able to only attend the quiz.
+--A Student can attend the quiz by something unique like by Quiz ID.
+--Whenever he attends the quiz points will be generated and displayed for the particular quiz.
+--As well as a global points will be calculated for every student user to increase his profile weightage
+--A Student can give feedback to the quiz and the experience after the completion of the quiz
+--He can see the Toppers and his position in the scoreboard after the completion of the Quiz
+--Student can see the correct answer and the answer given by him after the completion of the Quiz
+
+
+Teachers Usage :
+--Teachers can also attend the Quiz using the Unique QuizID.
+--Teachers will not have Points in their profile
+--Teacher can create the Quiz
+--They can Create any number of Questions in the Quiz
+--They should be ased to choice the question type when they tries to create a question
+--The question types alowed will be MCQ or FillUps
+--If the Question type is MCQ the teachers should give the options and the correction answers in along with the Question details
+--If the Question type is FillUps the teachers should give the correct Answer alone with the Question Deatils.
+--Teachers can give points to the question
+--They can edit the Quiz and Questions
+--They can change the questions in the Quiz
+--They can Delete the Quiz
+--The teacher can see the scores of all the Responses for the Quiz
+--They can see the students answer for the question and it helps to evaluate which question was answered 
+rightly and which question was answered wrongly by the students
+--Teacher can see all of his old Questions created by him 
+--Teacher can reuse his old questions created for some other quizzes also
+--A Teacher can create any number of Quiz
+--Teacher can specify the start Time and end time of the Quiz
+--If the Student try to attend the quiz after or before the specified time he can't able to attend it
+
+
+
+
