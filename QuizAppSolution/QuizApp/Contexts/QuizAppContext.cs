@@ -23,10 +23,12 @@ namespace QuizApp.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //user
             modelBuilder.Entity<Teacher>().HasData(
                 new Teacher { Id = 101, Name = "Janu", Email = "janu@gmail.com", MobileNumber = "1234567890", DateOfBirth = new DateTime(1990, 1, 1),Designation="HOD",NumsOfQuestionsCreated =2,NumsOfQuizCreated=1}
             );
 
+            //Question - MCQ
             modelBuilder.Entity<MultipleChoice>().HasData(
                 new MultipleChoice
                 {
@@ -46,6 +48,7 @@ namespace QuizApp.Contexts
                 }
             );
 
+            //Question - FillUps
             modelBuilder.Entity<FillUps>().HasData(
                 new FillUps
                 {
@@ -61,10 +64,12 @@ namespace QuizApp.Contexts
                 }
             );
 
+            //Quiz 
             modelBuilder.Entity<Quiz>().HasData(
                 new Quiz { Id = 1, QuizName = "Sample Quiz", QuizDescription = "A sample quiz", QuizType = "Practice", CreatedOn = DateTime.Now, NumOfQuestions = 2, TotalPoints = 25 ,QuizCreatedBy=101}
             );
 
+            //QuizQuestion
             modelBuilder.Entity<QuizQuestion>().HasData(
                 new QuizQuestion { QuizId = 1, QuestionId = 201 },
                 new QuizQuestion { QuizId = 1, QuestionId = 202 }
