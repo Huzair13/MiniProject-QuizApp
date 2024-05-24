@@ -4,6 +4,7 @@ namespace QuizApp.Models
 {
     public class User
     {
+
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
@@ -19,8 +20,6 @@ namespace QuizApp.Models
                 return age;
             }
         }
-
-        public UserDetails UserDetails { get; set; }
 
     }
 }

@@ -8,6 +8,7 @@ namespace QuizApp.Models
         Medium,
         Hard
     }
+
     public class Question
     {
         [Key]

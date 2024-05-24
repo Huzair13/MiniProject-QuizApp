@@ -68,3 +68,5 @@ C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\obj\Debug\net6.0\re
 C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\obj\Debug\net6.0\QuizApp.pdb
 C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\obj\Debug\net6.0\QuizApp.genruntimeconfig.cache
 C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\obj\Debug\net6.0\ref\QuizApp.dll
+C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\bin\Debug\net6.0\log4net.dll
+C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\bin\Debug\net6.0\Microsoft.Extensions.Logging.Log4Net.AspNetCore.dll
