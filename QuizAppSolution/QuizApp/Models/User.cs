@@ -11,6 +11,7 @@ namespace QuizApp.Models
         public string Email { get; set; }
         public string MobileNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public string UserType { get; set; }
         public int Age
         {
             get

@@ -34,7 +34,6 @@ namespace QuizApp.Contexts
                 {
                     Id = 201,
                     QuestionText = "What is the capital of France?",
-                    QuestionType = "Multiple Choice",
                     Points = 10,
                     Category = "Geography",
                     DifficultyLevel = DifficultyLevel.Easy,
@@ -53,7 +52,6 @@ namespace QuizApp.Contexts
                 {
                     Id = 202,
                     QuestionText = "What is the largest planet in our solar system?",
-                    QuestionType = "Fill in the Blank",
                     Points = 15,
                     Category = "Science",
                     DifficultyLevel = DifficultyLevel.Medium,
@@ -103,7 +101,6 @@ namespace QuizApp.Contexts
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
-
             modelBuilder.Entity<Question>()
                 .HasOne(q => q.CreatedByUser)
                 .WithMany(u => u.QuestionsCreated)
@@ -117,6 +114,18 @@ namespace QuizApp.Contexts
                 .HasForeignKey(q => q.QuizCreatedBy)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
+
+            modelBuilder.Entity<Question>()
+                .HasDiscriminator<string>("QuestionType")
+                .HasValue<Question>("Question")
+                .HasValue<MultipleChoice>("MultipleChoice")
+                .HasValue<FillUps>("Fillups");
+
+            modelBuilder.Entity<User>()
+               .HasDiscriminator<string>("UserType")
+               .HasValue<User>("User")
+               .HasValue<Student>("Student")
+               .HasValue<Teacher>("Teacher");
         }
     }
 }

@@ -75,13 +75,27 @@ namespace QuizApp
             #region repositories
             builder.Services.AddScoped<IRepository<int, Student>, StudentRepository>();
             builder.Services.AddScoped<IRepository<int, Teacher>, TeacherRepository>();
+            builder.Services.AddScoped<IRepository<int,User>, UserRepository>();
             builder.Services.AddScoped<IRepository<int, UserDetails>, UserDetailRepository>();
+            builder.Services.AddScoped<IRepository<int, MultipleChoice>, MultipleChoiceRepository>();
+            builder.Services.AddScoped<IRepository<int, FillUps>, FillUpsRepository>();
+            builder.Services.AddScoped<IRepository<int, Question>, QuestionRepository>();
+            builder.Services.AddScoped<IRepository<int,Quiz>,QuizRepository>();
             #endregion
 
             #region services
             builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddScoped<ITokenServices, TokenServices>();
+            builder.Services.AddScoped<IQuestionServices, QuestionServices>();
+            builder.Services.AddScoped<IQuizServices,QuizServices>();
             #endregion
+
+            //builder.Services.AddControllers()
+            //    .AddJsonOptions(options =>
+            //    {
+            //        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            //        options.JsonSerializerOptions.MaxDepth = 64;
+            //    });
 
             var app = builder.Build();
 

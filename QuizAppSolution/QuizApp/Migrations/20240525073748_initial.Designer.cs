@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizApp.Contexts;
 
@@ -11,9 +12,10 @@ using QuizApp.Contexts;
 namespace QuizApp.Migrations
 {
     [DbContext(typeof(QuizAppContext))]
-    partial class QuizAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240525073748_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,7 +107,7 @@ namespace QuizApp.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2024, 5, 26, 9, 9, 8, 297, DateTimeKind.Local).AddTicks(9115),
+                            CreatedOn = new DateTime(2024, 5, 25, 13, 7, 48, 483, DateTimeKind.Local).AddTicks(6565),
                             NumOfQuestions = 2,
                             QuizCreatedBy = 101,
                             QuizDescription = "A sample quiz",
@@ -233,7 +235,7 @@ namespace QuizApp.Migrations
                         {
                             Id = 202,
                             Category = "Science",
-                            CreatedDate = new DateTime(2024, 5, 26, 9, 9, 8, 297, DateTimeKind.Local).AddTicks(9091),
+                            CreatedDate = new DateTime(2024, 5, 25, 13, 7, 48, 483, DateTimeKind.Local).AddTicks(6531),
                             DifficultyLevel = 1,
                             Points = 15m,
                             QuestionCreatedBy = 101,
@@ -273,7 +275,7 @@ namespace QuizApp.Migrations
                         {
                             Id = 201,
                             Category = "Geography",
-                            CreatedDate = new DateTime(2024, 5, 26, 9, 9, 8, 297, DateTimeKind.Local).AddTicks(9054),
+                            CreatedDate = new DateTime(2024, 5, 25, 13, 7, 48, 483, DateTimeKind.Local).AddTicks(6399),
                             DifficultyLevel = 0,
                             Points = 10m,
                             QuestionCreatedBy = 101,

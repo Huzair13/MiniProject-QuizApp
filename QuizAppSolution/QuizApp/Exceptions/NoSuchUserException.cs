@@ -11,6 +11,10 @@
         {
             exceptionMessage = "No such user found";
         }
+        public NoSuchUserException(string message)
+        {
+            exceptionMessage = message;
+        }
         public override string Message => exceptionMessage;
     }
 }

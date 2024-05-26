@@ -1,4 +1,7 @@
-﻿namespace QuizApp.Models
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace QuizApp.Models
 {
     public class QuizQuestion
     {
@@ -7,5 +10,6 @@
 
         public int QuestionId { get; set; }
         public Question Question { get; set; }
+
     }
 }

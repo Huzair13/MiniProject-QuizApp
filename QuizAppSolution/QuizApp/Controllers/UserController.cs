@@ -42,8 +42,7 @@ namespace QuizApp.Controllers
 
 
         [HttpPost("Register")]
-        [ProducesResponseType(typeof(Student), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Teacher), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RegisterReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<User>> Register([FromBody] UserInputDTO userInputDTO)
         {

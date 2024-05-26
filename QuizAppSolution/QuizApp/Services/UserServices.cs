@@ -18,17 +18,20 @@ namespace QuizApp.Services
         private readonly ITokenServices _tokenServices;
         private readonly IRepository<int,Teacher> _teacherRepo;
         private readonly IRepository<int, Student> _studentRepo;
+        private readonly IRepository<int, User> _userRepo;
         private readonly QuizAppContext _context;
 
         //DEPENDENCY INJECTION
         public UserServices(IRepository<int, UserDetails> userDetailsRepo,
                             ITokenServices tokenServices, IRepository<int, Teacher> teacherRepo,
-                            IRepository<int, Student> studentRepo, QuizAppContext context)
+                            IRepository<int, Student> studentRepo, QuizAppContext context, 
+                            IRepository<int,User> userRepo)
         {
             _userDetailsRepo = userDetailsRepo;
             _tokenServices = tokenServices;
             _teacherRepo = teacherRepo;
             _studentRepo = studentRepo;
+            _userRepo = userRepo;
             _context = context;
         }
 
@@ -82,35 +85,23 @@ namespace QuizApp.Services
 
         //CHECK USER ROLE
         private async Task<string> CheckUserRole(UserLoginDTO loginDTO)
-        {
-            Teacher teacher = null;
+        { 
             try
             {
-                teacher = await _teacherRepo.Get(loginDTO.UserId);
-                return "Teacher";
-            }
-            catch (NoSuchUserException ex)
-            {
-                teacher = null;
-            }
+                User user = await _userRepo.Get(loginDTO.UserId);
+                return user.UserType;
 
-            Student student = null;
-            try
-            {
-                student = await _studentRepo.Get(loginDTO.UserId);
-                return "Student";
             }
             catch (NoSuchUserException ex)
             {
-                student = null;
+                throw new NoSuchUserException(ex.Message);
             }
-            return null;
         }
 
         //MAP USER TO LOGIN RETURN
         private async Task<LoginReturnDTO> MapUsereToLoginReturn(User user)
         {
-            string role = GetUserRole(user);
+            string role = user.UserType;
             LoginReturnDTO returnDTO = new LoginReturnDTO();
             returnDTO.userID = user.Id;
             returnDTO.Role = role;
@@ -118,20 +109,6 @@ namespace QuizApp.Services
             return returnDTO;
         }
 
-        //GET USER ROLE
-        public string GetUserRole(User user)
-        {
-            string role = string.Empty;
-            if (user is Teacher)
-            {
-                role = "Teacher";
-            }
-            else if(user is Student)
-            {
-                role = "Student";
-            }
-            return role;
-        }
 
         //COMPARE PASSWORD
         private bool ComparePassword(byte[] encrypterPass, byte[] password)
@@ -184,9 +161,12 @@ namespace QuizApp.Services
             }
             catch (UserAlreadyExistsException ex)
             {
-                throw new UserAlreadyExistsException();
+                throw new UserAlreadyExistsException(ex.Message);
             }
-            catch (Exception) { }
+            catch (Exception) 
+            { 
+
+            }
             await RevertStudentAction(student, userDetail);
             throw new UnableToRegisterException("Not able to register at this moment");
         }
