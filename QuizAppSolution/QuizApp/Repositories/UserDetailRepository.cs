@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizApp.Contexts;
+using QuizApp.Exceptions;
 using QuizApp.Interfaces;
 using QuizApp.Models;
 
@@ -34,7 +35,7 @@ namespace QuizApp.Repositories
 
         public async Task<UserDetails> Get(int key)
         {
-            return (await _context.UsersDetails.SingleOrDefaultAsync(u => u.UserId == key)) ?? throw new Exception("No user with the given ID");
+            return (await _context.UsersDetails.SingleOrDefaultAsync(u => u.UserId == key)) ?? throw new NoSuchUserException(key);
         }
 
         public async Task<IEnumerable<UserDetails>> Get()

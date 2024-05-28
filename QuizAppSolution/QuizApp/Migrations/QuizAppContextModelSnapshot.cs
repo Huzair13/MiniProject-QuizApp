@@ -40,6 +40,9 @@ namespace QuizApp.Migrations
                     b.Property<int>("DifficultyLevel")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("Points")
                         .HasColumnType("decimal(18,2)");
 
@@ -74,6 +77,12 @@ namespace QuizApp.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMultipleAttemptAllowed")
+                        .HasColumnType("bit");
+
                     b.Property<int>("NumOfQuestions")
                         .HasColumnType("int");
 
@@ -105,7 +114,9 @@ namespace QuizApp.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2024, 5, 26, 9, 9, 8, 297, DateTimeKind.Local).AddTicks(9115),
+                            CreatedOn = new DateTime(2024, 5, 28, 9, 56, 23, 836, DateTimeKind.Local).AddTicks(2096),
+                            IsDeleted = false,
+                            IsMultipleAttemptAllowed = false,
                             NumOfQuestions = 2,
                             QuizCreatedBy = 101,
                             QuizDescription = "A sample quiz",
@@ -117,28 +128,38 @@ namespace QuizApp.Migrations
 
             modelBuilder.Entity("QuizApp.Models.QuizQuestion", b =>
                 {
-                    b.Property<int>("QuizId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.HasKey("QuizId", "QuestionId");
+                    b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("QuizId");
 
                     b.ToTable("QuizQuestions");
 
                     b.HasData(
                         new
                         {
-                            QuizId = 1,
-                            QuestionId = 201
+                            Id = 301,
+                            QuestionId = 201,
+                            QuizId = 1
                         },
                         new
                         {
-                            QuizId = 1,
-                            QuestionId = 202
+                            Id = 302,
+                            QuestionId = 202,
+                            QuizId = 1
                         });
                 });
 
@@ -150,20 +171,58 @@ namespace QuizApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("ScoredPoints")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<TimeSpan>("TimeTaken")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("QuizId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Responses");
+                });
+
+            modelBuilder.Entity("QuizApp.Models.ResponseAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResponseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubmittedAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("ResponseId");
+
+                    b.ToTable("ResponseAnswers");
                 });
 
             modelBuilder.Entity("QuizApp.Models.User", b =>
@@ -233,8 +292,9 @@ namespace QuizApp.Migrations
                         {
                             Id = 202,
                             Category = "Science",
-                            CreatedDate = new DateTime(2024, 5, 26, 9, 9, 8, 297, DateTimeKind.Local).AddTicks(9091),
+                            CreatedDate = new DateTime(2024, 5, 28, 9, 56, 23, 836, DateTimeKind.Local).AddTicks(2085),
                             DifficultyLevel = 1,
+                            IsDeleted = false,
                             Points = 15m,
                             QuestionCreatedBy = 101,
                             QuestionText = "What is the largest planet in our solar system?",
@@ -273,8 +333,9 @@ namespace QuizApp.Migrations
                         {
                             Id = 201,
                             Category = "Geography",
-                            CreatedDate = new DateTime(2024, 5, 26, 9, 9, 8, 297, DateTimeKind.Local).AddTicks(9054),
+                            CreatedDate = new DateTime(2024, 5, 28, 9, 56, 23, 836, DateTimeKind.Local).AddTicks(2059),
                             DifficultyLevel = 0,
+                            IsDeleted = false,
                             Points = 10m,
                             QuestionCreatedBy = 101,
                             QuestionText = "What is the capital of France?",
@@ -360,13 +421,13 @@ namespace QuizApp.Migrations
                     b.HasOne("QuizApp.Models.Question", "Question")
                         .WithMany("QuizQuestions")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizApp.Models.Quiz", "Quiz")
                         .WithMany("QuizQuestions")
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Question");
@@ -376,13 +437,40 @@ namespace QuizApp.Migrations
 
             modelBuilder.Entity("QuizApp.Models.Response", b =>
                 {
+                    b.HasOne("QuizApp.Models.Quiz", "Quiz")
+                        .WithMany()
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("QuizApp.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Quiz");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("QuizApp.Models.ResponseAnswer", b =>
+                {
+                    b.HasOne("QuizApp.Models.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuizApp.Models.Response", "Response")
+                        .WithMany("ResponseAnswers")
+                        .HasForeignKey("ResponseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Response");
                 });
 
             modelBuilder.Entity("QuizApp.Models.UserDetails", b =>
@@ -404,6 +492,11 @@ namespace QuizApp.Migrations
             modelBuilder.Entity("QuizApp.Models.Quiz", b =>
                 {
                     b.Navigation("QuizQuestions");
+                });
+
+            modelBuilder.Entity("QuizApp.Models.Response", b =>
+                {
+                    b.Navigation("ResponseAnswers");
                 });
 
             modelBuilder.Entity("QuizApp.Models.Teacher", b =>

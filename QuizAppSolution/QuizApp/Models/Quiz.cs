@@ -15,6 +15,8 @@ namespace QuizApp.Models
 
         public int QuizCreatedBy { get; set; }
         public Teacher QuizCreatedByUser { get; set; }
+        public bool IsMultipleAttemptAllowed { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
 

@@ -28,7 +28,7 @@ namespace QuizApp.Repositories
             if (quiz != null)
             {
                 _context.Remove(quiz);
-                _context.SaveChangesAsync(true);
+                await _context.SaveChangesAsync(true);
                 return quiz;
             }
             throw new NoSuchQuizException(quizId);
@@ -36,7 +36,8 @@ namespace QuizApp.Repositories
 
         public async Task<Quiz> Get(int quizId)
         {
-            var quiz = await _context.Quizzes.FindAsync(quizId);
+            var quiz = await _context.Quizzes.Include(q => q.QuizQuestions).ThenInclude(qq => qq.Question)
+                                    .FirstOrDefaultAsync(q => q.Id == quizId);
             if (quiz != null)
             {
                 return quiz;
@@ -46,7 +47,7 @@ namespace QuizApp.Repositories
 
         public async Task<IEnumerable<Quiz>> Get()
         {
-            var quizzes = await _context.Quizzes.ToListAsync();
+            var quizzes = await _context.Quizzes.Include(q=>q.QuizQuestions).ThenInclude(qq=>qq.Question).ToListAsync();
             if (quizzes.Count != 0)
             {
                 return quizzes;

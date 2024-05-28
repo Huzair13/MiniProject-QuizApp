@@ -13,6 +13,16 @@ namespace QuizApp.Models
         [ForeignKey("UserId")]
         public User User { get; set; }
 
-        public TimeSpan TimeTaken { get; set; }
+        public int QuizId { get; set; }
+        [ForeignKey("QuizId")]
+        public Quiz Quiz { get; set; }
+
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+
+        [NotMapped]
+        public TimeSpan TimeTaken => (EndTime.HasValue) ? EndTime.Value - StartTime : TimeSpan.Zero;
+
+        public ICollection<ResponseAnswer> ResponseAnswers { get; set; } = new List<ResponseAnswer>();
     }
 }

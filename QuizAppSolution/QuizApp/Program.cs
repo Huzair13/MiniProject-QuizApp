@@ -81,13 +81,15 @@ namespace QuizApp
             builder.Services.AddScoped<IRepository<int, FillUps>, FillUpsRepository>();
             builder.Services.AddScoped<IRepository<int, Question>, QuestionRepository>();
             builder.Services.AddScoped<IRepository<int,Quiz>,QuizRepository>();
+            builder.Services.AddScoped<IRepository<int,Response>, ResponseRepository>();
             #endregion
 
             #region services
-            builder.Services.AddScoped<IUserServices, UserServices>();
+            builder.Services.AddScoped<IUserLoginAndRegisterServices, UserLoginAndRegisterServices>();
             builder.Services.AddScoped<ITokenServices, TokenServices>();
             builder.Services.AddScoped<IQuestionServices, QuestionServices>();
             builder.Services.AddScoped<IQuizServices,QuizServices>();
+            builder.Services.AddScoped<IQuizResponseServices, QuizResponseServices>();
             #endregion
 
             //builder.Services.AddControllers()

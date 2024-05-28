@@ -52,15 +52,15 @@ namespace QuizApp.Repositories
 
         public async Task<T> Update(T user)
         {
-            var userIdProperty = typeof(T).GetProperty("Id");
 
+            var userIdProperty = typeof(T).GetProperty("Id");
             var userIdValue = (int)userIdProperty.GetValue(user);
 
             var existingUser = await Get(userIdValue);
 
             if (existingUser != null)
             {
-                _context.Update(user);
+                _context.Entry(existingUser).CurrentValues.SetValues(user);
                 await _context.SaveChangesAsync();
                 return existingUser;
             }

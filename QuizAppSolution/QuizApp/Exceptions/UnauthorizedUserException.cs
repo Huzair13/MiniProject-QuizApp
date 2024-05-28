@@ -3,7 +3,7 @@
 namespace QuizApp.Exceptions
 {
     [Serializable]
-    internal class UnauthorizedUserException : Exception
+    public class UnauthorizedUserException : Exception
     {
         public UnauthorizedUserException()
         {
@@ -17,7 +17,7 @@ namespace QuizApp.Exceptions
         {
         }
 
-        protected UnauthorizedUserException(SerializationInfo info, StreamingContext context) : base(info, context)
+        public UnauthorizedUserException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

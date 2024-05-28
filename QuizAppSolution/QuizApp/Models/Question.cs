@@ -24,6 +24,7 @@ namespace QuizApp.Models
 
         public int QuestionCreatedBy { get; set; }
         public Teacher CreatedByUser { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }

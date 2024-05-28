@@ -20,6 +20,7 @@ namespace QuizApp.Contexts
         public DbSet<Question> Questions { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<QuizQuestion> QuizQuestions { get; set; }
+        public DbSet<ResponseAnswer> ResponseAnswers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -66,8 +67,8 @@ namespace QuizApp.Contexts
             );
 
             modelBuilder.Entity<QuizQuestion>().HasData(
-                new QuizQuestion { QuizId = 1, QuestionId = 201 },
-                new QuizQuestion { QuizId = 1, QuestionId = 202 }
+                new QuizQuestion { Id=301,QuizId = 1, QuestionId = 201 },
+                new QuizQuestion { Id = 302,QuizId = 1, QuestionId = 202 }
             );
 
 
@@ -84,21 +85,19 @@ namespace QuizApp.Contexts
                         .Property(q => q.Category)
                         .HasConversion<string>();
 
-            modelBuilder.Entity<QuizQuestion>()
-                .HasKey(q => new { q.QuizId, q.QuestionId });
 
             modelBuilder.Entity<QuizQuestion>()
                 .HasOne(q => q.Quiz)
                 .WithMany(q => q.QuizQuestions)
                 .HasForeignKey(q => q.QuizId)
-                .OnDelete(DeleteBehavior.Restrict)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
 
             modelBuilder.Entity<QuizQuestion>()
                 .HasOne(q => q.Question)
                 .WithMany(q => q.QuizQuestions)
                 .HasForeignKey(q => q.QuestionId)
-                .OnDelete(DeleteBehavior.Restrict)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
 
             modelBuilder.Entity<Question>()

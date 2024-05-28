@@ -27,7 +27,7 @@ namespace QuizApp.Repositories
             if (question != null)
             {
                 _context.Remove(question);
-                _context.SaveChangesAsync(true);
+                await _context.SaveChangesAsync(true);
                 return question;
             }
             throw new NoSuchQuestionException(QuestionId);
@@ -60,7 +60,7 @@ namespace QuizApp.Repositories
             if (question != null)
             {
                 _context.Update(item);
-                _context.SaveChangesAsync(true);
+                await _context.SaveChangesAsync(true);
                 return question;
             }
             throw new NoSuchQuestionException(item.Id);
