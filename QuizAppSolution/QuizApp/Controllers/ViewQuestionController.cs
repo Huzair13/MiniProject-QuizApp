@@ -15,15 +15,18 @@ namespace QuizApp.Controllers
     [ApiController]
     public class ViewQuestionController :ControllerBase
     {
+        //INITIALIZATION
         private readonly IQuestionViewServices _questionServices;
         private readonly ILogger<ViewQuestionController> _logger;
 
+        //DEPENDENCY INJECTION
         public ViewQuestionController(IQuestionViewServices questionServices, ILogger<ViewQuestionController> logger)
         {
             _questionServices = questionServices;
             _logger = logger;
         }
 
+        //GET ALL QUESTIONS
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllQuestions")]
         [ProducesResponseType(typeof(IList<QuestionReturnDTO>), StatusCodes.Status200OK)]
@@ -48,6 +51,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL MCQ QUESTIONS
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllMCQQuestions")]
         [ProducesResponseType(typeof(IList<QuestionReturnDTO>), StatusCodes.Status200OK)]
@@ -72,6 +76,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL FILL UPS QUESTIONS
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllFillUpsQuestions")]
         [ProducesResponseType(typeof(IList<FillUpsReturnDTO>), StatusCodes.Status200OK)]
@@ -96,6 +101,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL SOFT DELETED QUESTIONS
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllSoftDeletedQuestion")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -120,6 +126,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL HARD QUESTIONS
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllHardQuestions")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -144,6 +151,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL MEDIUM QUESTIONS
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllMediumQuestions")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -168,6 +176,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL EASY QUESTIONS
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllEasyQuestions")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -192,6 +201,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL QUESTION CREATED BY THE LOGGED IN USER
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllCreatedQuestion")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]

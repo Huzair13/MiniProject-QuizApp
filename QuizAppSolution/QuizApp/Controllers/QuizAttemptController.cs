@@ -14,15 +14,18 @@ namespace QuizApp.Controllers
     [Route("api/[controller]")]
     public class QuizAttemptController : ControllerBase
     {
+        //INITIALIZATION
         private readonly IQuizResponseServices _quizResponseServices;
         private readonly ILogger<QuizController> _logger;
 
+        //DEPENDENCY INJECTION
         public QuizAttemptController(IQuizResponseServices quizResponseServices, ILogger<QuizController> logger)
         {
             _quizResponseServices = quizResponseServices;
             _logger = logger;
         }
 
+        //START QUIZ
         [Authorize]
         [HttpPost("StartQuiz")]
         [ProducesResponseType(typeof(StartQuizResponseDTO), StatusCodes.Status200OK)]
@@ -54,6 +57,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //SUBMIT ANSWER
         [Authorize]
         [HttpPost("submitAnswer")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -96,6 +100,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details are not provided");
         }
 
+        //SUBMIT ALL ANSWER
         [Authorize]
         [HttpPost("submitAllAnswer")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -145,6 +150,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //CHECK RESULT
         [Authorize]
         [HttpPost("checkResult")]
         [ProducesResponseType(typeof(QuizResultDTO), StatusCodes.Status200OK)]
@@ -170,6 +176,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //LEADERBOARD
         [Authorize]
         [HttpGet("LeaderBoard")]
         [ProducesResponseType(typeof(List<LeaderboardDTO>), StatusCodes.Status200OK)]
@@ -194,6 +201,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //STUDENT LEADERBOARD
         [Authorize]
         [HttpGet("StudentLeaderBoard")]
         [ProducesResponseType(typeof(List<LeaderboardDTO>), StatusCodes.Status200OK)]
@@ -218,6 +226,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //STUDENT POSITION
         [Authorize]
         [HttpGet("GetStudentPosition")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
@@ -243,6 +252,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL RESPONSES
         [Authorize]
         [HttpGet("GetAllUserResponses")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]

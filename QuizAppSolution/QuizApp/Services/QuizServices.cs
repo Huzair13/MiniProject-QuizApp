@@ -14,16 +14,18 @@ namespace QuizApp.Services
         private readonly IRepository<int, Question> _questionRepository;
         private readonly IRepository<int, Teacher> _teacherRepo;
         private readonly IRepository<int,User> _userRepo;
+        private readonly ILogger<QuizServices> _logger;
 
 
         //INJECTING REPOSITORIES
         public QuizServices(IRepository<int, Quiz> quizRepo, IRepository<int, Question> questionRepository
-            , IRepository<int, Teacher> teacherRepo, IRepository<int, User> userRepo)
+            , IRepository<int, Teacher> teacherRepo, IRepository<int, User> userRepo, ILogger<QuizServices> logger)
         {
             _quizRepo = quizRepo;
             _questionRepository = questionRepository;
             _teacherRepo = teacherRepo;
             _userRepo = userRepo;
+            _logger = logger;
         }
 
         //ADD QUIZ 
@@ -54,9 +56,11 @@ namespace QuizApp.Services
             }
             catch(NoSuchUserException ex)
             {
+                _logger.LogError(ex, "Question Not found at AddQuiz service");
                 throw new NoSuchUserException(ex.Message);
             }
             catch(Exception ex) {
+                _logger.LogError(ex, "An error occurred at AddQuiz service");
                 throw new Exception(ex.Message);
             }
             
@@ -165,23 +169,28 @@ namespace QuizApp.Services
             }
             catch (UnauthorizedToEditException ex)
             {
+               
                 throw new UnauthorizedToEditException();
             }
             catch(QuizDeletedException ex)
             {
+                _logger.LogError(ex, "Quiz Deleted exception at EditQuizByID service");
                 throw new QuizDeletedException();
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at EditQuizByID service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch(NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at EditQuizByID service");
                 throw new NoSuchQuestionException(ex.Message);
             }
             
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at EditQuizByID service");
                 throw new Exception(ex.Message);
             }
         }
@@ -217,14 +226,17 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at DeleteQuizByID service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch(UnauthorizedToDeleteException ex)
             {
+                _logger.LogError(ex, "Unauthorized to delete exception at DeleteQuizByIDAsync service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at DeleteQuizByIDAsync service");
                 throw new Exception(ex.Message);
             }
         }
@@ -261,14 +273,17 @@ namespace QuizApp.Services
             }
             catch(UnauthorizedToDeleteException ex)
             {
+                _logger.LogError(ex, "Unauthorized exception at SoftDeleteQuizByID service");
                 throw ex;
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at SoftDeleteQuizByID service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at SoftDeleteQuizByID service");
                 throw new Exception(ex.Message);
             }
         }
@@ -302,14 +317,17 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at UndoSoftDeleteQuizByID service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch(UnauthorizedToEditException ex)
             {
+                _logger.LogError(ex, "Unauthorized exception at UndoSoftDeleteQuizByID service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at UndoSoftDeleteQuizByID service");
                 throw new Exception(ex.Message);
             }
         }
@@ -333,10 +351,12 @@ namespace QuizApp.Services
             }
             catch(NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at GetAllQuizzes Service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetAllQuizzes Service");
                 throw new Exception(ex.Message);
             }
         }
@@ -360,10 +380,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found while at GetAllSoftDeletedQuizzes service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetAllSoftDeletedQuizzes service");
                 throw new Exception(ex.Message);
             }
         }
@@ -387,10 +409,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at GetAllQuizzesCreatedByLoggedInTeacherAsync service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetAllQuizzesCreatedByLoggedInTeacherAsync service");
                 throw new Exception(ex.Message);
             }
         }
@@ -432,14 +456,17 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at CreateQuizFromExistingQuiz service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch (NoSuchUserException ex)
             {
+                _logger.LogError(ex, "User Not found at CreateQuizFromExistingQuiz service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at CreateQuizFromExistingQuiz service");
                 throw new Exception(ex.Message);
             }
         }
@@ -476,18 +503,22 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at AddQuestionsToQuizAsync service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at AddQuestionsToQuizAsync service");
                 throw new NoSuchQuestionException(ex.Message);
             }
             catch (UnauthorizedToEditException ex)
             {
+                _logger.LogError(ex, "Unauthorized exception at AddQuestionsToQuizAsync service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at AddQuestionsToQuizAsync service");
                 throw new Exception(ex.Message);
             }
         }

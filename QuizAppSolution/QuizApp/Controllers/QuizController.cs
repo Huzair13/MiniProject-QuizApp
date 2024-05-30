@@ -15,15 +15,18 @@ namespace QuizApp.Controllers
     [ApiController]
     public class QuizController : ControllerBase
     {
+        //INITIALIZATION
         private readonly IQuizServices _quizServices;
         private readonly ILogger<QuizController> _logger;
 
+        //DEPENDENCY INJECTION
         public QuizController(IQuizServices quizServices, ILogger<QuizController> logger)
         {
             _quizServices = quizServices;
             _logger = logger;
         }
 
+        //ADD QUIZ
         [Authorize(Roles = "Teacher")]
         [HttpPost("AddQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -66,7 +69,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details are not provided");
         }
 
-
+        //EDIT QUIZ
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -110,6 +113,7 @@ namespace QuizApp.Controllers
 
         }
 
+        //DELETE QUIZ
         [Authorize(Roles = "Teacher")]
         [HttpDelete("DeleteQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -152,7 +156,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details are not provided");
         }
 
-
+        //SOFT DELETE QUIZ
         [Authorize(Roles = "Teacher")]
         [HttpDelete("SoftDeleteQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -196,6 +200,7 @@ namespace QuizApp.Controllers
 
         }
 
+        //UNDO SOFT DELETE
         [Authorize(Roles = "Teacher")]
         [HttpPost("UndoSoftDelete")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -238,6 +243,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details are not provided");
         }
 
+        //CREATE QUIZ FROM EXISTING QUIZ
         [Authorize(Roles = "Teacher")]
         [HttpPost("CreateQuizByExistingQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -275,6 +281,7 @@ namespace QuizApp.Controllers
 
         }
 
+        //ADD QUESTIONS
         [Authorize(Roles = "Teacher")]
         [HttpPost("AddQuestions")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]

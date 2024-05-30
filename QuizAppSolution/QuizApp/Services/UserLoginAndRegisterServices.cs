@@ -19,12 +19,13 @@ namespace QuizApp.Services
         private readonly IRepository<int,Teacher> _teacherRepo;
         private readonly IRepository<int, Student> _studentRepo;
         private readonly IRepository<int, User> _userRepo;
+        private readonly ILogger<UserLoginAndRegisterServices> _logger;
 
         //DEPENDENCY INJECTION
         public UserLoginAndRegisterServices(IRepository<int, User> userRepo,
                             IRepository<int, UserDetails> userDetailsRepo,
                             ITokenServices tokenServices, IRepository<int, Teacher> teacherRepo,
-                            IRepository<int, Student> studentRepo
+                            IRepository<int, Student> studentRepo, ILogger<UserLoginAndRegisterServices> logger
                             )
         {
             _userDetailsRepo = userDetailsRepo;
@@ -32,6 +33,7 @@ namespace QuizApp.Services
             _teacherRepo = teacherRepo;
             _studentRepo = studentRepo;
             _userRepo = userRepo;
+            _logger = logger;
         }
 
         //LOGIN SERVICE
@@ -56,14 +58,17 @@ namespace QuizApp.Services
             }
             catch (NoSuchUserException ex)
             {
+                _logger.LogError(ex, "User Not Found at Login service");
                 throw new UnauthorizedUserException("Invalid username or password");
             }
             catch(UnauthorizedUserException ex)
             {
+                _logger.LogError(ex, "Unauthorized at Login service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An Error occured at Login service");
                 throw new Exception(ex.Message);
             }
         }
@@ -156,6 +161,7 @@ namespace QuizApp.Services
             }
             catch (UserAlreadyExistsException ex)
             {
+                _logger.LogError(ex, "User Already Exists Error at Student Register service");
                 throw new UserAlreadyExistsException(ex.Message);
             }
             catch (Exception) 
@@ -201,6 +207,7 @@ namespace QuizApp.Services
             }
             catch (UserAlreadyExistsException ex)
             {
+                _logger.LogError(ex, "User Already Exists Error at Teacher Register service");
                 throw new UserAlreadyExistsException();
             }
             catch (Exception) { }

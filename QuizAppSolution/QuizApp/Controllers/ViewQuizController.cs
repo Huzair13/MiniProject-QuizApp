@@ -12,15 +12,18 @@ namespace QuizApp.Controllers
     [ApiController]
     public class ViewQuizController : ControllerBase
     {
+        //INITIALIZATION
         private readonly IQuizServices _quizServices;
         private readonly ILogger<QuizController> _logger;
 
+        //DEPENDENCY INJECTION
         public ViewQuizController(IQuizServices quizServices, ILogger<QuizController> logger)
         {
             _quizServices = quizServices;
             _logger = logger;
         }
 
+        //GET ALL QUIZZES
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllQuizzes")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -44,7 +47,8 @@ namespace QuizApp.Controllers
                 return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
-
+        
+        //GET ALL SOFT DELETED QUIZZES
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllSoftDeletedQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -69,6 +73,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //GET ALL QUIZZES CREATED BY THE LOGGED IN TEACHER
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetQuizzesBySpecificTeacher")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]

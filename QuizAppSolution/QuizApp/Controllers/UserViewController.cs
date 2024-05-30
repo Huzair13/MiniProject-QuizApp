@@ -11,16 +11,18 @@ namespace QuizApp.Controllers
     [ApiController]
     public class UserViewController : ControllerBase
     {
+        //INITIALIZATION
         private readonly IUserServices _userServices;
         private readonly ILogger<UserViewController> _logger;
 
+        //DEPENDENCY INJECTION
         public UserViewController(IUserServices userServices ,ILogger<UserViewController> logger) 
         {
             _userServices = userServices;
             _logger = logger;
         }
 
-
+        //VIEW STUDENT PROFILE
         [Authorize(Roles = "Student")]
         [HttpGet("ViewStudentProfile")]
         [ProducesResponseType(typeof(StudentReturnDTO), StatusCodes.Status200OK)]
@@ -40,6 +42,7 @@ namespace QuizApp.Controllers
             }
         }
 
+        //VIEW TEACHER PROFILE
         [Authorize(Roles = "Teacher")]
         [HttpGet("ViewTeacherProfile")]
         [ProducesResponseType(typeof(TeacherReturnDTO), StatusCodes.Status200OK)]

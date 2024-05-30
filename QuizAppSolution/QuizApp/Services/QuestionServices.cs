@@ -19,17 +19,20 @@ namespace QuizApp.Services
         private readonly IRepository<int, FillUps> _fillUpsRepo;
         private readonly IRepository<int, MultipleChoice> _multipleChoiceRepo;
         private readonly IRepository<int, Teacher> _teacherRepo;
+        private readonly ILogger<QuestionServices> _logger;
 
         //INJECTING REPOSITORIES
         public QuestionServices(IRepository<int, Question> reposiroty, 
                                 IRepository<int, FillUps> fillUpsRepo, 
                                 IRepository<int, MultipleChoice> mcqRepo,
-                                 IRepository<int,Teacher> teacherRepo)
+                                 IRepository<int,Teacher> teacherRepo,
+                                 ILogger<QuestionServices> logger)
         {
             _repository = reposiroty;
             _fillUpsRepo = fillUpsRepo;
             _multipleChoiceRepo = mcqRepo;
             _teacherRepo = teacherRepo;
+            _logger = logger;
         }
 
         //ADD MCQ QUESTION
@@ -58,10 +61,12 @@ namespace QuizApp.Services
             }
             catch(NoSuchUserException ex)
             {
+                _logger.LogError(ex, "No user found error at Add Mcq Question Services");
                 throw new NoSuchUserException(ex.Message);
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at the MCQ Question Services");
                 throw new Exception(ex.Message);
             }
         }
@@ -93,10 +98,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchUserException ex)
             {
+                _logger.LogError(ex, "User Not found at FillUps Question service");
                 throw new NoSuchUserException(ex.Message);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at FillUps Question services");
                 throw new Exception(ex.Message);
             }
         }
@@ -217,16 +224,19 @@ namespace QuizApp.Services
 
 
             }
-            catch(NoSuchQuestionException e)
+            catch(NoSuchQuestionException ex)
             {
-                throw new NoSuchQuestionException(e.Message);
+                _logger.LogError(ex, "Question Not found at edit fill ups service");
+                throw new NoSuchQuestionException(ex.Message);
             }
             catch(UnauthorizedToEditException ex)
             {
+                _logger.LogError(ex, "An error occurred at edit fillups service");
                 throw ex ;
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at the edit fillups service");
                 throw ex;
             }
 
@@ -292,16 +302,19 @@ namespace QuizApp.Services
 
 
             }
-            catch (NoSuchQuestionException e)
+            catch (NoSuchQuestionException ex)
             {
-                throw new NoSuchQuestionException(e.Message);
+                _logger.LogError(ex, "Question Not found at the edit MCQ service");
+                throw new NoSuchQuestionException(ex.Message);
             }
             catch(UnauthorizedToEditException ex)
             {
+                _logger.LogError(ex, "An error occurred at the edit MCQ service");
                 throw ex;
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at edit MCQ service");
                 throw ex;
             }
 
@@ -380,18 +393,22 @@ namespace QuizApp.Services
             }
             catch(NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at Delete Question By ID service");
                 throw new NoSuchQuestionException(ex.Message);
             }
             catch(UnauthorizedToDeleteException ex)
             {
+                _logger.LogError(ex, "Unathorized exception at Delete Question By ID service");
                 throw ex;
             }
             catch(NoSuchUserException ex)
             {
+                _logger.LogError(ex, "No User found exception at Delete Question By ID service");
                 throw ex;
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at Delete the Question By ID service");
                 throw new Exception(ex.Message);
             }
         }
@@ -425,14 +442,17 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at Soft Delete the Question By ID service");
                 throw new NoSuchQuestionException(ex.Message);
             }
             catch(UnauthorizedToDeleteException ex)
             {
+                _logger.LogError(ex, "Unathorized at soft Delete the Question By ID service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at soft delete the question service");
                 throw new Exception(ex.Message);
             }
         }
@@ -463,14 +483,17 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at undo Soft Delete service");
                 throw new NoSuchQuestionException(ex.Message);
             }
             catch (UnauthorizedToEditException ex)
             {
+                _logger.LogError(ex, "Unathorized at undo the soft Delete service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at undo soft delete question service");
                 throw new Exception(ex.Message);
             }
         }

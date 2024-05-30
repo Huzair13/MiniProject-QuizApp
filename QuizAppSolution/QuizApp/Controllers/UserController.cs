@@ -14,9 +14,11 @@ namespace QuizApp.Controllers
     [ApiController]
     public class UserController :ControllerBase
     {
+        //INITIALIZATION
         private readonly IUserLoginAndRegisterServices _userLoginService;
         private readonly ILogger<QuizController> _logger;
 
+        //DEPENDNCY INJECTION
         public UserController(IUserLoginAndRegisterServices userLoginService, ILogger<QuizController> logger)
         {
             _userLoginService = userLoginService;
@@ -24,6 +26,7 @@ namespace QuizApp.Controllers
         }
 
 
+        //LOGIN
         [HttpPost("Login")]
         [ProducesResponseType(typeof(LoginReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status401Unauthorized)]
@@ -48,7 +51,7 @@ namespace QuizApp.Controllers
 
         }
 
-
+        //REGISTER
         [HttpPost("Register")]
         [ProducesResponseType(typeof(RegisterReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]

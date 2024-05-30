@@ -16,19 +16,21 @@ namespace QuizApp.Services
         private readonly IRepository<int, Response> _responseRepo;
         private readonly IRepository<int,Student> _studentRepo;
         private readonly IRepository<int, User> _userRepo;
+        private readonly ILogger<QuizResponseServices> _logger;
 
 
         //INJECTING THE REPOSITORY
         public QuizResponseServices(
             IRepository<int, Quiz> quizRepo,IRepository<int, Question> questionRepository,
             IRepository<int, Response> responseRepo, IRepository<int, Student> studentRepo
-            ,IRepository<int,User> userRepo)
+            ,IRepository<int,User> userRepo, ILogger<QuizResponseServices> logger)
         {
             _quizRepo = quizRepo;
             _questionRepository = questionRepository;
             _responseRepo = responseRepo;
             _studentRepo = studentRepo;
             _userRepo = userRepo;
+            _logger = logger;
 
         }
 
@@ -68,10 +70,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at GetQuizResult Service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "An error occured at GetQuizResult Service");
                 throw new Exception(ex.Message);
             }
 
@@ -110,14 +114,17 @@ namespace QuizApp.Services
             }
             catch(QuizAlreadyStartedException ex)
             {
+                _logger.LogError(ex, "Quiz already started error at StartQuiz service");
                 throw ex;
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at StartQuiz service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at StartQuiz service");
                 throw new Exception(ex.Message);
             }
         }
@@ -283,30 +290,37 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
-                throw new NoSuchQuizException(ex.Message);
+                _logger.LogError(ex, "Quiz Not found at SubmitAllAnswers service");
+                throw ex;
             }
             catch(QuizNotStartedException ex)
             {
+                _logger.LogError(ex, "Quiz not started error at SubmitAllAnswers service");
                 throw ex;
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at SubmitAllAnswers service");
                 throw new NoSuchQuestionException(ex.Message);
             }
             catch (UserAlreadyAnsweredTheQuestionException ex)
             {
+                _logger.LogError(ex, "Already Answered the question error at SubmitAllAnswers service");
                 throw new UserAlreadyAnsweredTheQuestionException(ex.Message);
             }
             catch(NoSuchUserException ex)
             {
+                _logger.LogError(ex, "User not found at SubmitAllAnswers service");
                 throw new NoSuchUserException(ex.Message);
             }
             catch(QuizTimeLimitExceededException ex)
             {
+                _logger.LogError(ex, "Quiz time limit exceeded error at SubmitAllAnswers service");
                 throw ex;
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "An error occurred at SubmitAllAnswers service");
                 throw new Exception(e.Message);
             }
         }
@@ -417,28 +431,33 @@ namespace QuizApp.Services
             }
             catch(NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at SubmitAnswers service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch(NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at SubmitAnswers service");
                 throw new NoSuchQuestionException(ex.Message);
             }
             catch(UserAlreadyAnsweredTheQuestionException ex)
             {
+                _logger.LogError(ex, "Already Answered the question error at SubmitAnswers service");
                 throw ex;
             }
             catch(QuizTimeLimitExceededException ex)
             {
+                _logger.LogError(ex, "Quiz time limit exceeded error at SubmitAnswers service");
                 throw ex;
             }
             catch(Exception e)
             {
+                _logger.LogError(e, "An error occurred at SubmitAnswers service");
                 throw new Exception(e.Message);
             }
             
         }
 
-
+        //GET QUIZ LEADERBOARD 
         public async Task<List<LeaderboardDTO>> GetQuizLeaderboardAsync(int quizId)
         {
             try
@@ -487,14 +506,17 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at GetQuizLeaderboard Service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetQuizLeaderboard Service");
                 throw new Exception(ex.Message);
             }
         }
 
+        //GET STUDENT LEADERBOARD
         public async Task<List<LeaderboardDTO>> GetStudentQuizLeaderboardAsync(int quizId)
         {
             try
@@ -543,10 +565,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found at GetStudentQuizLeaderboard Service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetStudentQuizLeaderboard Service");
                 throw new Exception(ex.Message);
             }
         }
@@ -568,10 +592,12 @@ namespace QuizApp.Services
             }
             catch(NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not Found at GetStudentPositionInLeaderboard service");
                 throw new NoSuchQuizException(ex.Message);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetStudentPositionInLeaderboard service");
                 throw new Exception(ex.Message);
             }
         }
@@ -633,10 +659,12 @@ namespace QuizApp.Services
             }
             catch(NoSuchResponseException ex)
             {
+                _logger.LogError(ex, "No Response Found error at GetAllUseresponses service");
                 throw new NoSuchResponseException(ex.Message);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetAllUseresponses service");
                 throw new Exception(ex.Message);
             }
         }

@@ -39,6 +39,7 @@ namespace QuizApp.Services
             }
         }
 
+        //VIEW TEACHER PROFILE
         public async Task<TeacherReturnDTO> ViewTeacherProfile(int userId)
         {
             try
@@ -54,11 +55,12 @@ namespace QuizApp.Services
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, "No User found");
+                _logger.LogError(ex, "An Error Occured");
                 throw ex;
             }
         }
 
+        //VIEW STUDENT PROFILE
         public async Task<StudentReturnDTO> ViewStudentProfile(int userId)
         {
             try
@@ -79,6 +81,7 @@ namespace QuizApp.Services
             }
         }
 
+        //MAP STUDENT TO STUDENT RETURN DTO
         private async Task<StudentReturnDTO> MapStudentToStudentReturnDTO(Student student)
         {
            StudentReturnDTO studentReturnDTO = new StudentReturnDTO() 
@@ -95,6 +98,7 @@ namespace QuizApp.Services
             return studentReturnDTO;
         }
 
+        //MAP TEACHER TO TEACHER RETURN DTO
         private async Task<TeacherReturnDTO> MapTeacherToTeacherReturnDTO(Teacher teacher)
         {
             TeacherReturnDTO teacherReturnDTO = new TeacherReturnDTO()

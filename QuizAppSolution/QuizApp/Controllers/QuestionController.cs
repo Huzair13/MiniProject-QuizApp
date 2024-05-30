@@ -27,6 +27,7 @@ namespace QuizApp.Controllers
             _logger = logger;
         }
 
+        //ADD MCQ CONTROLLER
         [Authorize(Roles = "Teacher")]
         [HttpPost("AddMCQQuestion")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
@@ -63,6 +64,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details not provided");
         }
 
+        //ADD FILL UPS
         [Authorize(Roles = "Teacher")]
         [HttpPost("AddFillUpsQuestion")]
         [ProducesResponseType(typeof(FillUpsReturnDTO), StatusCodes.Status200OK)]
@@ -99,6 +101,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details not provided");
         }
 
+        //EDIT FILL UPS
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditFillUps")]
         [ProducesResponseType(typeof(FillUpsReturnDTO), StatusCodes.Status200OK)]
@@ -134,6 +137,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details not provided");
         }
 
+        //EDIT MCQ
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditMCQ")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
@@ -169,6 +173,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details not provided");
         }
 
+        //EDIT QUESTION
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditQuestionByID")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
@@ -204,7 +209,7 @@ namespace QuizApp.Controllers
             return BadRequest("All Details not provided");
         }
 
-
+        //DELETE QUESTION
         [Authorize(Roles = "Teacher")]
         [HttpDelete("DeleteQuestionByID")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
@@ -236,7 +241,7 @@ namespace QuizApp.Controllers
             }
         }
 
-
+        //SOFT DELETE QUESTION
         [Authorize(Roles = "Teacher")]
         [HttpDelete("SoftDeleteQuestion")]
         [ProducesResponseType(typeof(QuestionDTO), StatusCodes.Status200OK)]
@@ -265,11 +270,12 @@ namespace QuizApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while adding the quiz.");
+                _logger.LogError(ex, "An error occurred while soft deleting the question.");
                 return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
 
+        //UNDO SOFT DELETE
         [Authorize(Roles = "Teacher")]
         [HttpPost("UndoSoftDelete")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -297,11 +303,12 @@ namespace QuizApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while adding the quiz.");
+                _logger.LogError(ex, "An error occurred undoing the soft Delete");
                 return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
 
+        //MAP INPUT DTO TO FILL UPS DTO
         private FillUpsDTO MapInputDTOToFiilUpsDTO(FillUpsInputDTO inputDTO)
         {
             FillUpsDTO fillUpsDTO = new FillUpsDTO();
@@ -313,6 +320,7 @@ namespace QuizApp.Controllers
             return fillUpsDTO;
         }
 
+        //MAP INPUT DTO TO MCQ DTO
         private MCQDTO MapInputDTOToMCQDTO(MCQInputDTO inputDTO)
         {
             MCQDTO mCQDTO= new MCQDTO();

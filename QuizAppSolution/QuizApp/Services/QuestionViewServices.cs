@@ -13,12 +13,14 @@ namespace QuizApp.Services
 
         //REPOSITORIES
         private readonly IRepository<int, Question> _repository;
+        private readonly ILogger<QuestionViewServices> _logger;
 
 
         //INJECTING REPOSITORIES
-        public QuestionViewServices(IRepository<int, Question> reposiroty)
+        public QuestionViewServices(IRepository<int, Question> reposiroty, ILogger<QuestionViewServices> logger)
         {
             _repository = reposiroty;
+            _logger = logger;
         }
 
         //GET ALL FILL UPS QUESTIONS
@@ -50,6 +52,7 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException e)
             {
+                _logger.LogError(e, "Question Not found at GetAllFillups service");
                 throw new NoSuchQuestionException(e.Message);
             }
         }
@@ -85,6 +88,7 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException e)
             {
+                _logger.LogError(e, "Question Not found at GetAllMCQQuestion Service");
                 throw new NoSuchQuestionException(e.Message);
             }
         }
@@ -114,10 +118,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException e)
             {
+                _logger.LogError(e, "Question Not found at GetAllQuestions Service");
                 throw new NoSuchQuestionException(e.Message);
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetAllQuestion service");
                 throw new Exception(ex.Message);
             }
         }
@@ -146,10 +152,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at GetAllSoftDeletedQuestionsAsync Service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetAllSoftDeletedQuestionsAsync Service");
                 throw new Exception(ex.Message);
             }
         }
@@ -177,10 +185,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at GetAllQuestionsCreatedByLoggedInTeacherAsync service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetAllQuestionsCreatedByLoggedInTeacherAsync service");
                 throw new Exception(ex.Message);
             }
         }
@@ -207,10 +217,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at GetAllHardQuestions services");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetAllHardQuestions services");
                 throw new Exception(ex.Message);
             }
         }
@@ -237,10 +249,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at GetMediumQuestion Service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetMediumQuestion Service");
                 throw new Exception(ex.Message);
             }
         }
@@ -267,10 +281,12 @@ namespace QuizApp.Services
             }
             catch (NoSuchQuestionException ex)
             {
+                _logger.LogError(ex, "Question Not found at GetEasyQuestion Service");
                 throw ex;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred at GetEasyQuestion Service");
                 throw new Exception(ex.Message);
             }
         }

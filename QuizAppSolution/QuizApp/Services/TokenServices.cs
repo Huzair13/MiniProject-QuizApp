@@ -10,20 +10,25 @@ namespace QuizApp.Services
 {
     public class TokenServices : ITokenServices
     {
+        //INITIALIZATION
         private readonly string _secretKey;
         private readonly SymmetricSecurityKey _key;
 
+        //DEPENDENCY INJECTION
         public TokenServices(IConfiguration configuration)
         {
             _secretKey = configuration.GetSection("TokenKey").GetSection("JWT").Value.ToString();
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
         }
+
+        //GENERATE TOKEN
         public async Task<string> GenerateToken(User user)
         {
             string role = await GetRole(user);
             return await GetToken(user, role);
         }
 
+        //GET TOKEN
         private async Task<string> GetToken(User user, string role)
         {
             string token = string.Empty;
@@ -37,6 +42,7 @@ namespace QuizApp.Services
             return token;
         }
 
+        //GET ROLE
         private async Task<string> GetRole(User user)
         {
             if (user is Teacher)
