@@ -25,13 +25,9 @@ namespace QuizApp.Repositories
         public async Task<Response> Delete(int responseId)
         {
             var response = await Get(responseId);
-            if (response != null)
-            {
-                _context.Remove(response);
-                _context.SaveChangesAsync(true);
-                return response;
-            }
-            throw new NoSuchResponseException(responseId);
+            _context.Remove(response);
+            _context.SaveChangesAsync(true);
+            return response;
         }
 
         public async Task<Response> Get(int responseId)
@@ -53,14 +49,9 @@ namespace QuizApp.Repositories
         public async Task<Response> Update(Response response)
         {
             var existingResponse = await Get(response.Id);
-
-            if (existingResponse != null)
-            {
-                _context.Update(response);
-                await _context.SaveChangesAsync();
-                return existingResponse;
-            }
-            throw new NoSuchResponseException(response.Id);
+            _context.Update(response);
+            await _context.SaveChangesAsync();
+            return existingResponse;
         }
     }
 }

@@ -121,11 +121,11 @@ namespace QuizApp.Services
         //REGISTER SERVICE
         public async Task<RegisterReturnDTO> Register(UserRegisterInputDTO userInputDTO)
         {
-            if (userInputDTO.userType == "Teacher")
+            if (userInputDTO.UserType == "Teacher")
             {
                 return await TeacherRegister(userInputDTO);
             }
-            else if(userInputDTO.userType == "Student")
+            else if(userInputDTO.UserType == "Student")
             {
                 return await StudentRegister(userInputDTO);
             }
@@ -184,7 +184,9 @@ namespace QuizApp.Services
             {
                 teacher = await MapUserDTOToTeacher(userInputDTO);
                 userDetail = await MapUserDTOToUserDetails(userInputDTO);
+
                 var existingUsers = await _teacherRepo.Get();
+
                 var result = existingUsers.FirstOrDefault(u => u.Email == teacher.Email);
                 var phoneResult = existingUsers.FirstOrDefault(u => u.MobileNumber == teacher.MobileNumber);
                 if (result != null || phoneResult != null)

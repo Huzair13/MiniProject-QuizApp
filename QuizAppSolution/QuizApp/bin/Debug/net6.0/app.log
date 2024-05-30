@@ -1,0 +1,41 @@
+INFO  12:45:27 Now listening on: http://localhost:5273
+INFO  12:45:27 Application started. Press Ctrl+C to shut down.
+INFO  12:45:27 Hosting environment: Development
+INFO  12:45:27 Content root path: C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\
+INFO  12:45:49 Entity Framework Core 6.0.30 initialized 'QuizAppContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.30' with options: None
+INFO  12:45:51 Executed DbCommand (239ms) [Parameters=[@__key_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[UserId], [u].[Password], [u].[PasswordHashKey]
+FROM [UsersDetails] AS [u]
+WHERE [u].[UserId] = @__key_0
+ERROR 12:45:52 Login failed for user: 999
+QuizApp.Exceptions.UnauthorizedUserException: Invalid username or password
+   at QuizApp.Services.UserLoginAndRegisterServices.Login(UserLoginDTO loginDTO) in C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\Services\UserLoginAndRegisterServices.cs:line 59
+   at QuizApp.Controllers.UserController.Login(UserLoginDTO userLoginDTO) in C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\Controllers\UserController.cs:line 36
+INFO  12:46:36 Entity Framework Core 6.0.30 initialized 'QuizAppContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.30' with options: None
+INFO  12:46:36 Executed DbCommand (15ms) [Parameters=[@__key_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[UserId], [u].[Password], [u].[PasswordHashKey]
+FROM [UsersDetails] AS [u]
+WHERE [u].[UserId] = @__key_0
+INFO  12:46:37 Executed DbCommand (9ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[DateOfBirth], [u].[Email], [u].[MobileNumber], [u].[Name], [u].[UserType], [u].[CoinsEarned], [u].[EducationQualification], [u].[NumsOfQuizAttended], [u].[Designation], [u].[NumsOfQuestionsCreated], [u].[NumsOfQuizCreated]
+FROM [Users] AS [u]
+WHERE [u].[Id] = @__p_0
+INFO  12:46:37 Login successful for user: 102
+INFO  12:47:09 Entity Framework Core 6.0.30 initialized 'QuizAppContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.30' with options: None
+INFO  12:47:10 Executed DbCommand (42ms) [Parameters=[@__quizId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedOn], [t].[IsDeleted], [t].[IsMultipleAttemptAllowed], [t].[NumOfQuestions], [t].[QuizCreatedBy], [t].[QuizDescription], [t].[QuizName], [t].[QuizType], [t].[TimeLimit], [t].[TotalPoints], [t0].[Id], [t0].[QuestionId], [t0].[QuizId], [t0].[Id0], [t0].[Category], [t0].[CreatedDate], [t0].[DifficultyLevel], [t0].[IsDeleted], [t0].[Points], [t0].[QuestionCreatedBy], [t0].[QuestionText], [t0].[QuestionType], [t0].[CorrectAnswer], [t0].[Choice1], [t0].[Choice2], [t0].[Choice3], [t0].[Choice4], [t0].[CorrectChoice]
+FROM (
+    SELECT TOP(1) [q].[Id], [q].[CreatedOn], [q].[IsDeleted], [q].[IsMultipleAttemptAllowed], [q].[NumOfQuestions], [q].[QuizCreatedBy], [q].[QuizDescription], [q].[QuizName], [q].[QuizType], [q].[TimeLimit], [q].[TotalPoints]
+    FROM [Quizzes] AS [q]
+    WHERE [q].[Id] = @__quizId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [q0].[Id], [q0].[QuestionId], [q0].[QuizId], [q1].[Id] AS [Id0], [q1].[Category], [q1].[CreatedDate], [q1].[DifficultyLevel], [q1].[IsDeleted], [q1].[Points], [q1].[QuestionCreatedBy], [q1].[QuestionText], [q1].[QuestionType], [q1].[CorrectAnswer], [q1].[Choice1], [q1].[Choice2], [q1].[Choice3], [q1].[Choice4], [q1].[CorrectChoice]
+    FROM [QuizQuestions] AS [q0]
+    INNER JOIN [Questions] AS [q1] ON [q0].[QuestionId] = [q1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[QuizId]
+ORDER BY [t].[Id], [t0].[Id]
+ERROR 12:47:11 Quiz Not found while updating the quiz.
+QuizApp.Exceptions.NoSuchQuizException: Quiz with the QuizId : 0 not found
+   at QuizApp.Services.QuizServices.EditQuizByIDAsync(QuizUpdateDTO quizDTO, Int32 userId) in C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\Services\QuizServices.cs:line 176
+   at QuizApp.Controllers.QuizController.EditQuiz(QuizUpdateDTO updateQuizDTO) in C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\Controllers\QuizController.cs:line 84

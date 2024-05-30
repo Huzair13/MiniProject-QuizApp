@@ -14,6 +14,7 @@ namespace QuizApp.Interfaces
         public Task<QuizReturnDTO> SoftDeleteQuizByIDAsync(int quizID, int userId);
         public Task<QuizReturnDTO> UndoSoftDeleteQuizByIDAsync(int quizID, int userId);
         public Task<QuizReturnDTO> CreateQuizFromExistingQuiz(int quizID, int userId);
+        public Task<QuizReturnDTO> AddQuestionsToQuizAsync(AddQuestionsToQuizDTO inputDTO, int userID);
 
     }
 }

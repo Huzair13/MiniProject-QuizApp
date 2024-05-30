@@ -39,6 +39,8 @@ namespace QuizApp.Services
             {
                 List<QuizResultDTO> QuizResults = new List<QuizResultDTO>();
 
+                Quiz quiz = await _quizRepo.Get(quizId);
+
                 var AllResponses = await _responseRepo.Get();
                 var responses = AllResponses
                             .Where(r => r.UserId == userId && r.QuizId == quizId)
@@ -93,6 +95,8 @@ namespace QuizApp.Services
                     }
                     else
                     {
+                        existingResponse.EndTime = DateTime.Now;
+                        await _responseRepo.Update(existingResponse);
                         return await StartMultipleAttemptQuiz(userId, quizId, quiz);
                     }
                     
@@ -103,6 +107,10 @@ namespace QuizApp.Services
                 }
 
                 
+            }
+            catch(QuizAlreadyStartedException ex)
+            {
+                throw ex;
             }
             catch (NoSuchQuizException ex)
             {
@@ -219,6 +227,12 @@ namespace QuizApp.Services
                 {
                     throw new QuizNotStartedException(submitAllAnswersDTO.QuizId);
                 }
+                if (DateTime.Now > response.StartTime.Add(quiz.TimeLimit))
+                {
+                    response.EndTime = response.StartTime.Add(quiz.TimeLimit);
+                    await _responseRepo.Update(response);
+                    throw new QuizTimeLimitExceededException();
+                }
 
                 foreach (var questionId in submitAllAnswersDTO.QuestionAnswers.Keys)
                 {
@@ -271,6 +285,10 @@ namespace QuizApp.Services
             {
                 throw new NoSuchQuizException(ex.Message);
             }
+            catch(QuizNotStartedException ex)
+            {
+                throw ex;
+            }
             catch (NoSuchQuestionException ex)
             {
                 throw new NoSuchQuestionException(ex.Message);
@@ -283,9 +301,9 @@ namespace QuizApp.Services
             {
                 throw new NoSuchUserException(ex.Message);
             }
-            catch(NoSuchResponseException ex)
+            catch(QuizTimeLimitExceededException ex)
             {
-                throw new NoSuchResponseException(ex.Message);
+                throw ex;
             }
             catch (Exception e)
             {
@@ -300,7 +318,12 @@ namespace QuizApp.Services
             response.EndTime = DateTime.Now;
             if (totalPoints == response.ScoredPoints)
             {
+
                 Student student = await _studentRepo.Get(userId);
+
+                TimeSpan halfwayPoint = quiz.TimeLimit.Divide(2);
+                TimeSpan elapsedTime = DateTime.Now - response.StartTime;
+
                 int coinsEarned = student.CoinsEarned ?? 0;
                 if (coinsEarned == 0)
                 {
@@ -309,6 +332,10 @@ namespace QuizApp.Services
                 else
                 {
                     student.CoinsEarned += 5;
+                }
+                if (elapsedTime < halfwayPoint)
+                {
+                    student.CoinsEarned += 3;
                 }
                 await _studentRepo.Update(student);
             }
@@ -335,6 +362,14 @@ namespace QuizApp.Services
                     .Where(r => r.UserId == submitAnswerDTO.UserId && r.QuizId == submitAnswerDTO.QuizId)
                     .OrderByDescending(r => r.StartTime)
                     .FirstOrDefault();
+
+
+                if (DateTime.Now > response.StartTime.Add(quiz.TimeLimit))
+                {
+                    response.EndTime = response.StartTime.Add(quiz.TimeLimit);
+                    await _responseRepo.Update(response);
+                    throw new QuizTimeLimitExceededException();
+                }
 
                 var existingAnswer = response.ResponseAnswers.FirstOrDefault(ra => ra.QuestionId == submitAnswerDTO.QuestionId);
 
@@ -366,8 +401,9 @@ namespace QuizApp.Services
                     response.ScoredPoints += question.Points;
                 }
 
-                if (response.ResponseAnswers.Count == quiz.QuizQuestions.Count)
+                if (response.ResponseAnswers.Count == quiz.QuizQuestions.Count )
                 {
+
                     await UpdateStudentCoins(quiz, response, submitAnswerDTO.UserId ?? 0);
                 }
 
@@ -387,9 +423,13 @@ namespace QuizApp.Services
             {
                 throw new NoSuchQuestionException(ex.Message);
             }
-            catch(NoSuchResponseException ex)
+            catch(UserAlreadyAnsweredTheQuestionException ex)
             {
-                throw new NoSuchResponseException(ex.Message);
+                throw ex;
+            }
+            catch(QuizTimeLimitExceededException ex)
+            {
+                throw ex;
             }
             catch(Exception e)
             {
@@ -397,5 +437,209 @@ namespace QuizApp.Services
             }
             
         }
+
+
+        public async Task<List<LeaderboardDTO>> GetQuizLeaderboardAsync(int quizId)
+        {
+            try
+            {
+                var quiz = await _quizRepo.Get(quizId);
+                var responses = await _responseRepo.Get();
+                var quizResponses = responses.Where(r => r.QuizId == quizId).ToList();
+
+                if (quiz.IsMultipleAttemptAllowed)
+                {
+                    quizResponses = quizResponses.GroupBy(r => r.UserId)
+                        .Select(g => g.OrderByDescending(r => r.ScoredPoints).First())
+                        .ToList();
+                }
+
+                var sortedResponses = quizResponses.OrderByDescending(r => r.ScoredPoints).ThenBy(r=>r.TimeTaken).ToList();
+
+                var leaderboard = new List<LeaderboardDTO>();
+
+                var totalQuestions = quiz.NumOfQuestions;
+
+                int rank = 1;
+                foreach (var response in sortedResponses)
+                {
+                    if (response.EndTime != null)
+                    {
+                        var user = await _userRepo.Get(response.UserId);
+                        var correctlyAsnweredQuestions = response.ResponseAnswers.Count(r => r.IsCorrect);
+
+                        var percentage = ((decimal)correctlyAsnweredQuestions / totalQuestions) * 100;
+
+                        leaderboard.Add(new LeaderboardDTO
+                        {
+                            Rank = rank++,
+                            UserId = response.UserId,
+                            UserName = user != null ? user.Name : "Unknown",
+                            ScoredPoints = response.ScoredPoints,
+                            StartTime = response.StartTime,
+                            correctPercentage = percentage,
+                            EndTime = response.EndTime
+                        });
+                    }
+                }
+
+                return leaderboard;
+            }
+            catch (NoSuchQuizException ex)
+            {
+                throw new NoSuchQuizException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<LeaderboardDTO>> GetStudentQuizLeaderboardAsync(int quizId)
+        {
+            try
+            {
+                var quiz = await _quizRepo.Get(quizId);
+                var responses = await _responseRepo.Get();
+                var quizResponses = responses.Where(r => r.QuizId == quizId).ToList();
+
+                var totalQuestions = quiz.NumOfQuestions;
+
+                if (quiz.IsMultipleAttemptAllowed)
+                {
+                    quizResponses = quizResponses.GroupBy(r => r.UserId)
+                        .Select(g => g.OrderByDescending(r => r.ScoredPoints).First())
+                        .ToList();
+                }
+
+                var sortedResponses = quizResponses.OrderByDescending(r => r.ScoredPoints).ThenBy(r=>r.TimeTaken).ToList();
+
+                var leaderboard = new List<LeaderboardDTO>();
+
+                int rank = 1;
+                foreach (var response in sortedResponses)
+                {
+                    var user = await _userRepo.Get(response.UserId);
+                    if(user is Student student)
+                    {
+                        var correctlyAsnweredQuestions = response.ResponseAnswers.Count(r => r.IsCorrect);
+
+                        var percentage = ((decimal)correctlyAsnweredQuestions / totalQuestions) * 100;
+
+                        leaderboard.Add(new LeaderboardDTO
+                        {
+                            Rank = rank++,
+                            UserId = response.UserId,
+                            UserName = student != null ? student.Name : "Unknown",
+                            ScoredPoints = response.ScoredPoints,
+                            correctPercentage = percentage,
+                            StartTime = response.StartTime,
+                            EndTime = response.EndTime
+                        });
+                    }
+                }
+
+                return leaderboard;
+            }
+            catch (NoSuchQuizException ex)
+            {
+                throw new NoSuchQuizException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        //GET STUDENT POSITION IN THE LEADERBOARD
+        public async Task<int> GetStudentPositionInLeaderboardAsync(int userId, int quizId)
+        {
+            try
+            {
+                var leaderboard = await GetQuizLeaderboardAsync(quizId);
+
+                var studentPosition = leaderboard.FindIndex(l => l.UserId == userId);
+
+                if (studentPosition == -1)
+                {
+                    return -1;
+                }
+                return studentPosition + 1;
+            }
+            catch(NoSuchQuizException ex)
+            {
+                throw new NoSuchQuizException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        
+
+        //GET ALL RESPONSE BY THE STUDENT
+        public async Task<List<QuizResponseDTO>> GetAllUseresponsesAsync(int userId)
+        {
+            try
+            {
+                var allResponses = await _responseRepo.Get();
+                var userResponses = allResponses
+                                        .Where(r => r.UserId == userId)
+                                        .OrderByDescending(r => r.ScoredPoints)
+                                        .ToList();
+
+                var result = new List<QuizResponseDTO>();
+
+                foreach (var response in userResponses)   
+                {
+                    if (response.EndTime != null)
+                    {
+                        var quiz = await _quizRepo.Get(response.QuizId);
+
+                        var totalQuestions = quiz.NumOfQuestions;
+                        var correctAnsweredQuestion = response.ResponseAnswers.Count(r => r.IsCorrect);
+
+                        decimal percentage = ((decimal)correctAnsweredQuestion / totalQuestions) * 100;
+
+
+                        var answeredQuestions = response.ResponseAnswers.Select(ra => new AnsweredQuestionDTO
+                        {
+                            QuestionId = ra.QuestionId,
+                            SubmittedAnswer = ra.SubmittedAnswer,
+                            CorrectAnswer = (ra.Question is MultipleChoice mcq) ? mcq.CorrectChoice : (ra.Question is FillUps fillUps) ? fillUps.CorrectAnswer : null,
+                            IsCorrect = ra.IsCorrect
+                        }).ToList();
+
+                        result.Add(new QuizResponseDTO
+                        {
+                            ResponseId = response.Id,
+                            UserId = response.UserId,
+                            QuizId = response.QuizId,
+                            QuizName = quiz.QuizName,
+                            totalPoints = quiz.TotalPoints,
+                            CorrectPercentage = percentage,
+                            Score = response.ScoredPoints,
+                            AnsweredQuestions = answeredQuestions,
+                            StartTime = response.StartTime,
+                            EndTime = response.EndTime
+                        });
+                    }
+                }
+                if(result.Count == 0)
+                {
+                    throw new NoSuchResponseException();
+                }
+                return result;
+            }
+            catch(NoSuchResponseException ex)
+            {
+                throw new NoSuchResponseException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

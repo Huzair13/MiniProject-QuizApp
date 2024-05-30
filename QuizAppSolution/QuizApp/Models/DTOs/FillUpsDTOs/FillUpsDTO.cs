@@ -10,5 +10,6 @@
         public DateTime CreatedDate { get; set; }
         public int CreatedBy { get; set; }
         public string QuestionType { get; set; }
+        
     }
 }

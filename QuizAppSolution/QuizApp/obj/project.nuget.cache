@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "47eAcl6B+2eGQkaRlByeOz1UFBgJ7kC1m7w4jtE9xDtqDmRO1JC5ujg9BBywCwfEMSku4wpvertirjjM5I0cCA==",
+  "dgSpecHash": "RNMYKMJoq3/tKE8y8Hcr4vAJL3Lh120aYkQinG8u7sDHZ7GypeGMwUyCsneAhqmoUBeEW/ZMsDlqMCJqAvoAGA==",
   "success": true,
   "projectFilePath": "C:\\Users\\VC\\source\\repos\\MiniProject\\QuizAppSolution\\QuizApp\\QuizApp.csproj",
   "expectedPackageFiles": [
@@ -26,7 +26,7 @@
     "C:\\Users\\VC\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.1\\microsoft.extensions.dependencyinjection.6.0.1.nupkg.sha512",
     "C:\\Users\\VC\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\VC\\.nuget\\packages\\microsoft.extensions.logging\\6.0.0\\microsoft.extensions.logging.6.0.0.nupkg.sha512",
-    "C:\\Users\\VC\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\VC\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.4\\microsoft.extensions.logging.abstractions.6.0.4.nupkg.sha512",
     "C:\\Users\\VC\\.nuget\\packages\\microsoft.extensions.logging.log4net.aspnetcore\\6.0.0\\microsoft.extensions.logging.log4net.aspnetcore.6.0.0.nupkg.sha512",
     "C:\\Users\\VC\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
     "C:\\Users\\VC\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",

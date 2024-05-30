@@ -11,6 +11,7 @@
         public int QuizCreatedBy { get; set; }
         public bool IsMultpleAllowed { get; set; }
         public decimal TotalPoints { get; set; }
+        public TimeSpan Timelimit { get; set; }
         public List<int> QuizQuestions { get; set; }
     }
 }

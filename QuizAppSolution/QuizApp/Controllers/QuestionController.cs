@@ -6,6 +6,9 @@ using QuizApp.Models;
 using QuizApp.Models.DTOs;
 using QuizApp.Models.DTOs.FillUpsDTOs;
 using QuizApp.Models.DTOs.MCQDTOs;
+using QuizApp.Models.DTOs.QuizDTOs;
+using QuizApp.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace QuizApp.Controllers
@@ -25,92 +28,39 @@ namespace QuizApp.Controllers
         }
 
         [Authorize(Roles = "Teacher")]
-        [HttpGet("GetAllQuestions")]
-        [ProducesResponseType(typeof(IList<QuestionReturnDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IList<Question>>> GetAllQuestions()
-        {
-            try
-            {
-                var result = await _questionServices.GetAllQuestionsAsync();
-                return Ok(result);
-            }
-            catch (NoSuchQuestionException ex)
-            {
-                return NotFound(new ErrorModel(404, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new ErrorModel(501, ex.Message));
-            }
-        }
-
-        [Authorize(Roles = "Teacher")]
-        [HttpGet("GetAllMCQQuestions")]
-        [ProducesResponseType(typeof(IList<QuestionReturnDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IList<MultipleChoice>>> GetAllMCQQuestions()
-        {
-            try
-            {
-                var result = await _questionServices.GetAllMCQQuestionsAsync();
-                return Ok(result);
-            }
-            catch (NoSuchQuestionException ex)
-            {
-                return NotFound(new ErrorModel(404, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new ErrorModel(501, ex.Message));
-            }
-        }
-
-        [Authorize(Roles = "Teacher")]
-        [HttpGet("GetAllFillUpsQuestions")]
-        [ProducesResponseType(typeof(IList<FillUpsReturnDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IList<MultipleChoice>>> GetAllFillUpsQuestions()
-        {
-            try
-            {
-                var result = await _questionServices.GetAllFillUpsQuestionsAsync();
-                return Ok(result);
-            }
-            catch (NoSuchQuestionException ex)
-            {
-                return NotFound(new ErrorModel(404, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new ErrorModel(501, ex.Message));
-            }
-        }
-
-        [Authorize(Roles = "Teacher")]
         [HttpPost("AddMCQQuestion")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
         [ProducesErrorResponseType(typeof(ErrorModel))]
         public async Task<ActionResult<QuestionReturnDTO>> AddMCQQuestion([FromBody] MCQInputDTO inputDTO)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var userId = User.FindFirstValue(ClaimTypes.Name);
+                try
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.Name);
 
-                MCQDTO mCQDTO = MapInputDTOToMCQDTO(inputDTO);
+                    MCQDTO mCQDTO = MapInputDTOToMCQDTO(inputDTO);
 
-                mCQDTO.CreatedBy = Convert.ToInt32(userId);
-                mCQDTO.CreatedDate = DateTime.Now;
-    
-                var result = await _questionServices.AddMCQQuestion(mCQDTO);
+                    mCQDTO.CreatedBy = Convert.ToInt32(userId);
+                    mCQDTO.CreatedDate = DateTime.Now;
 
-                return Ok(result);
+                    var result = await _questionServices.AddMCQQuestion(mCQDTO);
+
+                    return Ok(result);
+                }
+                catch (NoSuchUserException ex)
+                {
+                    _logger.LogError(ex, "User Not found while adding the MCQ Question.");
+                    return NotFound(new ErrorModel(404, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while adding the MCQ Question.");
+                    return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+                }
             }
-            catch (Exception ex)
-            {
-                return NotFound(new ErrorModel(501, ex.Message));
-            }
+            return BadRequest("All Details not provided");
         }
 
         [Authorize(Roles = "Teacher")]
@@ -120,80 +70,138 @@ namespace QuizApp.Controllers
         [ProducesErrorResponseType(typeof(ErrorModel))]
         public async Task<ActionResult<QuestionReturnDTO>> AddFillUpsQuestion([FromBody] FillUpsInputDTO inputDTO)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var userId = User.FindFirstValue(ClaimTypes.Name);
+                try
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.Name);
 
-                FillUpsDTO fillUpsDTO = MapInputDTOToFiilUpsDTO(inputDTO);
+                    FillUpsDTO fillUpsDTO = MapInputDTOToFiilUpsDTO(inputDTO);
 
-                fillUpsDTO.CreatedBy = Convert.ToInt32(userId);
-                fillUpsDTO.CreatedDate = DateTime.Now;
+                    fillUpsDTO.CreatedBy = Convert.ToInt32(userId);
+                    fillUpsDTO.CreatedDate = DateTime.Now;
 
-                var result = await _questionServices.AddFillUpsQuestion(fillUpsDTO);
+                    var result = await _questionServices.AddFillUpsQuestion(fillUpsDTO);
 
-                return Ok(result);
+                    return Ok(result);
+                }
+                catch (NoSuchUserException ex)
+                {
+                    _logger.LogError(ex, "User Not found while adding the FillUps Question.");
+                    return NotFound(new ErrorModel(404, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while adding the FillUps Question.");
+                    return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+                }
             }
-            catch (Exception ex)
-            {
-                return NotFound(new ErrorModel(501, ex.Message));
-            }
+            return BadRequest("All Details not provided");
         }
 
-        //[Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher")]
         [HttpPut("EditFillUps")]
         [ProducesResponseType(typeof(FillUpsReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
-        [ProducesErrorResponseType(typeof(ErrorModel))]
-        public async Task<ActionResult<QuestionReturnDTO>> EditFillUps([FromBody] FillUpsUpdateDTO inputDTO)
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<FillUpsReturnDTO>> EditFillUps([FromBody] FillUpsUpdateDTO inputDTO)
         {
-            try
+            if (ModelState.IsValid)
             {
-                int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
-                var result = await _questionServices.EditFillUpsQuestionById(inputDTO,userId);
-                return Ok(result);
+                try
+                {
+                    int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
+                    var result = await _questionServices.EditFillUpsQuestionById(inputDTO, userId);
+                    return Ok(result);
+                }
+                catch (NoSuchQuestionException ex)
+                {
+                    _logger.LogError(ex, "Question Not found while editing the fillups.");
+                    return NotFound(new ErrorModel(404, ex.Message));
+                }
+                catch (UnauthorizedToEditException ex)
+                {
+                    _logger.LogError(ex, "An error occurred while editing the fillups.");
+                    return Unauthorized(new ErrorModel(403, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while editing the fillups.");
+                    return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+                }
             }
-            catch (Exception ex)
-            {
-                return NotFound(new ErrorModel(501, ex.Message));
-            }
+            return BadRequest("All Details not provided");
         }
 
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditMCQ")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
-        [ProducesErrorResponseType(typeof(ErrorModel))]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<QuestionReturnDTO>> EditMCQ([FromBody] MCQUpdateDTO inputDTO)
         {
-            try
+            if (ModelState.IsValid)
             {
-                int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
-                var result = await _questionServices.EditMCQByQuestionID(inputDTO,userId);
-                return Ok(result);
+                try
+                {
+                    int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
+                    var result = await _questionServices.EditMCQByQuestionID(inputDTO, userId);
+                    return Ok(result);
+                }
+                catch (NoSuchQuestionException ex)
+                {
+                    _logger.LogError(ex, "Question Not found while editing the MCQ.");
+                    return NotFound(new ErrorModel(404, ex.Message));
+                }
+                catch (UnauthorizedToEditException ex)
+                {
+                    _logger.LogError(ex, "An error occurred while editing the MCQ.");
+                    return Unauthorized(new ErrorModel(403, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while editing the MCQ.");
+                    return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+                }
             }
-            catch (Exception ex)
-            {
-                return NotFound(new ErrorModel(501, ex.Message));
-            }
+            return BadRequest("All Details not provided");
         }
 
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditQuestionByID")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
-        [ProducesErrorResponseType(typeof(ErrorModel))]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<QuestionReturnDTO>> EditQuestionByID([FromBody] UpdateQuestionDTO inputDTO)
         {
-            try
+            if (ModelState.IsValid)
             {
-                int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
-                var result = await _questionServices.EditQuestionByID(inputDTO, userId);
-                return Ok(result);
+                try
+                {
+                    int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
+                    var result = await _questionServices.EditQuestionByID(inputDTO, userId);
+                    return Ok(result);
+                }
+                catch (NoSuchQuestionException ex)
+                {
+                    _logger.LogError(ex, "Question Not found while editing the Question By ID.");
+                    return NotFound(new ErrorModel(404, ex.Message));
+                }
+                catch (UnauthorizedToEditException ex)
+                {
+                    _logger.LogError(ex, "An error occurred while editing the Question By ID.");
+                    return Unauthorized(new ErrorModel(403, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while editing the Question By ID.");
+                    return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+                }
             }
-            catch (Exception ex)
-            {
-                return NotFound(new ErrorModel(501, ex.Message));
-            }
+            return BadRequest("All Details not provided");
         }
 
 
@@ -201,7 +209,8 @@ namespace QuizApp.Controllers
         [HttpDelete("DeleteQuestionByID")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
-        [ProducesErrorResponseType(typeof(ErrorModel))]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<QuestionDTO>> DeleteQuestionById(int questionId)
         {
             try
@@ -210,9 +219,86 @@ namespace QuizApp.Controllers
                 var result = await _questionServices.DeleteQuestionByID(questionId, userId);
                 return Ok(result);
             }
+            catch (NoSuchQuestionException ex)
+            {
+                _logger.LogError(ex, "Question Not found while Deleting the Question By ID.");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (UnauthorizedToDeleteException ex)
+            {
+                _logger.LogError(ex, "Unathorized while Deleting the Question By ID.");
+                return Unauthorized(new ErrorModel(403, ex.Message));
+            }
             catch (Exception ex)
             {
-                return NotFound(new ErrorModel(501, ex.Message));
+                _logger.LogError(ex, "An error occurred while Deleting the Question By ID.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+            }
+        }
+
+
+        [Authorize(Roles = "Teacher")]
+        [HttpDelete("SoftDeleteQuestion")]
+        [ProducesResponseType(typeof(QuestionDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<QuestionDTO>> SoftDeleteQuestion(int QuestionID)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
+
+                var result = await _questionServices.SoftDeleteQuestionByIDAsync(QuestionID, userId);
+
+                return Ok(result);
+            }
+            catch (NoSuchQuestionException ex)
+            {
+                _logger.LogError(ex, "Question Not found while Soft Deleting the Question By ID.");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (UnauthorizedToDeleteException ex)
+            {
+                _logger.LogError(ex, "Unathorized while soft Deleting the Question By ID.");
+                return Unauthorized(new ErrorModel(403, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while adding the quiz.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+            }
+        }
+
+        [Authorize(Roles = "Teacher")]
+        [HttpPost("UndoSoftDelete")]
+        [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<QuizReturnDTO>> UndoSoftDeleteByID(int QuestionID)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
+
+                var result = await _questionServices.UndoSoftDeleteQuestionByIDAsync(QuestionID, userId);
+
+                return Ok(result);
+            }
+            catch (NoSuchQuestionException ex)
+            {
+                _logger.LogError(ex, "Question Not found while undoing Soft Delete.");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (UnauthorizedToEditException ex)
+            {
+                _logger.LogError(ex, "Unathorized while undoing the soft Delete");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while adding the quiz.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
 

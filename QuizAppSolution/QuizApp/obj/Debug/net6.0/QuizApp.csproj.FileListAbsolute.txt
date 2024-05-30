@@ -70,3 +70,5 @@ C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\obj\Debug\net6.0\Qu
 C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\obj\Debug\net6.0\ref\QuizApp.dll
 C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\bin\Debug\net6.0\log4net.dll
 C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\bin\Debug\net6.0\Microsoft.Extensions.Logging.Log4Net.AspNetCore.dll
+C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\VC\source\repos\MiniProject\QuizAppSolution\QuizApp\bin\Debug\net6.0\Log4net.config

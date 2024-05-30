@@ -17,6 +17,7 @@ namespace QuizApp.Models
         public Teacher QuizCreatedByUser { get; set; }
         public bool IsMultipleAttemptAllowed { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public TimeSpan TimeLimit { get; set; } = TimeSpan.FromMinutes(30);
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
 

@@ -25,13 +25,9 @@ namespace QuizApp.Repositories
         public async Task<T> Delete(int userId)
         {
             var user = await Get(userId);
-            if (user != null)
-            {
-                _context.Remove(user);
-                _context.SaveChangesAsync(true);
-                return user;
-            }
-            throw new NoSuchUserException(userId);
+            _context.Remove(user);
+            _context.SaveChangesAsync(true);
+            return user;
         }
 
         public async Task<T> Get(int userId)
@@ -58,13 +54,9 @@ namespace QuizApp.Repositories
 
             var existingUser = await Get(userIdValue);
 
-            if (existingUser != null)
-            {
-                _context.Entry(existingUser).CurrentValues.SetValues(user);
-                await _context.SaveChangesAsync();
-                return existingUser;
-            }
-            throw new NoSuchUserException(userIdValue);
+            _context.Entry(existingUser).CurrentValues.SetValues(user);
+            await _context.SaveChangesAsync();
+            return existingUser;
         }
     }
 }

@@ -3,9 +3,9 @@
     public class NoSuchUserException : Exception
     {
         string exceptionMessage;
-        public NoSuchUserException(int message)
+        public NoSuchUserException(int id)
         {
-            exceptionMessage = $"No user with the given ID : {message}";
+            exceptionMessage = $"No user with the given ID : {id}";
         }
         public NoSuchUserException()
         {

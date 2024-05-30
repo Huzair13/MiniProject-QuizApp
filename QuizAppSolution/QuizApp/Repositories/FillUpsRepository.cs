@@ -24,13 +24,9 @@ namespace QuizApp.Repositories
         public async Task<FillUps> Delete(int QuestionId)
         {
             var question = await Get(QuestionId);
-            if (question != null)
-            {
-                _context.Remove(question);
-                _context.SaveChangesAsync(true);
-                return question;
-            }
-            throw new NoSuchQuestionException(QuestionId);
+            _context.Remove(question);
+            _context.SaveChangesAsync(true);
+            return question;
         }
 
         public async Task<FillUps> Get(int QuestionId)
@@ -57,13 +53,9 @@ namespace QuizApp.Repositories
         public async Task<FillUps> Update(FillUps item)
         {
             var question = await Get(item.Id);
-            if (question != null)
-            {
-                _context.Update(item);
-                _context.SaveChangesAsync(true);
-                return question;
-            }
-            throw new NoSuchQuestionException(item.Id);
+            _context.Update(item);
+            _context.SaveChangesAsync(true);
+            return question;
         }
     }
 }

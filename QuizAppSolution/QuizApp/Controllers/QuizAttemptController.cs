@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuizApp.Exceptions;
 using QuizApp.Interfaces;
 using QuizApp.Models;
+using QuizApp.Models.DTOs;
 using QuizApp.Models.DTOs.QuizDTOs;
 using QuizApp.Models.DTOs.ResponseDTO;
 using System.Security.Claims;
@@ -13,16 +15,19 @@ namespace QuizApp.Controllers
     public class QuizAttemptController : ControllerBase
     {
         private readonly IQuizResponseServices _quizResponseServices;
+        private readonly ILogger<QuizController> _logger;
 
-        public QuizAttemptController(IQuizResponseServices quizResponseServices)
+        public QuizAttemptController(IQuizResponseServices quizResponseServices, ILogger<QuizController> logger)
         {
             _quizResponseServices = quizResponseServices;
+            _logger = logger;
         }
 
         [Authorize]
         [HttpPost("StartQuiz")]
         [ProducesResponseType(typeof(StartQuizResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<StartQuizResponseDTO>> StartQuiz([FromBody] int QuizId)
         {
@@ -32,9 +37,20 @@ namespace QuizApp.Controllers
                 var quizDetails = await _quizResponseServices.StartQuizAsync(Convert.ToInt32(userId), QuizId);
                 return Ok(quizDetails);
             }
+            catch (QuizAlreadyStartedException ex)
+            {
+                _logger.LogError(ex, "Quiz already started.");
+                return Conflict(new ErrorModel(409, ex.Message));
+            }
+            catch (NoSuchQuizException ex)
+            {
+                _logger.LogError(ex, "Quiz Not found while starting the quiz.");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogError(ex, "An error occurred while starting the quiz.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
 
@@ -42,27 +58,50 @@ namespace QuizApp.Controllers
         [HttpPost("submitAnswer")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> SubmitAnswer([FromBody] SubmitAnswerDTO submitAnswerDTO)
         {
-            try
+            if(ModelState.IsValid)
             {
-                var userId = User.FindFirstValue(ClaimTypes.Name);
-                submitAnswerDTO.UserId = Convert.ToInt32(userId);
+                try
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.Name);
+                    submitAnswerDTO.UserId = Convert.ToInt32(userId);
 
-                string result= await _quizResponseServices.SubmitAnswerAsync(submitAnswerDTO);
-                return Ok(result);
+                    string result = await _quizResponseServices.SubmitAnswerAsync(submitAnswerDTO);
+                    return Ok(result);
+                }
+                catch (NoSuchQuizException ex)
+                {
+                    _logger.LogError(ex, "Quiz Not found while Submitting the answer.");
+                    return NotFound(new ErrorModel(404, ex.Message));
+                }
+                catch (NoSuchQuestionException ex)
+                {
+                    _logger.LogError(ex, "Question Not found while Submitting the answer.");
+                    return NotFound(new ErrorModel(404, ex.Message));
+                }
+                catch (UserAlreadyAnsweredTheQuestionException ex)
+                {
+                    _logger.LogError(ex, "User already answered the question.");
+                    return Conflict(new ErrorModel(409, ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while Submitting the answer.");
+                    return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+                }
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest("All Details are not provided");
         }
 
         [Authorize]
         [HttpPost("submitAllAnswer")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status408RequestTimeout)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<string>> SubmitAllAnswer([FromBody] SubmitAllAnswersDTO submitAllAnswersDTO)
         {
@@ -74,9 +113,35 @@ namespace QuizApp.Controllers
                 var result= await _quizResponseServices.SubmitAllAnswersAsync(submitAllAnswersDTO);
                 return Ok(result);
             }
+            catch (NoSuchQuizException ex)
+            {
+                _logger.LogError(ex, "Quiz Not found while Submitting the answer.");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (QuizNotStartedException ex)
+            {
+                _logger.LogError(ex, "Quiz has not started.");
+                return Conflict(new ErrorModel(409, ex.Message));
+            }
+            catch (NoSuchQuestionException ex)
+            {
+                _logger.LogError(ex, "Question Not found while Submitting the answer.");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (UserAlreadyAnsweredTheQuestionException ex)
+            {
+                _logger.LogError(ex, "Already Answered the question.");
+                return Conflict(new ErrorModel(409, ex.Message));
+            }
+            catch (QuizTimeLimitExceededException ex)
+            {
+                _logger.LogError(ex, "Quiz time limit exceeded.");
+                return StatusCode(408, new ErrorModel(408, ex.Message));
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogError(ex, "An error occurred while Submitting the answer.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
 
@@ -93,9 +158,113 @@ namespace QuizApp.Controllers
                 var result = await _quizResponseServices.GetQuizResultAsync(userId, quizId);
                 return Ok(result);
             }
+            catch (NoSuchQuizException ex)
+            {
+                _logger.LogError(ex, "Quiz Not found while getting the result");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogError(ex, "An error occurred while getting the result.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+            }
+        }
+
+        [Authorize]
+        [HttpGet("LeaderBoard")]
+        [ProducesResponseType(typeof(List<LeaderboardDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<LeaderboardDTO>>> GetLeaderboard(int quizId)
+        {
+            try
+            {
+                var leaderboard = await _quizResponseServices.GetQuizLeaderboardAsync(quizId);
+                return Ok(leaderboard);
+            }
+            catch (NoSuchQuizException ex)
+            {
+                _logger.LogError(ex, "Quiz Not found while getting the leaderboard");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting the leaderboard.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+            }
+        }
+
+        [Authorize]
+        [HttpGet("StudentLeaderBoard")]
+        [ProducesResponseType(typeof(List<LeaderboardDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<LeaderboardDTO>>> GetStudentLeaderboard(int quizId)
+        {
+            try
+            {
+                var leaderboard = await _quizResponseServices.GetStudentQuizLeaderboardAsync(quizId);
+                return Ok(leaderboard);
+            }
+            catch (NoSuchQuizException ex)
+            {
+                _logger.LogError(ex, "Quiz Not found while getting the student Leaderboard");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting the student Leaderboard.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+            }
+        }
+
+        [Authorize]
+        [HttpGet("GetStudentPosition")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<int>> GetStudentPosition(int quizId)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
+                var leaderboard = await _quizResponseServices.GetStudentPositionInLeaderboardAsync(userId, quizId);
+                return Ok(leaderboard);
+            }
+            catch (NoSuchQuizException ex)
+            {
+                _logger.LogError(ex, "Quiz Not found while getting the student position in the quiz");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting the student position in the quiz.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
+            }
+        }
+
+        [Authorize]
+        [HttpGet("GetAllUserResponses")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<QuizResponseDTO>> GetAllUserResponses()
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.Name));
+                var responses = await _quizResponseServices.GetAllUseresponsesAsync(userId);
+                return Ok(responses);
+            }
+            catch(NoSuchUserException ex)
+            {
+                _logger.LogError(ex, "user not found while getting user responses");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting user responses.");
+                return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
     }

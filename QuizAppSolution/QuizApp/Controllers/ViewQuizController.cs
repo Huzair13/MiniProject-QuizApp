@@ -35,11 +35,12 @@ namespace QuizApp.Controllers
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found while getting the quiz.");
                 return NotFound(new ErrorModel(404, ex.Message));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while adding the quiz.");
+                _logger.LogError(ex, "An error occurred while getting the quiz.");
                 return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
@@ -58,11 +59,12 @@ namespace QuizApp.Controllers
             }
             catch (NoSuchQuizException ex)
             {
+                _logger.LogError(ex, "Quiz Not found while getting the soft deleted quiz.");
                 return NotFound(new ErrorModel(404, ex.Message));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while getting the quiz.");
+                _logger.LogError(ex, "An error occurred while gettings the soft deleted quiz.");
                 return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
@@ -80,17 +82,19 @@ namespace QuizApp.Controllers
                 var result = await _quizServices.GetAllQuizzesCreatedByLoggedInTeacherAsync(userId);
                 return Ok(result);
             }
-            catch (NoSuchQuizException ex)
-            {
-                return NotFound(new ErrorModel(404, ex.Message));
-            }
             catch(NoSuchUserException ex)
             {
+                _logger.LogError(ex, "User Not found while getting the created quiz.");
+                return NotFound(new ErrorModel(404, ex.Message));
+            }
+            catch (NoSuchQuizException ex)
+            {
+                _logger.LogError(ex, "Quiz Not found while getting the created quiz.");
                 return NotFound(new ErrorModel(404, ex.Message));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while getting the quiz.");
+                _logger.LogError(ex, "An error occurred while getting the created quiz.");
                 return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }

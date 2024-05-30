@@ -1,9 +1,11 @@
-﻿using QuizApp.Exceptions;
+﻿using QuizApp.Controllers;
+using QuizApp.Exceptions;
 using QuizApp.Interfaces;
 using QuizApp.Models;
 using QuizApp.Models.DTOs;
 using QuizApp.Models.DTOs.FillUpsDTOs;
 using QuizApp.Models.DTOs.MCQDTOs;
+using QuizApp.Models.DTOs.QuizDTOs;
 using QuizApp.Repositories;
 using System.Linq;
 
@@ -18,7 +20,6 @@ namespace QuizApp.Services
         private readonly IRepository<int, MultipleChoice> _multipleChoiceRepo;
         private readonly IRepository<int, Teacher> _teacherRepo;
 
-
         //INJECTING REPOSITORIES
         public QuestionServices(IRepository<int, Question> reposiroty, 
                                 IRepository<int, FillUps> fillUpsRepo, 
@@ -29,150 +30,6 @@ namespace QuizApp.Services
             _fillUpsRepo = fillUpsRepo;
             _multipleChoiceRepo = mcqRepo;
             _teacherRepo = teacherRepo;
-        }
-
-        //GET ALL FILL UPS QUESTIONS
-        public async Task<IEnumerable<FillUpsReturnDTO>> GetAllFillUpsQuestionsAsync()
-        {
-            try
-            {
-                var questions = await _repository.Get();
-
-                IEnumerable<FillUpsReturnDTO> fillUpsReturnDTO = await MapFillUpsToFillUpsReturnDTO(questions);
-                return fillUpsReturnDTO;
-            }
-            catch (NoSuchQuestionException e)
-            {
-                throw new NoSuchQuestionException(e.Message);
-            }
-        }
-
-
-        //GET ALL MCQ QUESTIONS
-        public async Task<IEnumerable<QuestionReturnDTO>> GetAllMCQQuestionsAsync()
-        {
-            try
-            {
-                var questions = await _repository.Get();
-
-                IEnumerable<QuestionReturnDTO> returnRequestDTO =await MapQuestionToMCQReturnDTO(questions);
-                return returnRequestDTO;
-            }
-            catch (NoSuchQuestionException e)
-            {
-                throw new NoSuchQuestionException(e.Message);
-            }
-        }
-
-        //GET ALL QUESTIONS
-        public async Task<IEnumerable<QuestionReturnDTO>> GetAllQuestionsAsync()
-        {
-            try
-            {
-                var questions = await _repository.Get();
-
-                IEnumerable<QuestionReturnDTO> returnRequestDTO = await MapQuestionToQuestionReturnDTO(questions);
-                return returnRequestDTO;
-            }
-            catch(NoSuchQuestionException e)
-            {
-                throw new NoSuchQuestionException(e.Message);
-            }
-        }
-
-        //MAP QUESTION TO QUESTION RETURN DTO
-        private async Task<IEnumerable<QuestionReturnDTO>> MapQuestionToQuestionReturnDTO(IEnumerable<Question> questions)
-        {
-            IEnumerable<QuestionReturnDTO> questionReturnDTOs = new List<QuestionReturnDTO>();
-
-            foreach (var item in questions)
-            {
-                QuestionReturnDTO questionReturnDTO = new QuestionReturnDTO
-                {
-                    Id = item.Id,
-                    Category = item.Category,
-                    QuestionText = item.QuestionText,
-                    QuestionCreatedBy = item.QuestionCreatedBy,
-                    DifficultyLevel = item.DifficultyLevel,
-                    CreatedDate = item.CreatedDate,
-                    Points = item.Points,
-                    QuestionType = item.QuestionType,
-                };
-                if(item is MultipleChoice mcq)
-                {
-                    questionReturnDTO.Choice1 = mcq.Choice1;
-                    questionReturnDTO.Choice2 = mcq.Choice2;
-                    questionReturnDTO.Choice3 = mcq.Choice3;
-                    questionReturnDTO.Choice4 = mcq.Choice4;
-                    questionReturnDTO.CorrectAnswer = mcq.CorrectChoice;
-                }
-                else if(item is FillUps fillUps)
-                {
-                    questionReturnDTO.CorrectAnswer = fillUps.CorrectAnswer;
-                }
-
-                questionReturnDTOs = questionReturnDTOs.Concat(new[] { questionReturnDTO });
-            }
-            return questionReturnDTOs;
-        }
-
-        //MAP QUESTION TO MCQ_RETURN_DTO
-        private async Task<IEnumerable<QuestionReturnDTO>> MapQuestionToMCQReturnDTO(IEnumerable<Question> questions)
-        {
-            IEnumerable<QuestionReturnDTO> questionReturnDTOs = new List<QuestionReturnDTO>();
-
-            foreach (var item in questions)
-            {
-                if (item is MultipleChoice mcq)
-                {
-                    QuestionReturnDTO questionReturnDTO = new QuestionReturnDTO();
-
-
-                    questionReturnDTO.Id = item.Id;
-                    questionReturnDTO.Category = item.Category;
-                    questionReturnDTO.QuestionText = item.QuestionText;
-                    questionReturnDTO.QuestionCreatedBy = item.QuestionCreatedBy;
-                    questionReturnDTO.DifficultyLevel = item.DifficultyLevel;
-                    questionReturnDTO.CreatedDate = item.CreatedDate;
-                    questionReturnDTO.Points = item.Points;
-                    questionReturnDTO.QuestionType = item.QuestionType;
-                    questionReturnDTO.Choice1 = mcq.Choice1;
-                    questionReturnDTO.Choice2 = mcq.Choice2;
-                    questionReturnDTO.Choice3 = mcq.Choice3;
-                    questionReturnDTO.Choice4 = mcq.Choice4;
-                    questionReturnDTO.CorrectAnswer = mcq.CorrectChoice;
-
-                    questionReturnDTOs = questionReturnDTOs.Concat(new[] { questionReturnDTO });
-                }
-            }
-            return questionReturnDTOs;
-        }
-
-        //MAP FILL UPS TO FILLUPS_RETURN_DTO
-        private async Task<IEnumerable<FillUpsReturnDTO>> MapFillUpsToFillUpsReturnDTO(IEnumerable<Question> questions)
-        {
-            IEnumerable<FillUpsReturnDTO> questionReturnDTOs = new List<FillUpsReturnDTO>();
-
-            foreach (var item in questions)
-            {
-                if (item is FillUps fillUps)
-                {
-                    FillUpsReturnDTO questionReturnDTO = new FillUpsReturnDTO();
-
-                    questionReturnDTO.Id = item.Id;
-                    questionReturnDTO.Category = item.Category;
-                    questionReturnDTO.QuestionText = item.QuestionText;
-                    questionReturnDTO.QuestionCreatedBy = item.QuestionCreatedBy;
-                    questionReturnDTO.DifficultyLevel = item.DifficultyLevel;
-                    questionReturnDTO.CreatedDate = item.CreatedDate;
-                    questionReturnDTO.Points = item.Points;
-                    questionReturnDTO.QuestionType = item.QuestionType;
-                    questionReturnDTO.CorrectAnswer = fillUps.CorrectAnswer;
-
-                    questionReturnDTOs = questionReturnDTOs.Concat(new[] { questionReturnDTO });
-                }
-            }
-            return questionReturnDTOs;
         }
 
         //ADD MCQ QUESTION
@@ -244,6 +101,7 @@ namespace QuizApp.Services
             }
         }
 
+        //MAP FILL UPS TO FILL UP RETURN DTO
         private async Task<FillUpsReturnDTO> MapFillUpsToFillUpsReturnDTO(FillUps fillUps)
         {
             FillUpsReturnDTO fillUpsReturnDTO = new FillUpsReturnDTO();
@@ -260,6 +118,7 @@ namespace QuizApp.Services
             return fillUpsReturnDTO;
         }
 
+        //MAP FILL UPS INPUT TO FILL UPS
         private async Task<FillUps> MapFillUpsInputDTOToFillUps(FillUpsDTO fillUpsDTO)
         {
             FillUps fillUps = new FillUps();
@@ -498,7 +357,8 @@ namespace QuizApp.Services
                 return questionReturnDTO;
             }
         }
-
+        
+        //HARD DELETE QUESTION BY ID 
         public async Task<QuestionDTO> DeleteQuestionByID(int QuestionID,int userId)
         {
             try
@@ -522,12 +382,101 @@ namespace QuizApp.Services
             {
                 throw new NoSuchQuestionException(ex.Message);
             }
+            catch(UnauthorizedToDeleteException ex)
+            {
+                throw ex;
+            }
+            catch(NoSuchUserException ex)
+            {
+                throw ex;
+            }
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
+        // DELETE QUESTION BY ID - SOFTDELETE
+        public async Task<QuestionDTO> SoftDeleteQuestionByIDAsync(int questionID, int userId)
+        {
+            try
+            {
+                Question question = await _repository.Get(questionID);
+
+                if (question.QuestionCreatedBy == userId)
+                {
+                    question.IsDeleted = true;
+                    var result = await _repository.Update(question);
+
+                    Teacher teacher = await _teacherRepo.Get(question.QuestionCreatedBy);
+                    if (teacher.NumsOfQuestionsCreated != null && teacher.NumsOfQuestionsCreated > 0)
+                    {
+                        teacher.NumsOfQuestionsCreated -= 1;
+                        await _teacherRepo.Update(teacher);
+                    }
+
+                    return await MapQuestionToQuestionDTO(result);
+                }
+                else
+                {
+                    throw new UnauthorizedToDeleteException();
+                }
+
+            }
+            catch (NoSuchQuestionException ex)
+            {
+                throw new NoSuchQuestionException(ex.Message);
+            }
+            catch(UnauthorizedToDeleteException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        // UNDO QUIZ SOFT DELETE BY QUESTION_ID 
+        public async Task<QuestionDTO> UndoSoftDeleteQuestionByIDAsync(int questionID, int userId)
+        {
+            try
+            {
+                Question question = await _repository.Get(questionID);
+
+                if (question.QuestionCreatedBy == userId)
+                {
+                    question.IsDeleted = false;
+                    var result = await _repository.Update(question);
+
+                    Teacher teacher = await _teacherRepo.Get(question.QuestionCreatedBy);
+
+                    teacher.NumsOfQuizCreated += 1;
+                    await _teacherRepo.Update(teacher);
+                    return await MapQuestionToQuestionDTO(result);
+                }
+                else
+                {
+                    throw new UnauthorizedToEditException();
+                }
+
+            }
+            catch (NoSuchQuestionException ex)
+            {
+                throw new NoSuchQuestionException(ex.Message);
+            }
+            catch (UnauthorizedToEditException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        
+        //MAP QUESTION TO QUESTION DTO
         private async Task<QuestionDTO> MapQuestionToQuestionDTO(Question question)
         {
             return new QuestionDTO()

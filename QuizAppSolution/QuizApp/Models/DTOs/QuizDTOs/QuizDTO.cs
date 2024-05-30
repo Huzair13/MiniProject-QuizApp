@@ -8,5 +8,6 @@
         public bool IsMultpleAttemptAllowed { get; set; }
         public int QuizCreatedBy { get; set; }
         public List<int> QuestionIds { get; set; } = new List<int>();
+        public TimeSpan TimeLimit { get; set; }
     }
 }

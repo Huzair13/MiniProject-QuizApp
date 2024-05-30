@@ -24,13 +24,9 @@ namespace QuizApp.Repositories
         public async Task<Question> Delete(int QuestionId)
         {
             var question = await Get(QuestionId);
-            if (question != null)
-            {
-                _context.Remove(question);
-                await _context.SaveChangesAsync(true);
-                return question;
-            }
-            throw new NoSuchQuestionException(QuestionId);
+            _context.Remove(question);
+            await _context.SaveChangesAsync(true);
+            return question;
         }
 
         public async Task<Question> Get(int QuestionId)
@@ -47,23 +43,15 @@ namespace QuizApp.Repositories
         public async Task<IEnumerable<Question>> Get()
         {
             var questions = await _context.Questions.ToListAsync();
-            if (questions.Count != 0)
-            {
-                return questions;
-            }
-            throw new NoSuchQuestionException();
+            return questions;
         }
 
         public async Task<Question> Update(Question item)
         {
             var question = await Get(item.Id);
-            if (question != null)
-            {
-                _context.Update(item);
-                await _context.SaveChangesAsync(true);
-                return question;
-            }
-            throw new NoSuchQuestionException(item.Id);
+            _context.Update(item);
+            await _context.SaveChangesAsync(true);
+            return question;
         }
     }
 }

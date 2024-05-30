@@ -4,6 +4,8 @@ using QuizApp.Interfaces;
 using QuizApp.Models;
 using QuizApp.Services;
 using QuizApp.Models.DTOs.UserDTOs;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace QuizApp.Controllers
 {
@@ -12,12 +14,12 @@ namespace QuizApp.Controllers
     [ApiController]
     public class UserController :ControllerBase
     {
-        private readonly IUserLoginAndRegisterServices _userService;
-        private readonly ILogger<UserController> _logger;
+        private readonly IUserLoginAndRegisterServices _userLoginService;
+        private readonly ILogger<QuizController> _logger;
 
-        public UserController(IUserLoginAndRegisterServices userService, ILogger<UserController> logger)
+        public UserController(IUserLoginAndRegisterServices userLoginService, ILogger<QuizController> logger)
         {
-            _userService = userService;
+            _userLoginService = userLoginService;
             _logger = logger;
         }
 
@@ -31,7 +33,7 @@ namespace QuizApp.Controllers
             {
                 try
                 {
-                    var result = await _userService.Login(userLoginDTO);
+                    var result = await _userLoginService.Login(userLoginDTO);
                     _logger.LogInformation("Login successful for user: {UserID}", userLoginDTO.UserId);
                     return Ok(result);
                 }
@@ -42,7 +44,7 @@ namespace QuizApp.Controllers
                 }
             }
 
-            return BadRequest("Details are Missing . Please check the input object");
+            return BadRequest("Details are Missing");
 
         }
 
@@ -50,22 +52,26 @@ namespace QuizApp.Controllers
         [HttpPost("Register")]
         [ProducesResponseType(typeof(RegisterReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<User>> Register([FromBody] UserRegisterInputDTO userInputDTO)
+        public async Task<ActionResult<RegisterReturnDTO>> Register([FromBody] UserRegisterInputDTO userInputDTO)
         {
-            try
+            if (ModelState.IsValid)
             {
-                object result = await _userService.Register(userInputDTO);
-                //_logger.LogInformation($"Registration successful for user: {((Teacher)result).Id}");
-                return Ok(result);
+                try
+                {
+                    object result = await _userLoginService.Register(userInputDTO);
+                    _logger.LogInformation($"Registration successful for user");
+                    return Ok(result);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Registration failed for user");
+                    return BadRequest(new ErrorModel(501, ex.Message));
+                }  
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Registration failed for user");
-                return BadRequest(new ErrorModel(501, ex.Message));
-            }
+            return BadRequest("Details are Missing");
+
         }
+
     }
-
-
     
 }

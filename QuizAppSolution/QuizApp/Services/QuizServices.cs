@@ -76,6 +76,7 @@ namespace QuizApp.Services
                 QuizCreatedBy = quiz.QuizCreatedBy,
                 TotalPoints = quiz.TotalPoints,
                 IsMultpleAllowed = quiz.IsMultipleAttemptAllowed,
+                Timelimit = quiz.TimeLimit,
                 QuizQuestions = quiz.QuizQuestions.Select(qq => qq.QuestionId).ToList()
             };
         }
@@ -93,21 +94,18 @@ namespace QuizApp.Services
                 NumOfQuestions = quizDTO.QuestionIds.Count,
                 QuizCreatedBy = quizDTO.QuizCreatedBy,
                 IsMultipleAttemptAllowed = quizDTO.IsMultpleAttemptAllowed,
-                QuizQuestions = new List<QuizQuestion>()
+                QuizQuestions = new List<QuizQuestion>(),
+                TimeLimit = quizDTO.TimeLimit
             };
 
             decimal totalPoints = 0;
             foreach (var questionId in quizDTO.QuestionIds)
             {
                 var question = await _questionRepository.Get(questionId);
-                if (question != null)
+                if (question != null && !question.IsDeleted)
                 {
                     totalPoints += question.Points;
                     quiz.QuizQuestions.Add(new QuizQuestion { QuizId = quiz.Id, QuestionId = questionId });
-                }
-                else
-                {
-                    throw new NoSuchQuestionException($"Question with ID {questionId} does not exist.");
                 }
             }
             quiz.TotalPoints = totalPoints;
@@ -130,9 +128,9 @@ namespace QuizApp.Services
                     quiz.QuizName = quizDTO.QuizName ?? quiz.QuizName;
                     quiz.QuizDescription = quizDTO.QuizDescription ?? quiz.QuizDescription;
                     quiz.QuizType = quizDTO.QuizType ?? quiz.QuizType;
-                    quiz.IsMultipleAttemptAllowed = quizDTO.IsMultpleAttemptAllowed ?? quiz.IsMultipleAttemptAllowed;
+                    quiz.IsMultipleAttemptAllowed = quizDTO.IsMultipleAttemptAllowed ?? quiz.IsMultipleAttemptAllowed;
+                    quiz.TimeLimit = quizDTO.TimeLimit ?? quiz.TimeLimit;
 
-                    // Update QuizQuestions if provided
                     if (quizDTO.QuestionIds != null)
                     {
                         quiz.QuizQuestions.Clear();
@@ -141,8 +139,15 @@ namespace QuizApp.Services
                         foreach (var questionId in quizDTO.QuestionIds)
                         {
                             var question = await _questionRepository.Get(questionId);
-                            totalPoints += question.Points;
-                            quiz.QuizQuestions.Add(new QuizQuestion { QuizId = quiz.Id, QuestionId = questionId });
+                            if (!question.IsDeleted)
+                            {
+                                totalPoints += question.Points;
+                                quiz.QuizQuestions.Add(new QuizQuestion { QuizId = quiz.Id, QuestionId = questionId });
+                            }
+                            else
+                            {
+                                throw new NoSuchQuestionException(questionId);
+                            }
                         }
 
                         quiz.NumOfQuestions = quizDTO.QuestionIds.Count;
@@ -214,6 +219,10 @@ namespace QuizApp.Services
             {
                 throw new NoSuchQuizException(ex.Message);
             }
+            catch(UnauthorizedToDeleteException ex)
+            {
+                throw ex;
+            }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
@@ -250,13 +259,13 @@ namespace QuizApp.Services
                 }
 
             }
+            catch(UnauthorizedToDeleteException ex)
+            {
+                throw ex;
+            }
             catch (NoSuchQuizException ex)
             {
                 throw new NoSuchQuizException(ex.Message);
-            }
-            catch(NoSuchUserException ex)
-            {
-                throw new NoSuchUserException(ex.Message);
             }
             catch (Exception ex)
             {
@@ -295,10 +304,6 @@ namespace QuizApp.Services
             {
                 throw new NoSuchQuizException(ex.Message);
             }
-            catch (NoSuchUserException ex)
-            {
-                throw new NoSuchUserException(ex.Message);
-            }
             catch(UnauthorizedToEditException ex)
             {
                 throw ex;
@@ -328,7 +333,7 @@ namespace QuizApp.Services
             }
             catch(NoSuchQuizException ex)
             {
-                throw ex;
+                throw new NoSuchQuizException(ex.Message);
             }
             catch (Exception ex)
             {
@@ -337,7 +342,6 @@ namespace QuizApp.Services
         }
 
         //GET ALL SOFT DELETED QUIZ
-
         public async Task<List<QuizReturnDTO>> GetAllSoftDeletedQuizzesAsync()
         {
             try
@@ -408,6 +412,7 @@ namespace QuizApp.Services
                     NumOfQuestions = originalQuiz.NumOfQuestions,
                     QuizCreatedBy = userId,
                     IsMultipleAttemptAllowed = originalQuiz.IsMultipleAttemptAllowed,
+                    TimeLimit = originalQuiz.TimeLimit,
                     QuizQuestions = new List<QuizQuestion>(),
                     TotalPoints = originalQuiz.TotalPoints
                 };
@@ -428,6 +433,54 @@ namespace QuizApp.Services
             catch (NoSuchQuizException ex)
             {
                 throw new NoSuchQuizException(ex.Message);
+            }
+            catch (NoSuchUserException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        // ADD QUESTIONS TO EXISTING QUIZ
+        public async Task<QuizReturnDTO> AddQuestionsToQuizAsync(AddQuestionsToQuizDTO inputDTO, int userId)
+        {
+            try
+            {
+                Quiz quiz = await _quizRepo.Get(inputDTO.QuizId);
+                if (userId == quiz.QuizCreatedBy)
+                {
+                    decimal totalPoints = quiz.TotalPoints;
+                    foreach (var questionId in inputDTO.QuestionIds)
+                    {
+                        if (quiz.QuizQuestions.Any(q => q.QuestionId == questionId))
+                        {
+                            continue;
+                        }
+                        var question = await _questionRepository.Get(questionId);
+                        totalPoints += question.Points;
+                        quiz.QuizQuestions.Add(new QuizQuestion { QuizId = quiz.Id, QuestionId = questionId });
+                        quiz.NumOfQuestions += 1;
+                    }
+                    quiz.TotalPoints = totalPoints;
+                    await _quizRepo.Update(quiz);
+                    return await MapQuizToQuizReturnDTO(quiz);
+                }
+                else
+                {
+                    throw new UnauthorizedToEditException();
+                }
+
+            }
+            catch (NoSuchQuizException ex)
+            {
+                throw new NoSuchQuizException(ex.Message);
+            }
+            catch (NoSuchQuestionException ex)
+            {
+                throw new NoSuchQuestionException(ex.Message);
             }
             catch (UnauthorizedToEditException ex)
             {

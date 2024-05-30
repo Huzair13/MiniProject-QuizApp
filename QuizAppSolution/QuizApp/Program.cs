@@ -22,6 +22,7 @@ namespace QuizApp
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddLogging(l => l.AddLog4Net());
 
             builder.Services.AddSwaggerGen(option =>
             {
@@ -82,6 +83,7 @@ namespace QuizApp
             builder.Services.AddScoped<IRepository<int, Question>, QuestionRepository>();
             builder.Services.AddScoped<IRepository<int,Quiz>,QuizRepository>();
             builder.Services.AddScoped<IRepository<int,Response>, ResponseRepository>();
+            
             #endregion
 
             #region services
@@ -90,18 +92,12 @@ namespace QuizApp
             builder.Services.AddScoped<IQuestionServices, QuestionServices>();
             builder.Services.AddScoped<IQuizServices,QuizServices>();
             builder.Services.AddScoped<IQuizResponseServices, QuizResponseServices>();
+            builder.Services.AddScoped<IUserServices, UserServices>();
+            builder.Services.AddScoped<IQuestionViewServices, QuestionViewServices>();
             #endregion
-
-            //builder.Services.AddControllers()
-            //    .AddJsonOptions(options =>
-            //    {
-            //        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-            //        options.JsonSerializerOptions.MaxDepth = 64;
-            //    });
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -111,6 +107,7 @@ namespace QuizApp
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseHttpLogging();
 
 
             app.MapControllers();
