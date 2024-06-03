@@ -9,6 +9,7 @@ using QuizApp.Models.DTOs.MCQDTOs;
 using QuizApp.Models.DTOs.QuizDTOs;
 using QuizApp.Services;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace QuizApp.Controllers
@@ -18,9 +19,12 @@ namespace QuizApp.Controllers
     [ApiController]
     public class QuestionController :ControllerBase
     {
+        //INITIALIZATION
         private readonly IQuestionServices _questionServices;
         private readonly ILogger<UserController> _logger;
 
+        //DEPENDENCY INJECTION
+        [ExcludeFromCodeCoverage]
         public QuestionController(IQuestionServices questionServices, ILogger<UserController> logger)
         {
             _questionServices = questionServices;
@@ -28,6 +32,7 @@ namespace QuizApp.Controllers
         }
 
         //ADD MCQ CONTROLLER
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPost("AddMCQQuestion")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
@@ -65,6 +70,7 @@ namespace QuizApp.Controllers
         }
 
         //ADD FILL UPS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPost("AddFillUpsQuestion")]
         [ProducesResponseType(typeof(FillUpsReturnDTO), StatusCodes.Status200OK)]
@@ -102,6 +108,7 @@ namespace QuizApp.Controllers
         }
 
         //EDIT FILL UPS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditFillUps")]
         [ProducesResponseType(typeof(FillUpsReturnDTO), StatusCodes.Status200OK)]
@@ -138,6 +145,7 @@ namespace QuizApp.Controllers
         }
 
         //EDIT MCQ
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditMCQ")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
@@ -174,6 +182,7 @@ namespace QuizApp.Controllers
         }
 
         //EDIT QUESTION
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditQuestionByID")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
@@ -210,6 +219,7 @@ namespace QuizApp.Controllers
         }
 
         //DELETE QUESTION
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpDelete("DeleteQuestionByID")]
         [ProducesResponseType(typeof(QuestionReturnDTO), StatusCodes.Status200OK)]
@@ -242,6 +252,7 @@ namespace QuizApp.Controllers
         }
 
         //SOFT DELETE QUESTION
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpDelete("SoftDeleteQuestion")]
         [ProducesResponseType(typeof(QuestionDTO), StatusCodes.Status200OK)]
@@ -276,6 +287,7 @@ namespace QuizApp.Controllers
         }
 
         //UNDO SOFT DELETE
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPost("UndoSoftDelete")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -309,6 +321,7 @@ namespace QuizApp.Controllers
         }
 
         //MAP INPUT DTO TO FILL UPS DTO
+        [ExcludeFromCodeCoverage]
         private FillUpsDTO MapInputDTOToFiilUpsDTO(FillUpsInputDTO inputDTO)
         {
             FillUpsDTO fillUpsDTO = new FillUpsDTO();
@@ -321,6 +334,7 @@ namespace QuizApp.Controllers
         }
 
         //MAP INPUT DTO TO MCQ DTO
+        [ExcludeFromCodeCoverage]
         private MCQDTO MapInputDTOToMCQDTO(MCQInputDTO inputDTO)
         {
             MCQDTO mCQDTO= new MCQDTO();

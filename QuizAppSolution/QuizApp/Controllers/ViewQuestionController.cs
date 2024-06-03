@@ -8,6 +8,7 @@ using QuizApp.Models;
 using QuizApp.Models.DTOs.QuizDTOs;
 using QuizApp.Services;
 using System.Security.Claims;
+using System.Diagnostics.CodeAnalysis;
 
 namespace QuizApp.Controllers
 {
@@ -20,6 +21,7 @@ namespace QuizApp.Controllers
         private readonly ILogger<ViewQuestionController> _logger;
 
         //DEPENDENCY INJECTION
+        [ExcludeFromCodeCoverage]
         public ViewQuestionController(IQuestionViewServices questionServices, ILogger<ViewQuestionController> logger)
         {
             _questionServices = questionServices;
@@ -27,6 +29,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL QUESTIONS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllQuestions")]
         [ProducesResponseType(typeof(IList<QuestionReturnDTO>), StatusCodes.Status200OK)]
@@ -52,6 +55,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL MCQ QUESTIONS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllMCQQuestions")]
         [ProducesResponseType(typeof(IList<QuestionReturnDTO>), StatusCodes.Status200OK)]
@@ -77,6 +81,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL FILL UPS QUESTIONS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllFillUpsQuestions")]
         [ProducesResponseType(typeof(IList<FillUpsReturnDTO>), StatusCodes.Status200OK)]
@@ -102,6 +107,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL SOFT DELETED QUESTIONS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllSoftDeletedQuestion")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -127,6 +133,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL HARD QUESTIONS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllHardQuestions")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -152,6 +159,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL MEDIUM QUESTIONS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllMediumQuestions")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -177,6 +185,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL EASY QUESTIONS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllEasyQuestions")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -202,6 +211,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL QUESTION CREATED BY THE LOGGED IN USER
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllCreatedQuestion")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]

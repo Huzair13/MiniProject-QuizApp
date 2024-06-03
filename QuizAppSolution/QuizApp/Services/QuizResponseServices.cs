@@ -46,7 +46,7 @@ namespace QuizApp.Services
                 var AllResponses = await _responseRepo.Get();
                 var responses = AllResponses
                             .Where(r => r.UserId == userId && r.QuizId == quizId)
-                            .OrderByDescending(r => r.ScoredPoints);
+                            .OrderByDescending(r => r.ScoredPoints).ThenBy(r=>r.TimeTaken);
                 foreach(var response in responses)
                 {
                     var answeredQuestions = response.ResponseAnswers.Select(ra => new AnsweredQuestionDTO
@@ -63,6 +63,7 @@ namespace QuizApp.Services
                         UserId = userId,
                         QuizId = quizId,
                         Score = response.ScoredPoints,
+                        TimeTaken = response.TimeTaken,
                         AnsweredQuestions = answeredQuestions
                     });
                 }
@@ -115,7 +116,7 @@ namespace QuizApp.Services
             catch(QuizAlreadyStartedException ex)
             {
                 _logger.LogError(ex, "Quiz already started error at StartQuiz service");
-                throw ex;
+                throw new QuizAlreadyStartedException(ex.Message);
             }
             catch (NoSuchQuizException ex)
             {
@@ -263,11 +264,14 @@ namespace QuizApp.Services
 
                     if (question is MultipleChoice multipleChoiceQuestion)
                     {
-                        isCorrect = multipleChoiceQuestion.CorrectChoice == answer;
+                        //isCorrect = multipleChoiceQuestion.CorrectChoice == answer;
+                        isCorrect = string.Equals(multipleChoiceQuestion.CorrectChoice, answer, StringComparison.OrdinalIgnoreCase);
                     }
                     else if (question is FillUps fillUpsQuestion)
                     {
-                        isCorrect = fillUpsQuestion.CorrectAnswer == answer;
+                        //isCorrect = fillUpsQuestion.CorrectAnswer == answer;
+                        isCorrect = string.Equals(fillUpsQuestion.CorrectAnswer, answer, StringComparison.OrdinalIgnoreCase);
+
                     }
 
                     response.ResponseAnswers.Add(new ResponseAnswer
@@ -296,7 +300,7 @@ namespace QuizApp.Services
             catch(QuizNotStartedException ex)
             {
                 _logger.LogError(ex, "Quiz not started error at SubmitAllAnswers service");
-                throw ex;
+                throw new QuizNotStartedException(ex.Message);
             }
             catch (NoSuchQuestionException ex)
             {
@@ -496,6 +500,7 @@ namespace QuizApp.Services
                             UserName = user != null ? user.Name : "Unknown",
                             ScoredPoints = response.ScoredPoints,
                             StartTime = response.StartTime,
+                            TimeTaken = response.TimeTaken,
                             correctPercentage = percentage,
                             EndTime = response.EndTime
                         });
@@ -555,6 +560,7 @@ namespace QuizApp.Services
                             UserName = student != null ? student.Name : "Unknown",
                             ScoredPoints = response.ScoredPoints,
                             correctPercentage = percentage,
+                            TimeTaken = response.TimeTaken,
                             StartTime = response.StartTime,
                             EndTime = response.EndTime
                         });

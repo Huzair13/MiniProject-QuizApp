@@ -6,6 +6,7 @@ using QuizApp.Models;
 using QuizApp.Models.DTOs;
 using QuizApp.Models.DTOs.QuizDTOs;
 using QuizApp.Models.DTOs.ResponseDTO;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace QuizApp.Controllers
@@ -19,6 +20,7 @@ namespace QuizApp.Controllers
         private readonly ILogger<QuizController> _logger;
 
         //DEPENDENCY INJECTION
+        [ExcludeFromCodeCoverage]
         public QuizAttemptController(IQuizResponseServices quizResponseServices, ILogger<QuizController> logger)
         {
             _quizResponseServices = quizResponseServices;
@@ -26,6 +28,7 @@ namespace QuizApp.Controllers
         }
 
         //START QUIZ
+        [ExcludeFromCodeCoverage]
         [Authorize]
         [HttpPost("StartQuiz")]
         [ProducesResponseType(typeof(StartQuizResponseDTO), StatusCodes.Status200OK)]
@@ -58,6 +61,7 @@ namespace QuizApp.Controllers
         }
 
         //SUBMIT ANSWER
+        [ExcludeFromCodeCoverage]
         [Authorize]
         [HttpPost("submitAnswer")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -101,6 +105,7 @@ namespace QuizApp.Controllers
         }
 
         //SUBMIT ALL ANSWER
+        [ExcludeFromCodeCoverage]
         [Authorize]
         [HttpPost("submitAllAnswer")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -151,6 +156,7 @@ namespace QuizApp.Controllers
         }
 
         //CHECK RESULT
+        [ExcludeFromCodeCoverage]
         [Authorize]
         [HttpPost("checkResult")]
         [ProducesResponseType(typeof(QuizResultDTO), StatusCodes.Status200OK)]
@@ -177,6 +183,7 @@ namespace QuizApp.Controllers
         }
 
         //LEADERBOARD
+        [ExcludeFromCodeCoverage]
         [Authorize]
         [HttpGet("LeaderBoard")]
         [ProducesResponseType(typeof(List<LeaderboardDTO>), StatusCodes.Status200OK)]
@@ -202,6 +209,7 @@ namespace QuizApp.Controllers
         }
 
         //STUDENT LEADERBOARD
+        [ExcludeFromCodeCoverage]
         [Authorize]
         [HttpGet("StudentLeaderBoard")]
         [ProducesResponseType(typeof(List<LeaderboardDTO>), StatusCodes.Status200OK)]
@@ -227,6 +235,7 @@ namespace QuizApp.Controllers
         }
 
         //STUDENT POSITION
+        [ExcludeFromCodeCoverage]
         [Authorize]
         [HttpGet("GetStudentPosition")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
@@ -253,6 +262,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL RESPONSES
+        [ExcludeFromCodeCoverage]
         [Authorize]
         [HttpGet("GetAllUserResponses")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]

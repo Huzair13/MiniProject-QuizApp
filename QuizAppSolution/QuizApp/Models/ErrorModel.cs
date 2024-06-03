@@ -1,5 +1,8 @@
-﻿namespace QuizApp.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace QuizApp.Models
 {
+    [ExcludeFromCodeCoverage]
     public class ErrorModel
     {
         public int ErrorCode { get; set; }

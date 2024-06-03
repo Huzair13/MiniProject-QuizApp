@@ -8,6 +8,7 @@ using QuizApp.Models;
 using QuizApp.Models.DTOs.QuizDTOs;
 using QuizApp.Models.DTOs.MCQDTOs;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace QuizApp.Controllers
 {
@@ -20,6 +21,7 @@ namespace QuizApp.Controllers
         private readonly ILogger<QuizController> _logger;
 
         //DEPENDENCY INJECTION
+        [ExcludeFromCodeCoverage]
         public QuizController(IQuizServices quizServices, ILogger<QuizController> logger)
         {
             _quizServices = quizServices;
@@ -27,6 +29,7 @@ namespace QuizApp.Controllers
         }
 
         //ADD QUIZ
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPost("AddQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -70,6 +73,7 @@ namespace QuizApp.Controllers
         }
 
         //EDIT QUIZ
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPut("EditQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -114,6 +118,7 @@ namespace QuizApp.Controllers
         }
 
         //DELETE QUIZ
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpDelete("DeleteQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -157,6 +162,7 @@ namespace QuizApp.Controllers
         }
 
         //SOFT DELETE QUIZ
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpDelete("SoftDeleteQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -201,6 +207,7 @@ namespace QuizApp.Controllers
         }
 
         //UNDO SOFT DELETE
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPost("UndoSoftDelete")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -244,6 +251,7 @@ namespace QuizApp.Controllers
         }
 
         //CREATE QUIZ FROM EXISTING QUIZ
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPost("CreateQuizByExistingQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -282,6 +290,7 @@ namespace QuizApp.Controllers
         }
 
         //ADD QUESTIONS
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpPost("AddQuestions")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]

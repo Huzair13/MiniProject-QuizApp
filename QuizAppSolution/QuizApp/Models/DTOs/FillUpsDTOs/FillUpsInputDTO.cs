@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace QuizApp.Models.DTOs.FillUpsDTOs
 {
+    [ExcludeFromCodeCoverage]
     public class FillUpsInputDTO
     {
         [Required(ErrorMessage = "Question text is required.")]

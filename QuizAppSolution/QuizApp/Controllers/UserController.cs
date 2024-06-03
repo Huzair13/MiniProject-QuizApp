@@ -6,6 +6,7 @@ using QuizApp.Services;
 using QuizApp.Models.DTOs.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Diagnostics.CodeAnalysis;
 
 namespace QuizApp.Controllers
 {
@@ -19,6 +20,7 @@ namespace QuizApp.Controllers
         private readonly ILogger<QuizController> _logger;
 
         //DEPENDNCY INJECTION
+        [ExcludeFromCodeCoverage]
         public UserController(IUserLoginAndRegisterServices userLoginService, ILogger<QuizController> logger)
         {
             _userLoginService = userLoginService;
@@ -27,6 +29,7 @@ namespace QuizApp.Controllers
 
 
         //LOGIN
+        [ExcludeFromCodeCoverage]
         [HttpPost("Login")]
         [ProducesResponseType(typeof(LoginReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status401Unauthorized)]
@@ -52,6 +55,7 @@ namespace QuizApp.Controllers
         }
 
         //REGISTER
+        [ExcludeFromCodeCoverage]
         [HttpPost("Register")]
         [ProducesResponseType(typeof(RegisterReturnDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]

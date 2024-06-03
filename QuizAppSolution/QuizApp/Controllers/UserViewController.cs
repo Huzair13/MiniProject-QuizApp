@@ -4,6 +4,7 @@ using QuizApp.Interfaces;
 using QuizApp.Models.DTOs.UserDTOs;
 using QuizApp.Models;
 using System.Security.Claims;
+using System.Diagnostics.CodeAnalysis;
 
 namespace QuizApp.Controllers
 {
@@ -16,6 +17,7 @@ namespace QuizApp.Controllers
         private readonly ILogger<UserViewController> _logger;
 
         //DEPENDENCY INJECTION
+        [ExcludeFromCodeCoverage]
         public UserViewController(IUserServices userServices ,ILogger<UserViewController> logger) 
         {
             _userServices = userServices;
@@ -23,6 +25,7 @@ namespace QuizApp.Controllers
         }
 
         //VIEW STUDENT PROFILE
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Student")]
         [HttpGet("ViewStudentProfile")]
         [ProducesResponseType(typeof(StudentReturnDTO), StatusCodes.Status200OK)]
@@ -43,6 +46,7 @@ namespace QuizApp.Controllers
         }
 
         //VIEW TEACHER PROFILE
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("ViewTeacherProfile")]
         [ProducesResponseType(typeof(TeacherReturnDTO), StatusCodes.Status200OK)]

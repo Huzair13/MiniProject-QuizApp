@@ -8,6 +8,7 @@ namespace QuizApp.Models.DTOs.QuizDTOs
         public int UserId { get; set; }
         public int QuizId { get; set; }
         public decimal Score { get; set; }
+        public TimeSpan TimeTaken { get; set; }
         public List<AnsweredQuestionDTO> AnsweredQuestions { get; set; }
     }
 }

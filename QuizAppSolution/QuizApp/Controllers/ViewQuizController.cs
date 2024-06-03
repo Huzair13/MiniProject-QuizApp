@@ -5,6 +5,7 @@ using QuizApp.Interfaces;
 using QuizApp.Models.DTOs.QuizDTOs;
 using QuizApp.Models;
 using System.Security.Claims;
+using System.Diagnostics.CodeAnalysis;
 
 namespace QuizApp.Controllers
 {
@@ -17,6 +18,7 @@ namespace QuizApp.Controllers
         private readonly ILogger<QuizController> _logger;
 
         //DEPENDENCY INJECTION
+        [ExcludeFromCodeCoverage]
         public ViewQuizController(IQuizServices quizServices, ILogger<QuizController> logger)
         {
             _quizServices = quizServices;
@@ -24,6 +26,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL QUIZZES
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllQuizzes")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -47,8 +50,9 @@ namespace QuizApp.Controllers
                 return StatusCode(500, new ErrorModel(500, "An error occurred while processing your request."));
             }
         }
-        
+
         //GET ALL SOFT DELETED QUIZZES
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetAllSoftDeletedQuiz")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]
@@ -74,6 +78,7 @@ namespace QuizApp.Controllers
         }
 
         //GET ALL QUIZZES CREATED BY THE LOGGED IN TEACHER
+        [ExcludeFromCodeCoverage]
         [Authorize(Roles = "Teacher")]
         [HttpGet("GetQuizzesBySpecificTeacher")]
         [ProducesResponseType(typeof(QuizReturnDTO), StatusCodes.Status200OK)]

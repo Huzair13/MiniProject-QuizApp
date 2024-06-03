@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace QuizApp.Models.DTOs.MCQDTOs
 {
+    [ExcludeFromCodeCoverage]
     public class MCQInputDTO
     {
         [Required(ErrorMessage = "Question text is required.")]

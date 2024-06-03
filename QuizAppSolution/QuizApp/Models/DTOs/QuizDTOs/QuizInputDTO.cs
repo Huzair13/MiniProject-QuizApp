@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace QuizApp.Models.DTOs.QuizDTOs
 {
+    [ExcludeFromCodeCoverage]
     public class QuizInputDTO
     {
         [Required(ErrorMessage = "Quiz Name is required.")]
