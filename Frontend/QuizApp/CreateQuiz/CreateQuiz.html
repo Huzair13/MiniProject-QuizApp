@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz</title>
+    <!-- BOOTSRAP CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+    rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="CreateQuiz.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Create Quiz</h2>
+        <form id="quizForm" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="quizName" class="form-label">Quiz Name</label>
+                <input type="text" class="form-control" id="quizName" placeholder="Enter quiz name" required>
+            </div>
+            <div class="mb-3">
+                <label for="quizDescription" class="form-label" >Quiz Description</label>
+                <textarea class="form-control" id="quizDescription" rows="3" placeholder="Enter quiz description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="quizType" class="form-label">Quiz Type</label>
+                <input type="text" class="form-control" id="quizType" placeholder="Enter quiz type" required>
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="isMultipleAttemptAllowed">
+                <label class="form-check-label" for="isMultipleAttemptAllowed">Allow multiple attempts?</label>
+            </div>
+            <div class="mb-3">
+                <label for="timeLimit" class="form-label">Time Limit (minutes)</label>
+                <input type="number" class="form-control" id="timeLimit" placeholder="Enter time limit" required>
+            </div>
+
+            <h4 class="mt-4 mb-3">Select Questions</h4>
+            <div class="input-group input-group-sm mb-3">
+                <div>
+                    <label for="questionCategory">Category:</label>
+                    <select id="questionCategory">
+                        <option value="">All</option>
+                        <option value="Math">Math</option>
+                        <option value="Science">Science</option>
+                        <option value="General">General</option>
+                    </select>
+                
+                    <label for="questionType">Type:</label>
+                    <select id="questionType">
+                        <option value="">All</option>
+                        <option value="MultipleChoice">Multiple Choice</option>
+                        <option value="Fillups">Fill Ups</option>
+                    </select>
+                
+                    <label for="difficultyLevel">Difficulty:</label>
+                    <select id="difficultyLevel">
+                        <option value="">All</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                
+                    <button class="btn btn-primary" id="filter-button">Filter</button>
+                </div>
+                
+                <input type="text" class="form-control" id="search-query" placeholder="Search for quotes">
+                <button class="btn btn-primary" type="button" id="search-button">Search</button>
+                <div class="dropdown">
+                    <i class="fa fa-fw fa-sort sort-icon" id="filter-icon" data-bs-toggle="dropdown"></i>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" id="sort-az"> Question <span><i
+                                        class="bi bi-arrow-up"></i></span></a></li>
+                        <li><a class="dropdown-item" id="sort-za"> Question <span><i
+                                        class="bi bi-arrow-down"></i></span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="question-grid" id="questionGrid">
+                <!-- QUESTIONS FROM DB  -->
+            </div>
+
+            <nav aria-label="Questions pagination">
+                <ul class="pagination justify-content-center" id="pagination">
+                    <!-- PAGINATION -->
+                </ul>
+            </nav>
+
+            <button type="submit" class="btn btn-primary mt-3">Create Quiz</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="CreateQuiz.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,29 @@
+.container-fluid {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+body {
+    background: #90CCF4;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.login-button {
+    background-color: #90CCF4;
+    border-radius: 100px;
+    font-size: small;
+    font-weight: bolder;
+}
+.login-button:hover {
+    background-color: #46aaed;
+}
+.icon-color {
+    color: #5DA2D5;
+}
+input::placeholder {
+    font-size: 90%;
+}
+.form-group {
+    display: none;
+}
+

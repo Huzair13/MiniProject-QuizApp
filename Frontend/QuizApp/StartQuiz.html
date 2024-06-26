@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Start Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Custom CSS -->
+  <style>
+    /* Custom styles */
+    .quiz-container {
+      padding: 20px;
+    }
+    .question-card {
+      cursor: pointer;
+    }
+    .question-list {
+      list-style-type: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    .question-list li {
+      margin-bottom: 10px;
+    }
+    .selected {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container quiz-container">
+  <h1 class="mt-5 mb-4">Start Quiz</h1>
+  
+  <div class="row row-cols-1 row-cols-md-2 g-4" id="question-cards">
+    <!-- Add more question cards here -->
+  </div>
+
+  <!-- Sidebar for Question List -->
+  <div class="row mt-5">
+    <div class="col-3">
+      <h5>Questions</h5>
+      <ul class="question-list" id="question-list">
+        <!-- List of questions dynamically populated -->
+      </ul>
+    </div>
+    <div class="col-9">
+      <h5>Answer Area</h5>
+      <div id="answer-area">
+        <!-- Answer area for the selected question -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bootstrap JS and dependencies (optional if needed for functionality) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script><!-- Custom script for handling question selection -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+  const questionCardsContainer = document.getElementById('question-cards');
+  const questionList = document.getElementById('question-list');
+  const answerArea = document.getElementById('answer-area');
+  let questions = []; // Array to store questions from JSON
+
+  // Fetch questions from JSON file
+  fetch('test.json')
+    .then(response => response.json())
+    .then(data => {
+      questions = data; // Store questions in array
+
+      // Populate question list in the sidebar
+      questions.forEach((question, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = question.title;
+        listItem.classList.add('list-group-item');
+        listItem.dataset.index = index;
+        listItem.addEventListener('click', () => showQuestion(index));
+        questionList.appendChild(listItem);
+
+        // Create question card
+        const questionCardHTML = `
+          <div class="col">
+            <div class="card question-card" data-index="${index}">
+              <div class="card-body">
+                <h5 class="card-title">${question.title}</h5>
+                <p class="card-text">${question.text}</p>
+                ${generateOptionsHTML(question)}
+              </div>
+            </div>
+          </div>
+        `;
+        questionCardsContainer.innerHTML += questionCardHTML;
+      });
+    });
+
+  // Function to generate HTML for MCQ options
+  function generateOptionsHTML(question) {
+    if (question.type === 'mcq') {
+      let optionsHTML = question.options.map(option => `
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="q${question.index}" value="${option.value}">
+          <label class="form-check-label">
+            ${option.label}
+          </label>
+        </div>
+      `).join('');
+
+      return `
+        <ul class="options">${optionsHTML}</ul>
+      `;
+    }
+    return ''; // Return empty string for non-MCQ questions
+  }
+
+  // Function to display selected question in the answer area
+  function showQuestion(index) {
+    // Remove 'selected' class from all list items
+    const listItems = questionList.querySelectorAll('.list-group-item');
+    listItems.forEach(item => item.classList.remove('selected'));
+    // Add 'selected' class to the clicked list item
+    listItems[index].classList.add('selected');
+
+    const selectedQuestion = questions[index];
+
+    // Display selected question in the answer area based on type
+    if (selectedQuestion.type === 'fill-in-the-blank') {
+      answerArea.innerHTML = `
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">${selectedQuestion.title}</h5>
+            <p class="card-text">${selectedQuestion.text}</p>
+            <div class="mb-3">
+              <input type="text" class="form-control" id="fillInput" placeholder="Enter your answer">
+            </div>
+            <button class="btn btn-primary" id="save-answer-btn">Save Answer</button>
+          </div>
+        </div>
+      `;
+    } else if (selectedQuestion.type === 'mcq') {
+      let optionsHTML = selectedQuestion.options.map(option => `
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="mcqOptions" id="${option.value}" value="${option.value}">
+          <label class="form-check-label" for="${option.value}">
+            ${option.label}
+          </label>
+        </div>
+      `).join('');
+
+      answerArea.innerHTML = `
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">${selectedQuestion.title}</h5>
+            <p class="card-text">${selectedQuestion.text}</p>
+            <form id="mcqForm">${optionsHTML}</form>
+            <button class="btn btn-primary mt-3" id="save-answer-btn">Save Answer</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Add event listener to the Save Answer button
+    const saveAnswerBtn = document.getElementById('save-answer-btn');
+    if (saveAnswerBtn) {
+      saveAnswerBtn.addEventListener('click', function() {
+        saveAnswer(index);
+      });
+    }
+  }
+
+  // Dummy function to save answer (replace with actual functionality)
+  function saveAnswer(index) {
+    alert(`Answer for question ${index + 1} saved!`);
+    // Implement actual saving logic here
+  }
+});
+
+</script>
+
+</body>
+</html>

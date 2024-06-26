@@ -1,0 +1,34 @@
+.question-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.question-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+}
+.question-card:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.pagination {
+    margin-top: 20px;
+}
+
+.sort-icon {
+    font-size: 1.5em;
+    margin-left: 10px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.filter-icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    min-width: auto;
+}

@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <!-- BOOTSTRAP 5.3.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- FONT AWESOME  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!--  FONTS  -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- CSS STYLING -->
+    <link rel="stylesheet" href="Home.css">
+
+  </head>
+  <body>
+    <!-- MAIN DIV USING CONTAINER FLUID -->
+    <div class="container-fluid" id="mainDiv">
+      <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg sticky-top">
+            <div class="container-fluid" style="margin-left: 15px; margin-right: 15px;">
+                <a class="navbar-brand" href="Home.html">
+                    <img src="/Assets/Images/QuizzyNova2.png" alt="Logo" width="200px" height="50px" class="d-inline-block align-text-top img-fluid">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end text-center" id="navbarSupportedContent">
+                    <div class="navbar-nav mb-2 mb-lg-0 me-1 ms-1 mt-auto" id="loginAndSignUp">
+                        <button class="btn me-2 mt-1 text-center login-sigup-button" onclick="openLoginPage()">LogIn</button>
+                        <button class="btn me-2 mt-1 text-center login-sigup-button" onclick="openRegisterPage()">SignUp</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- LANDING CAROUSEL -->
+        <div id="LandingCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#LandingCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#LandingCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#LandingCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              <!-- IMAGE 1 -->
+              <div class="carousel-item active">
+                <img src="/Assets/Images/landingpage_carousel_1.jpg" class="d-block w-100" alt="First slide">
+                <div class="carousel-caption d-flex flex-column">
+                  <h5 style="font-family: 'Playfair Display', serif; ">Create & Share Quizzes</h5>
+                  <p style="font-family: 'Montserrat', sans-serif;">Tutors can easily create and share custom quizzes to make learning interactive and fun.</p>
+                  <button class="btn" onclick="openRegister()">Get Started</button>
+                </div>
+              </div>
+
+              <!-- IMAGE 2 -->
+              <div class="carousel-item">
+                <img src="/Assets/Images/landingpage_carousel_2.jpg" class="d-block w-100" alt="First slide">
+                <div class="carousel-caption d-flex flex-column">
+                  <h5 style="font-family: 'Playfair Display', serif; ">Compete & Collaborate</h5>
+                  <p style="font-family: 'Montserrat', sans-serif;">Engage in real-time quiz battles with friends and climb the leaderboard together!</p>
+                  <button class="btn" onclick="openRegister()">Get Started</button>
+                </div>
+              </div>
+
+              <!-- IMAGE 3 -->
+              <div class="carousel-item">
+                <img src="/Assets/Images/landingpage_carousel_3.jpg" class="d-block w-100" alt="First slide">
+                <div class="carousel-caption d-flex flex-column">
+                  <h5 style="font-family: 'Playfair Display', serif;">Track & Improve</h5>
+                  <p style="font-family: 'Montserrat', sans-serif;">Monitor your progress and performance over time. Turn knowledge into power with detailed analytics.</p>
+                  <button class="btn" onclick="openRegister()">Get Started</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREVIOUS BUTTON -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#LandingCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+
+            <!-- NEXT BUTTON -->
+            <button class="carousel-control-next" type="button" data-bs-target="#LandingCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <!-- TRY FOR FREE TEXT -->
+          <div class="text-center mt-5 quotes" style="font-family: 'Playfair Display', serif; color: black; margin: 0; padding: 0;">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6 p-0" style="background-color: #ECD06F;">
+                  <lottie-player src="https://lottie.host/b4d820bd-bc3f-4b14-9ecd-1de3446fca40/kt6CNRvney.json" class="d-block mx-auto" speed="1" style="width: 100%; max-width: 300px; height: 300px;" loop autoplay direction="1" mode="normal"></lottie-player>
+                </div>
+                <div class="col-md-6 d-flex align-items-center justify-content-center" style="background-color: #ECECEC; padding: 20px;">
+                  <div>
+                    <h5 class="pt-3 ps-5 pe-5 text-center">
+                      A well-crafted quiz is like a mirror reflecting your understanding. It shows you where you shine and where you can improve, making every quiz a step towards self-improvement.
+                    </h5>
+                    <button class="btn mt-3 getStartedButton d-block mx-auto" onclick="openRegister()">
+                      Try For Free
+                    </button>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          
+
+          <!-- CARD SLIDES -->
+          <div class="container-fluid">
+            <div id="CardSlider" class="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+
+                  <!-- CARD 1 -->
+                  <div class="card" style="border-radius: 20px 0px 20px;">
+                    <div class="img-wrapper">
+                      <img src="/Assets/Images/create_question_1.jpg" style="border-radius: 20px 0px 0px 0px;" alt="..."> 
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title text-center" style="font-family: 'Playfair Display', serif; ">Craft Your Questions</h5>
+                      <p class="card-text text-center">Be the creator of quizzes, shaping questions that challenge and entertain. Your quiz, your rules!</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="carousel-item">
+                  <div class="card" style="border-radius: 20px 0px 20px;">
+                    <div class="img-wrapper">
+                      <img src="/Assets/Images/create_quiz_2.jpg" style="border-radius: 20px 0px 0px 0px;" class="d-block w-100" alt="..."> 
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title text-center" style="font-family: 'Playfair Display', serif; ">Build Your Quiz</h5>
+                      <p class="card-text text-center">Piece together quizzes that excite and engage. Create, share, and enjoy the thrill of learning!</p>
+                    </div>
+                  </div>
+                </div>
+          
+                <!-- CARD 3 -->
+                <div class="carousel-item">
+                  <div class="card" style="border-radius: 20px 0px 20px;">
+                    <div class="img-wrapper">
+                      <img src="/Assets/Images/test_skill_3.jpg" style="border-radius: 20px 0px 0px 0px;"  class="d-block w-100" alt="..."> 
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title text-center" style="font-family: 'Playfair Display', serif; ">Battle of Wits</h5>
+                      <p class="card-text text-center">Enter the quiz arena and test your knowledge. Enjoy fun and friendly competition!</p>
+                    </div>
+                  </div>
+                </div>
+          
+                <!-- CARD 4 -->
+                <div class="carousel-item">
+                  <div class="card" style="border-radius: 20px 0px 20px;">
+                    <div class="img-wrapper">
+                      <img src="/Assets/Images/attend_quiz_4.jpg" style="border-radius: 20px 0px 0px 0px;"  class="d-block w-100" alt="..."> 
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title text-center" style="font-family: 'Playfair Display', serif; ">Explore Quizzes</h5>
+                      <p class="card-text text-center">Discover new worlds of knowledge with a variety of quizzes. There's always something new to learn!</p>
+                    </div>
+                  </div>
+                </div>
+          
+                <!-- CARD 5 -->
+                <div class="carousel-item">
+                  <div class="card" style="border-radius: 20px 0px 20px;">
+                    <div class="img-wrapper">
+                      <img src="/Assets/Images/top_scorer_5.jpg" style="border-radius: 20px 0px 0px 0px;"  class="d-block w-100" alt="..."> 
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title text-center" style="font-family: 'Playfair Display', serif; ">Rise to the Top</h5>
+                      <p class="card-text text-center">Aim for the top spot on the leaderboard and prove yourself as the ultimate trivia champion!</p>
+                    </div>
+                  </div>
+                </div>
+          
+                <!-- CARD 6 -->
+                <div class="carousel-item">
+                  <div class="card" style="border-radius: 20px 0px 20px;">
+                    <div class="img-wrapper">
+                      <img src="/Assets/Images/rewards_6.jpg" style="border-radius: 20px 0px 0px 0px;"  class="d-block w-100" alt="..."> 
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title text-center" style="font-family: 'Playfair Display', serif; ">Claim Your Riches</h5>
+                      <p class="card-text text-center">Journey through quizzes and claim glittering coins with each triumphant answer.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PREVIOUS BUTTON -->
+              <button class="carousel-control-prev cardSliderNextAndPrev" type="button" data-bs-target="#CardSlider" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+
+              <!-- NEXT BUTTON -->
+              <button class="carousel-control-next cardSliderNextAndPrev" type="button" data-bs-target="#CardSlider" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- FOOTER -->
+          <footer class="footer bg-light text-center text-lg-start">
+            <div class="container p-4">
+              <div class="row">
+                <!-- ABOUT -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                  <h5 class="text-uppercase text-center">About Us</h5>
+                  <p class="text-center">
+                    QuizzyNova is a platform that allows tutors to create and share custom quizzes to make learning interactive and fun.
+                  </p>
+                </div>
+          
+                <!-- QUICK LINK -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                  <h5 class="text-uppercase text-center">Quick Links</h5>
+                  <ul class="list-unstyled mb-0 text-center">
+                    <li>
+                      <a href="Home.html" class="text-dark">Home</a>
+                    </li>
+                    <li>
+                      <a href="About.html" class="text-dark">About</a>
+                    </li>
+                    <li>
+                      <a href="Contact.html" class="text-dark">Contact</a>
+                    </li>
+                    <li>
+                      <a href="FAQ.html" class="text-dark">FAQ</a>
+                    </li>
+                  </ul>
+                </div>
+          
+                <!-- CONTACT -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                  <h5 class="text-uppercase text-center">Contact</h5>
+                  <ul class="list-unstyled mb-0 text-center">
+                    <li>
+                      <a href="mailto:quizzynova@gmail.com" class="text-dark">quizzynova@gmail.com</a>
+                    </li>
+                    <li>
+                      <a href="tel:+919677381857" class="text-dark">+919677381857</a>
+                    </li>
+                    <li>
+                      <p class="text-dark">123,QuizzyNova Block, Chennai</p>
+                    </li>
+                  </ul>
+                </div>
+          
+                <!-- FOLLOW -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                  <h5 class="text-uppercase text-center">Follow Us</h5>
+                  <ul class="list-unstyled d-flex justify-content-center mb-0">
+                    <li>
+                      <a href="#" class="text-dark me-3">
+                        <i class="fab fa-facebook-f"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="text-dark me-3">
+                        <i class="fab fa-twitter"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="text-dark me-3">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="text-dark">
+                        <i class="fab fa-linkedin"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          
+            <div class="text-center p-3 text-black" style="background-color: #ECD06F;color: black;">
+              © 2024 QuizzyNova
+            </div>
+          </footer>
+    </div>
+
+    <!-- JAVASCRIPT FOR HOME PAGE -->
+    <script src="Home.js"></script>
+    <script>
+      var openRegister=()=>{
+        window.location.href="RegisterOption.html"
+      }
+    </script>
+
+    <!-- BOOTSTRAP JS AND LOTTIE PLAYER JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

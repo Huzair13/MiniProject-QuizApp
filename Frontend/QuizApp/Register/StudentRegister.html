@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+
+    <style>
+        .container-fluid {
+            min-height: 100vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        body{
+            background: #90CCF4;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .login-button{
+            background-color: #90CCF4;
+            border-radius: 100px;
+            font-size: small;
+            font-weight: bolder;
+        }
+
+        .login-button:hover {
+            background-color: #46aaed;
+        }
+
+        .icon-color {
+            color: #5DA2D5;
+        }
+
+        input::placeholder {
+            font-size: 90%; 
+        }
+        
+    </style>  
+</head>
+  <body>
+    <div class="container-fluid d-flex justify-content-center align-items-center">
+        <div class="card text-center shadow-lg rounded-5" style="width: 45rem; margin: 10px; background-color: #ECECEC;">
+            <lottie-player src="https://lottie.host/7d554267-2fbb-4cda-9962-9c6bdc3f23f7/zeOrx075o1.json"  speed="1" loop autoplay direction="1" style="width: auto; height: 150px;" clasa="card-img-top" mode="normal"></lottie-player>
+            <h5 class="card-title" style="font-family: 'Bebas Neue', sans-serif; font-size: 2rem;">REGISTER</h5>
+            <form class="needs-validation" novalidate>
+                <div class="row">
+                    <!-- Left Half -->
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <div class="mt-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user icon-color"></i></span>
+                                    <input class="form-control border-1" type="text" placeholder="NAME" required>
+                                    <div class="invalid-feedback" style="text-align: end;">
+                                        Please Enter the Name.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope icon-color"></i></span>
+                                    <input class="form-control border-1" type="email" placeholder="EMAIL" required>
+                                    <div class="invalid-feedback" style="text-align: end;">
+                                        Please Enter the Email.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone icon-color"></i></span>
+                                    <input class="form-control border-1" type="tel" placeholder="MOBILE NUMBER" required>
+                                    <div class="invalid-feedback" style="text-align: end;">
+                                        Please Enter the Mobile Number.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt icon-color"></i></span>
+                                    <input class="form-control border-1" type="date" id="dob" placeholder="YYYY-MM-DD" required>
+                                    <div class="invalid-feedback" style="text-align: end;">
+                                        Please Enter the DOB.
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Select your date of birth.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Half -->
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <div class="mt-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-university icon-color"></i></span>
+                                    <select class="form-control" id="qualification" name="qualification" required>
+                                        <option value="" disabled selected hidden id="EduOption">EDUCATIONAL QUALIFICATION</option>
+                                        <option value="High School"><i class="fas fa-graduation-cap icon-color"></i> High School</option>
+                                        <option value="Associate's Degree"><i class="fas fa-graduation-cap"></i> Associate's Degree</option>
+                                        <option value="Bachelor's Degree"><i class="fas fa-graduation-cap"></i> Bachelor's Degree</option>
+                                        <option value="Master's Degree"><i class="fas fa-graduation-cap"></i> Master's Degree</option>
+                                        <option value="Doctorate"><i class="fas fa-graduation-cap"></i> Doctorate</option>
+                                        <option value="Other"><i class="fas fa-graduation-cap"></i> Other</option>
+                                    </select>
+                                    <div class="invalid-feedback" style="text-align: end;">
+                                        Please Select the Educational Qualification.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock icon-color"></i></span>
+                                    <input class="form-control border-1" type="password" placeholder="PASSWORD" required>
+                                    <div class="invalid-feedback" style="text-align: end;">
+                                        Please Enter the Password.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock icon-color"></i></span>
+                                    <input class="form-control border-1" type="password" placeholder="RETYPE PASSWORD" required>
+                                    <div class="invalid-feedback" style="text-align: end;">
+                                        Please Re-Enter the Password.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex justify-content-center">
+                                <input type="submit" class="btn login-button btn-lg" value="REGISTER">
+                            </div>
+
+
+                            <div class="d-flex justify-content-between pt-3">
+                                <a href="Login.html"  style="font-size: small;">Already have an account?</a>
+                                <a href="#" class="forgot-password" style="font-size: small;">Forgot Password?</a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+
+    <script src="FormValidation.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

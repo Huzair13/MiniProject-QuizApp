@@ -1,0 +1,21 @@
+[
+  {
+    "questionId": 1,
+    "questionText": "Complete the sentence: 'HTML stands for HyperText Markup ____.'",
+    "questionType": "Fillups"
+  },
+  {
+    "questionId": 2,
+    "questionText": "Which of the following is not a programming language?",
+    "questionType": "MultipleChoice",
+    "options": ["HTML", "Java", "Remo", "Potato"]
+  },
+  {
+    "questionId": 3,
+    "questionText": "Which of the following is not a programming language?",
+    "questionType": "MultipleChoice",
+    "options": ["HTML", "Java", "Python", "Potato"]
+  }
+
+  ]
+  

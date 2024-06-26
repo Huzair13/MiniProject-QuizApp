@@ -1,0 +1,23 @@
+.quiz-container {
+    padding: 20px;
+  }
+  .question-list {
+    list-style-type: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .question-list li {
+    margin-bottom: 10px;
+  }
+  .selected {
+    background-color: #f0f0f0;
+  }
+
+  @media (min-width: 992px) {
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: auto;
+      overflow-y: auto;
+    }
+  }
