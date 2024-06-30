@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .question-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #questionSection {
+            display: none;
+            /* Initially hide the section */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Quiz Details</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" id="quizName">Edit Test</h5>
+                <p class="card-text" id="quizDescription">Test Quiz</p>
+                <p class="card-text"><strong>Type:</strong> <span id="quizType"></span></p>
+                <p class="card-text"><strong>Created On:</strong> <span id="createdOn"></span></p>
+                <p class="card-text"><strong>Number of Questions:</strong> <span id="numOfQuestions"></span></p>
+                <p class="card-text"><strong>Created By:</strong> <span id="quizCreatedBy"></span></p>
+                <p class="card-text"><strong>Multiple Attempts Allowed:</strong> <span id="isMultpleAllowed"></span></p>
+                <p class="card-text"><strong>Total Points:</strong> <span id="totalPoints"></span></p>
+                <p class="card-text"><strong>Time Limit:</strong> <span id="timelimit"></span></p>
+                <button class="btn btn-primary" id="addQuestionButton">Add Questions</button>
+            </div>
+        </div>
+
+        <div id="questionSection">
+            <h4 class="mt-4 mb-3">Select Questions</h4>
+            <div class="input-group input-group-sm mb-3">
+                <div>
+                    <label for="questionCategory">Category:</label>
+                    <select id="questionCategory">
+                        <option value="">All</option>
+                        <option value="Math">Math</option>
+                        <option value="Science">Science</option>
+                        <option value="General">General</option>
+                    </select>
+
+                    <label for="questionType">Type:</label>
+                    <select id="questionType">
+                        <option value="">All</option>
+                        <option value="MultipleChoice">Multiple Choice</option>
+                        <option value="Fillups">Fill Ups</option>
+                    </select>
+
+                    <label for="difficultyLevel">Difficulty:</label>
+                    <select id="difficultyLevel">
+                        <option value="">All</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+
+                    <button class="btn btn-primary" id="filter-button">Filter</button>
+                </div>
+                <input type="text" class="form-control" id="search-query" placeholder="Search for questions">
+                <button class="btn btn-primary" type="button" id="search-button">Search</button>
+                <div class="dropdown">
+                    <i class="fa fa-fw fa-sort sort-icon" id="filter-icon" data-bs-toggle="dropdown"></i>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" id="sort-az">Question <span><i class="bi bi-arrow-up"></i></span></a></li>
+                        <li><a class="dropdown-item" id="sort-za">Question <span><i class="bi bi-arrow-down"></i></span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="question-grid" id="questionGrid">
+                <!-- QUESTIONS FROM DB WILL BE DISPLAYED HERE -->
+            </div>
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination">
+                    <li class="page-item disabled" id="prev-page">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item" id="next-page">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <button class="btn btn-primary" id="btnAddQuestions">Click me</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+
+            const params = new URLSearchParams(window.location.search);
+            const QuizId = params.get('quizID');
+            const token = localStorage.getItem('token');
+
+            const questionGrid = document.getElementById('questionGrid');
+            const addQuestionButton = document.getElementById('addQuestionButton');
+            const questionSection = document.getElementById('questionSection');
+            const addQuestionsBtn = document.getElementById('btnAddQuestions');
+
+            const prevPageBtn = document.getElementById('prev-page');
+            const nextPageBtn = document.getElementById('next-page');
+            const pagination = document.getElementById('pagination');
+            const searchQueryInput = document.getElementById('search-query');
+            const searchButton = document.getElementById('search-button');
+
+            const questionCategoryInput = document.getElementById('questionCategory');
+            const questionTypeInput = document.getElementById('questionType');
+            const difficultyLevelInput = document.getElementById('difficultyLevel');
+            const filterButton = document.getElementById('filter-button');
+
+            let totalPages = 1;
+            let filteredQuestions = [];
+            const questionsPerPage = 5;
+            let currentPage = 1;
+            let allQuestions = [];
+            let selectedQuestions = [];
+            let quizData = {};
+
+            async function fetchQuizDetails() {
+                try {
+                    const response = await fetch(`http://localhost:5273/api/ViewQuiz/GetQuizByQuizID?quizID=${QuizId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (response.ok) {
+                        quizData = await response.json();
+                        console.log(quizData)
+                        displayQuizDetails(quizData);
+                    } else {
+                        console.error('Failed to fetch quiz details');
+                    }
+                } catch (error) {
+                    console.error('Error fetching quiz details:', error);
+                }
+            }
+
+            async function fetchQuestions() {
+                try {
+                    const response = await fetch(`http://localhost:5273/api/ViewQuestion/GetAllQuestions`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (response.ok) {
+                        allQuestions = await response.json();
+                        filterOutQuizQuestions();
+                        totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+                        renderPagination();
+                        renderQuestions(currentPage);
+                    } else {
+                        console.error('Failed to fetch questions');
+                    }
+                } catch (error) {
+                    console.error('Error fetching questions:', error);
+                }
+            }
+
+            function displayQuizDetails(quizData) {
+                document.getElementById('quizName').textContent = quizData.quizName;
+                document.getElementById('quizDescription').textContent = quizData.quizDescription;
+                document.getElementById('quizType').textContent = quizData.quizType;
+                document.getElementById('createdOn').textContent = new Date(quizData.createdOn).toLocaleString();
+                document.getElementById('numOfQuestions').textContent = quizData.numOfQuestions;
+                document.getElementById('quizCreatedBy').textContent = quizData.quizCreatedBy;
+                document.getElementById('isMultpleAllowed').textContent = quizData.isMultpleAllowed ? 'Yes' : 'No';
+                document.getElementById('totalPoints').textContent = quizData.totalPoints;
+                document.getElementById('timelimit').textContent = quizData.timelimit;
+            }
+
+            function renderQuestions(page) {
+                questionGrid.innerHTML = '';
+                const start = (page - 1) * questionsPerPage;
+                const end = start + questionsPerPage;
+                const paginatedQuestions = filteredQuestions.slice(start, end);
+
+                paginatedQuestions.forEach(question => {
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'question-card';
+                    const isChecked = selectedQuestions.includes(question.id);
+                    questionCard.innerHTML = `
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="question${question.id}" value="${question.id}" ${isChecked ? 'checked' : ''} onchange="updateSelectedQuestions(${question.id}, this.checked)">
+                            <label class="form-check-label" for="question${question.id}">${question.questionText}</label>
+                        </div>
+                    `;
+                    questionGrid.appendChild(questionCard);
+                });
+            }
+
+            function renderPagination() {
+                const totalPageItems = Math.ceil(filteredQuestions.length / questionsPerPage);
+                pagination.innerHTML = '';
+                for (let i = 1; i <= totalPageItems; i++) {
+                    const pageItem = document.createElement('li');
+                    pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                    pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                    pageItem.addEventListener('click', () => {
+                        currentPage = i;
+                        renderQuestions(currentPage);
+                    });
+                    pagination.appendChild(pageItem);
+                }
+            }
+
+            function filterOutQuizQuestions() {
+                filteredQuestions = allQuestions.filter(question => {
+                    return !quizData.quizQuestions.some(quizQuestion => quizQuestion.id === question.id);
+                });
+            }
+
+            addQuestionButton.addEventListener('click', async function () {
+                await fetchQuestions();
+                questionSection.style.display = 'block';
+            });
+
+            searchButton.addEventListener('click', function () {
+                const query = searchQueryInput.value.toLowerCase();
+                filteredQuestions = allQuestions.filter(question =>
+                    question.questionText.toLowerCase().includes(query)
+                );
+                totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+                renderPagination();
+                renderQuestions(currentPage);
+            });
+
+            filterButton.addEventListener('click', function () {
+                const category = questionCategoryInput.value;
+                const type = questionTypeInput.value;
+                const difficulty = difficultyLevelInput.value;
+
+                filteredQuestions = allQuestions.filter(question => {
+                    return (
+                        (category === '' || question.category === category) &&
+                        (type === '' || question.type === type) &&
+                        (difficulty === '' || question.difficulty === difficulty)
+                    );
+                });
+
+                totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+                renderPagination();
+                renderQuestions(currentPage);
+            });
+
+            prevPageBtn.addEventListener('click', function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderQuestions(currentPage);
+                }
+            });
+
+            nextPageBtn.addEventListener('click', function () {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderQuestions(currentPage);
+                }
+            });
+
+            window.updateSelectedQuestions = function (questionId, isChecked) {
+                if (isChecked) {
+                    if (!selectedQuestions.includes(questionId)) {
+                        selectedQuestions.push(questionId);
+                    }
+                } else {
+                    selectedQuestions = selectedQuestions.filter(id => id !== questionId);
+                }
+            };
+
+            addQuestionsBtn.addEventListener('click', async function () {
+                const requestBody = {
+                    quizId: QuizId,
+                    questionIds: selectedQuestions
+                };
+
+                try {
+                    const response = await fetch(`http://localhost:5273/api/ViewQuiz/AddQuestions`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+                    if (response.ok) {
+                        alert('Questions added successfully!');
+                        selectedQuestions = [];
+                        currentPage = 1;
+                        await fetchQuestions();
+                    } else {
+                        console.error('Failed to add questions');
+                    }
+                } catch (error) {
+                    console.error('Error adding questions:', error);
+                }
+            });
+
+            await fetchQuizDetails();
+        });
+    </script>
+</body>
+
+</html>

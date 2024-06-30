@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .leaderboard-table {
+            max-width: 1000px;
+            margin: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: linear-gradient(45deg, #007bff, #6610f2);
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .rank-badge {
+            font-size: 1.25rem;
+            padding: 0.5em 1em;
+            border-radius: 10px;
+        }
+
+        .badge-gold {
+            background-color: gold;
+            color: black;
+        }
+
+        .badge-silver {
+            background-color: silver;
+            color: black;
+        }
+
+        .badge-bronze {
+            background-color: #cd7f32;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="leaderboard-table">
+            <div class="table-header">
+                <h2>Quiz Leaderboard</h2>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">User ID</th>
+                        <th scope="col">User Name</th>
+                        <th scope="col">Scored Points</th>
+                        <th scope="col">Correct Percentage</th>
+                        <th scope="col">Time Taken</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">End Time</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Leaderboard data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const QuizId = params.get('quizID');
+        const token = localStorage.getItem('token');
+        console.log(QuizId);
+        console.log(token);
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch(`http://localhost:5273/api/QuizAttempt/LeaderBoard?quizId=${QuizId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const leaderboardBody = document.getElementById('leaderboard-body');
+                    data.forEach(user => {
+                        const row = document.createElement('tr');
+                        const rankClass = user.rank === 1 ? 'badge-gold' : user.rank === 2 ? 'badge-silver' : user.rank === 3 ? 'badge-bronze' : '';
+                        row.innerHTML = `
+                            <th scope="row">
+                                <span class="rank-badge ${rankClass}">${user.rank}</span>
+                            </th>
+                            <td>${user.userId}</td>
+                            <td>${user.userName}</td>
+                            <td>${user.scoredPoints}</td>
+                            <td>${user.correctPercentage}%</td>
+                            <td>${user.timeTaken}</td>
+                            <td>${new Date(user.startTime).toLocaleString()}</td>
+                            <td>${new Date(user.endTime).toLocaleString()}</td>
+                        `;
+                        leaderboardBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching leaderboard data:', error));
+        });
+    </script>
+</body>
+
+</html>

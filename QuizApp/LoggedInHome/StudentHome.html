@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title>
+  <!-- BOOTSTRAP 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- FONT AWESOME  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!--  FONTS  -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap"
+    rel="stylesheet">
+
+  <!-- CSS STYLING -->
+  <link rel="stylesheet" href="StudentHome.css">
+
+</head>
+
+<body>
+  <!-- MAIN DIV USING CONTAINER FLUID -->
+  <div class="container-fluid" id="mainDiv">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="Home.html">
+          <img src="/Assets/Images/QuizzyNovaBlue.png" alt="Logo" width="200px" height="50px"
+            class="d-inline-block align-text-top img-fluid ms-3">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3" style="font-family: 'Playfair Display', serif;">
+            <li class="nav-item">
+              <a class="nav-link" href="StudentHome.html" style="font-size: 18px; color: black;">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Home.html" style="font-size: 18px; color: black;">About</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav mb-2 mb-lg-0 me-3" style="font-family: 'Playfair Display', serif;">
+            <li class="nav-item">
+              <a class="nav-link" href="#" style="font-size: 18px; color: black;">
+                <i class="fas fa-user-circle"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- START QUIZ -->
+    <div class="container-fluid d-flex justify-content-center flex-column align-items-center p-3">
+      <div class="card" style="width: 100%; max-width: 20rem;">
+        <img src="/Assets/Images/StartQuiz.jpg" class="card-img-top" alt="..."
+          style="height: 15rem; width: 100%; max-width: 18rem; align-items: center; align-self: center;">
+        <div class="card-body">
+          <p class="card-text" style="text-align: center; font-family: 'Playfair Display', serif; width: 100%;">Take the
+            Quiz, Ace the Score!</p>
+        </div>
+      </div>
+
+      <input placeholder="ENTER QUIZ CODE" class="btn me-2 mt-1 text-center start-quiz" id="startQuizNumber"
+        style="width: 100%; max-width: 18rem;">
+      <button class="btn me-2 mt-1 text-center start-button mt-3" style="width: 100%; max-width: 18rem;"
+        id="startQuizHome">Start</button>
+    </div>
+
+
+    <div id="quiz-grid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+      <!-- Quiz cards will be inserted here -->
+    </div>
+    <div class="text-center mt-4">
+      <button id="see-all-btn" class="btn btn-primary">See All Quizzes</button>
+    </div>
+    <div id="pagination-container" class="mt-4" style="display: none;">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <!-- Pagination items will be inserted here -->
+        </ul>
+      </nav>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer bg-light text-center text-lg-start">
+      <div class="container p-4">
+        <div class="row">
+          <!-- ABOUT -->
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase text-center">About Us</h5>
+            <p class="text-center">
+              QuizzyNova is a platform that allows tutors to create and share custom quizzes to make learning
+              interactive and fun.
+            </p>
+          </div>
+
+          <!-- QUICK LINK -->
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase text-center">Quick Links</h5>
+            <ul class="list-unstyled mb-0 text-center">
+              <li>
+                <a href="Home.html" class="text-dark">Home</a>
+              </li>
+              <li>
+                <a href="About.html" class="text-dark">About</a>
+              </li>
+              <li>
+                <a href="Contact.html" class="text-dark">Contact</a>
+              </li>
+              <li>
+                <a href="FAQ.html" class="text-dark">FAQ</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- CONTACT -->
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase text-center">Contact</h5>
+            <ul class="list-unstyled mb-0 text-center">
+              <li>
+                <a href="mailto:quizzynova@gmail.com" class="text-dark">quizzynova@gmail.com</a>
+              </li>
+              <li>
+                <a href="tel:+919677381857" class="text-dark">+919677381857</a>
+              </li>
+              <li>
+                <p class="text-dark">123,QuizzyNova Block, Chennai</p>
+              </li>
+            </ul>
+          </div>
+
+          <!-- FOLLOW -->
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase text-center">Follow Us</h5>
+            <ul class="list-unstyled d-flex justify-content-center mb-0">
+              <li>
+                <a href="#" class="text-dark me-3">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-dark me-3">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-dark me-3">
+                  <i class="fab fa-instagram"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-dark">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center p-3 text-black" style="background-color: #ECD06F;color: black;">
+        © 2024 QuizzyNova
+      </div>
+    </footer>
+  </div>
+
+  <script src="StudentHome.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

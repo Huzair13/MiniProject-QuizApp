@@ -1,0 +1,121 @@
+body{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #90CCF4 ;
+}
+
+nav{
+    background: #ECECEC;
+}
+.container-fluid {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+} 
+.start-button{
+    background-color: #ECECEC;
+    color: #276792;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+    border-radius: 7px;
+}
+
+.start-quiz{
+    background-color: #ECECEC;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+}
+
+.start-quiz::placeholder{
+    color: #276792;
+}
+
+.custom-icon-color{
+    color: black;
+}
+
+
+#startQuizNumber:focus {
+    background-color: #ECECEC; 
+}
+
+#startQuizNumber:hover {
+    background-color: #ECECEC; 
+}
+
+.quiz-card {
+    text-align: center;
+    margin-bottom: 10px;
+    margin: 0;
+}
+
+.card {
+    margin: 2em 0.6em;
+    box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+    border: none;
+  }
+
+.navbar .fa-user-circle {
+    font-size: 1.5rem; 
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.studentProfile{
+    font-family: 'Montserrat', sans-serif;
+}
+
+@media (max-width: 991.98px) {
+    .navbar .navbar-nav {
+        flex-direction: row; 
+        justify-content: center; 
+        align-items: center;
+    }
+    .navbar .navbar-nav .nav-link {
+        padding: 0.5rem 0;
+        text-align: center;
+    }
+    .navbar .me-3 {
+        font-size: 0.875rem; 
+        margin-bottom: 0; 
+    }
+    .studentProfile{
+        background: #ECECEC;
+        color: #276792;
+        padding: 5px;
+    }
+}
+
+
+@media (min-width: 992px) {
+
+    .start-button{
+        transition: all 0.3s ease-in-out;
+    }
+    .start-button:hover{
+        transform: scale(1.1);
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        background-color: #0594f3;
+        color: white;
+    }
+}
+
+@media (max-width : 991px){
+    .start-button{
+        transition: all 0.3s ease-in-out;
+    }
+    .start-button:hover{
+        transform: scale(1.03);
+        background: #0574D1;
+        color: white;
+    }
+    .studentProfile{
+        background: #ECECEC;
+        color: #276792;
+        padding: 5px;
+    }
+}
+
+@media (max-width : 200px){
+    .navbar .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+}
