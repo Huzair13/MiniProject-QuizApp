@@ -1,0 +1,10 @@
+.edit-question-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 50px auto; 
+    background: #ECECEC;
+    padding: 30px;
+    border-radius: 25px 0px 25px;
+    box-sizing: border-box;
+}
+

@@ -1,7 +1,9 @@
 const quizzesPerPage = 12;
 let currentPage = 1;
 
-const token=localStorage.getItem('token');
+const token = localStorage.getItem('token');
+const role = localStorage.getItem('role');
+const userID = localStorage.getItem('userID')
 
 const renderQuizzes = (quizzesToRender) => {
     const quizGrid = document.getElementById('quiz-grid');
@@ -15,19 +17,19 @@ const renderQuizzes = (quizzesToRender) => {
         const imageUrl = `/Assets/Images/Quiz/Quiz${randomImageNumber}.jpg`;
 
         col.innerHTML = `
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-lg" >
                 <img src="${imageUrl}" class="card-img-top rounded-top quiz-image" alt="${quiz.quizName} Image">
-                <div class="card-body">
+                <div class="card-body quiz-card">
                     <h5 class="card-title text-center">${quiz.quizName}</h5>
                     <p class="card-text text-center">${quiz.quizDescription}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
-                        <li class="list-group-item"><strong>Points:</strong> ${quiz.totalPoints}</li>
-                        <li class="list-group-item"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
+                        <li class="list-group-item" style="background: #ECECEC;"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
+                        <li class="list-group-item" style="background: #ECECEC;"><strong>Points:</strong> ${quiz.totalPoints}</li>
+                        <li class="list-group-item" style="background: #ECECEC;"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
                     </ul>
                 </div>
-                <div class="card-footer bg-white border-top-0 text-right text-center">
-                    <button class="btn btn-primary btn-sm">Use Quiz</button>
+                <div class="card-footer bg-white border-top-0 text-center" >
+                    <button class="btn useQuizButton btn-sm">Use Quiz</button>
                 </div>
             </div>
         `;
@@ -41,12 +43,11 @@ const style = document.createElement('style');
 style.textContent = `
     .quiz-image {
         width: 100%;
-        height: 200px; /* Adjust as per your design requirements */
+        height: 200px; 
         object-fit: cover;
     }
 `;
 document.head.appendChild(style);
-
 
 const renderPagination = (totalQuizzes, quizzesPerPage, currentPage) => {
     const paginationContainer = document.querySelector('.pagination');
@@ -78,7 +79,7 @@ const renderPagination = (totalQuizzes, quizzesPerPage, currentPage) => {
     }
 
     document.querySelectorAll('.page-link').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const page = parseInt(this.getAttribute('data-page'));
             currentPage = page;
@@ -90,44 +91,51 @@ const renderPagination = (totalQuizzes, quizzesPerPage, currentPage) => {
     });
 };
 
-let quizzes = []; 
+let quizzes = [];
 
 
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded', function () {
     const startQuizBtn = document.getElementById('startQuizHome');
     const QuizIDInput = document.getElementById('startQuizNumber');
-    startQuizBtn.addEventListener('click',function(){
+
+    const quizView = document.getElementById('quizViewHome');
+
+    startQuizBtn.addEventListener('click', function () {
         const QuizID = QuizIDInput.value;
         window.location.href = `/StartQuiz/StartPage.html?quizID=${QuizID}`;
     })
 
-    const apiUrl = 'http://localhost:5273/api/ViewQuiz/GetAllQuizzes';
-    fetch(apiUrl, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        quizzes = data;
-        console.log(quizzes);
-        renderQuizzes(quizzes.slice(0, 3));
+    console.log(role)
+    console.log(userID)
+    if (role == "Student") {
+        quizView.style.display = "none";
+    }
+    if (role == "Teacher") {
+        quizView.style.display = "block"
+        const apiUrl = 'http://localhost:5273/api/ViewQuiz/GetAllQuizzes';
+        fetch(apiUrl, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                quizzes = data;
+                console.log(quizzes);
+                renderQuizzes(quizzes.slice(0, 3));
 
-        document.getElementById('see-all-btn').addEventListener('click', function() {
-            window.location.href="/ViewAllQuizzes/ViewAllQuiz.html"
-            // this.style.display = 'none';
-            // document.getElementById('pagination-container').style.display = 'block';
-            // renderQuizzes(quizzes.slice(0, quizzesPerPage));
-            // renderPagination(quizzes.length, quizzesPerPage, 1);
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching quizzes:', error);
-    });
+                document.getElementById('see-all-btn').addEventListener('click', function () {
+                    window.location.href = "/ViewAllQuizzes/ViewAllQuiz.html"
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching quizzes:', error);
+            });
+    }
 });

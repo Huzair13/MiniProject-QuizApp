@@ -21,33 +21,32 @@ document.addEventListener('DOMContentLoaded',function(){
         }
     });
 
-    function parseJwt(token) {
-        try {
-            return JSON.parse(atob(token.split('.')[1]));
-        } catch (e) {
-            return {};
-        }
-    }
+    // function parseJwt(token) {
+    //     try {
+    //         return JSON.parse(atob(token.split('.')[1]));
+    //     } catch (e) {
+    //         return {};
+    //     }
+    // }
 
-    const printToken = () =>{
+    // const printToken = () =>{
         
-        if (token) {
-            console.log("JWT Token:", token);
-            alert("JWT Token:\n" + token);
-        } else {
-            alert("No JWT token found in local storage.");
-        }
-        const decodedToken = parseJwt(token);
-        const userRole = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    //     if (token) {
+    //         console.log("JWT Token:", token);
+    //         alert("JWT Token:\n" + token);
+    //     } else {
+    //         alert("No JWT token found in local storage.");
+    //     }
+    //     const decodedToken = parseJwt(token);
+    //     const userRole = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
 
-        console.log(token);
-        console.log(decodedToken);
-        console.log(userRole);
+    //     console.log(token);
+    //     console.log(decodedToken);
+    //     console.log(userRole);
 
-    }
+    // }
 
     createButton.addEventListener('click', function() {
-        printToken();
         const QuestionTxt = QuestionInputField.value;
         const points = parseFloat(QuestionPointsInput.value); 
         const category = QuestionCategory.value === 'Other' ? otherCategoryInput.value : QuestionCategory.value;

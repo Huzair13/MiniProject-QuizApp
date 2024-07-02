@@ -15,7 +15,7 @@ const renderQuizzes = (quizzesToRender) => {
         const imageUrl = `/Assets/Images/Quiz/Quiz${randomImageNumber}.jpg`;
 
         col.innerHTML = `
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-lg">
                 <img src="${imageUrl}" class="card-img-top rounded-top quiz-image" alt="${quiz.quizName} Image">
                 <div class="card-body">
                     <h5 class="card-title text-center">${quiz.quizName}</h5>
@@ -27,7 +27,7 @@ const renderQuizzes = (quizzesToRender) => {
                     </ul>
                 </div>
                 <div class="card-footer bg-white border-top-0 text-right text-center">
-                    <button class="btn btn-primary btn-sm use-quiz-btn" data-quiz-id="${quiz.quizId}">Use Quiz</button>
+                    <button class="btn useQuizButton btn-sm use-quiz-btn" data-quiz-id="${quiz.quizId}">Use Quiz</button>
                 </div>
             </div>
         `;

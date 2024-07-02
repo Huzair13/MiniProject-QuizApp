@@ -1,82 +1,92 @@
-body{
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background-color: #90CCF4 ;
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #90CCF4;
 }
 
-nav{
+nav {
     background: #ECECEC;
 }
+
 .container-fluid {
     padding: 0;
     margin: 0;
     width: 100%;
-} 
-.start-button{
+}
+
+.start-button {
     background-color: #ECECEC;
     color: #276792;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     border-radius: 7px;
 }
 
-.start-quiz{
+.start-quiz {
     background-color: #ECECEC;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.start-quiz::placeholder{
+.start-quiz::placeholder {
     color: #276792;
 }
 
-.custom-icon-color{
+.custom-icon-color {
     color: black;
 }
 
 
 #startQuizNumber:focus {
-    background-color: #ECECEC; 
+    background-color: #ECECEC;
 }
 
 #startQuizNumber:hover {
-    background-color: #ECECEC; 
+    background-color: #ECECEC;
 }
 
 .quiz-card {
     text-align: center;
-    margin-bottom: 10px;
+    background: #ECECEC;
     margin: 0;
+}
+
+.quiz-image {
+    height: 200px;
+    object-fit: cover;
 }
 
 .card {
     margin: 2em 0.6em;
     box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
     border: none;
-  }
+}
 
 .navbar .fa-user-circle {
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
     margin-top: auto;
     margin-bottom: auto;
 }
 
-.studentProfile{
+.studentProfile {
     font-family: 'Montserrat', sans-serif;
 }
 
 @media (max-width: 991.98px) {
     .navbar .navbar-nav {
-        flex-direction: row; 
-        justify-content: center; 
+        flex-direction: row;
+        justify-content: center;
         align-items: center;
     }
+
     .navbar .navbar-nav .nav-link {
         padding: 0.5rem 0;
         text-align: center;
     }
+
     .navbar .me-3 {
-        font-size: 0.875rem; 
-        margin-bottom: 0; 
+        font-size: 0.875rem;
+        margin-bottom: 0;
     }
-    .studentProfile{
+
+    .studentProfile {
         background: #ECECEC;
         color: #276792;
         padding: 5px;
@@ -86,10 +96,11 @@ nav{
 
 @media (min-width: 992px) {
 
-    .start-button{
+    .start-button {
         transition: all 0.3s ease-in-out;
     }
-    .start-button:hover{
+
+    .start-button:hover {
         transform: scale(1.1);
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
         background-color: #0594f3;
@@ -97,25 +108,110 @@ nav{
     }
 }
 
-@media (max-width : 991px){
-    .start-button{
+@media (max-width : 991px) {
+    .start-button {
         transition: all 0.3s ease-in-out;
     }
-    .start-button:hover{
+
+    .start-button:hover {
         transform: scale(1.03);
         background: #0574D1;
         color: white;
     }
-    .studentProfile{
+
+    .studentProfile {
         background: #ECECEC;
         color: #276792;
         padding: 5px;
     }
 }
 
-@media (max-width : 200px){
+@media (max-width : 200px) {
     .navbar .navbar-nav {
         flex-direction: column;
         align-items: center;
     }
+}
+
+
+
+.createQuestionButton {
+    background-color: #46aaed;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    white-space: normal;
+    word-break: break-word;
+    width: 100%;
+    max-width: 200px;
+}
+
+.createQuestionButton:hover {
+    transform: scale(1.04);
+    background-color: #317bac;
+    color: white;
+}
+
+.createQuizButton {
+    background-color: #FF9398;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    white-space: normal;
+    word-break: break-word;
+    width: 100%;
+    max-width: 200px;
+}
+
+.createQuizButton:hover {
+    transform: scale(1.04);
+    background-color: #de797e;
+    color: white;
+}
+
+.useQuizButton{
+    background-color: #FF9398;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    white-space: normal;
+    word-break: break-word;
+    width: 100%;
+}
+
+.useQuizButton:hover{
+    transform: scale(1.04);
+    background-color: #de797e;
+    color: white;
+}
+
+.seeAllQuizzesBtn{
+    background-color: #ECD06F;
+    color: black;
+    transition: all 0.3s ease-in-out;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.seeAllQuizzesBtn:hover{
+    transform: scale(1.03);
+    background-color: #c2ac5c;
+    color: white;
+}
+
+.footer p,
+.footer h5,
+.footer ul {
+    font-size: calc(0.8rem + 0.2vw);
+    word-wrap: break-word;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.btn-container {
+    width: 100%;
+    text-align: center;
 }

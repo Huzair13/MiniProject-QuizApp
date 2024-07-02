@@ -1,0 +1,72 @@
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #90CCF4;
+}
+
+.centered-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.hidden {
+    display: none; 
+}
+
+.fill-ups-answer input{
+    background-color: #FF9398;
+}
+.fill-ups-answer input:focus{
+    background-color: #FF9398;
+}
+
+
+.navbar-collapse,
+.sidebar {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.question-list {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none; 
+    width: 100% !important; 
+    box-sizing: border-box !important;
+}
+
+.navbar,
+.container-fluid {
+    padding: 0;
+    margin: 0;
+}
+
+.prev-button,
+.next-button{
+    background-color: #343a40;
+    color: #ECD06F;
+}
+
+.prev-button:hover,
+.next-button:hover{
+    color: #343a40;
+    background-color: #ECD06F;
+}
+
+.submit-button{
+    background-color: #343a40;
+    color: #ECD06F;
+    transition: all 0.5s ease-in-out;
+}
+
+.submit-button:hover{
+    transform: scale(1.03);
+    color: #343a40;
+    background-color: #ECD06F;
+}
+
+.selected-item {
+    background-color: #343a40;
+    color: #ECD06F;
+}

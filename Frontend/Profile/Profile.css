@@ -225,3 +225,22 @@ p {
   font-size: calc(0.8rem + 0.2vw);
   word-wrap: break-word;
 }
+
+.btn-custom {
+  background: #FF9398;
+  transition: background-color 0.3s;
+}
+.btn-custom:hover {
+  background: rgb(247, 124, 128);
+}
+
+@media (max-width: 300px) {
+  .btn-custom {
+    width: 100%;
+    padding: 5px 10px; /* Adjust padding */
+    font-size: 12px;   /* Adjust font size */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

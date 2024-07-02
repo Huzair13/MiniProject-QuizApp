@@ -200,6 +200,7 @@ function filterQuestions(category, type, difficulty) {
         questions.forEach(question => {
             const questionCard = document.createElement('div');
             questionCard.className = 'question-card';
+            questionCard.classList.add('shadow')
             const isChecked = selectedQuestions.includes(question.id); 
             questionCard.innerHTML = `
                 <div class="form-check">

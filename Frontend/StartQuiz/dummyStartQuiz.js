@@ -79,6 +79,17 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function startTimer(startTimeStr, timeLimit) {
+
+        const animationContainer = document.getElementById('lottie-animation');
+        const animationData = {
+            container: animationContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'https://lottie.host/25ab4c6f-f452-4136-aaeb-711d766bdc0b/FPY7X1X5mw.json' // Replace with your Lottie animation URL
+        };
+        lottie.loadAnimation(animationData);
+
         if (!startTimeStr) {
             timerDisplay.textContent = "No start time available.";
             return;
@@ -135,10 +146,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 
-    //QUESTION LIST SIDE BAR
     function setQuizQuestionsFromLocalStorage() {
         questionList.innerHTML = '';
-
+    
         questions.forEach((question, index) => {
             const listItem = document.createElement('li');
             listItem.textContent = "Question " + question.questionId;
@@ -146,13 +156,33 @@ document.addEventListener('DOMContentLoaded', async function () {
             listItem.dataset.index = index;
             listItem.addEventListener('click', () => {
                 saveCurrentAnswer();
+
+                // Remove 'selected-item' class from all list items
+                const listItems = document.querySelectorAll('.list-group-item');
+                listItems.forEach(item => item.classList.remove('selected-item'));
+    
+                listItem.classList.add('selected-item');
+    
+                listItems.forEach(item => {
+                    item.style.background = "#ECD06F";
+                });
+    
+                listItem.style.background = "#343a40";
+    
                 showQuestion(index);
             });
+    
+            listItem.style.background = "#ECD06F";
+            listItem.style.border = "1px solid black";
+            listItem.style.borderRadius = "0";
+            listItem.type = "button";
+    
             questionList.appendChild(listItem);
         });
-
-        showQuestion(0);
+    
+        showQuestion(0); 
     }
+    
 
     // QUESTIONS RENDERING
     if (questions.length > 0) {
@@ -187,12 +217,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     function loadSavedAnswer(question, savedAnswer) {
         if (question.questionType === 'Fillups') {
             answerArea.innerHTML = `
-                <div class="card">
+                <div class="card" style="background:#ECECEC;">
                     <div class="card-body">
-                        <h5 class="card-title">${question.questionId}</h5>
-                        <p class="card-text">${question.questionText}</p>
-                        <div class="mb-3">
-                            <input type="text" class="form-control" id="fillInput" value="${savedAnswer}" required>
+                        <h5 class="card-title ms-3">${question.questionId}</h5>
+                        <p class="card-text ms-3">${question.questionText}</p>
+                        <div class="mb-3 fill-ups-answer">
+                            <input type="text" class="form-control" id="fillInput" value="${savedAnswer}" placeholder="Enter your answer" required>
                         </div>
                     </div>
                 </div>
@@ -200,19 +230,19 @@ document.addEventListener('DOMContentLoaded', async function () {
         } else if (question.questionType === 'MultipleChoice') {
             if (question.options && Array.isArray(question.options)) {
                 let optionsHTML = question.options.map(option => `
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="mcqOptions" id="${option}" value="${option}" ${savedAnswer === option ? 'checked' : ''}>
-                        <label class="form-check-label" for="${option}">
+                    <div class="form-check m-3 p-3" style="background:#FF9398;">
+                        <input class="form-check-input ms-1" type="radio" name="mcqOptions" id="${option}" value="${option}" ${savedAnswer === option ? 'checked' : ''}>
+                        <label class="form-check-label ms-3" for="${option}">
                             ${option}
                         </label>
                     </div>
                 `).join('');
 
                 answerArea.innerHTML = `
-                    <div class="card">
+                    <div class="card" style="background:#ECECEC;">
                         <div class="card-body">
-                            <h5 class="card-title">${question.questionId}</h5>
-                            <p class="card-text">${question.questionText}</p>
+                            <h5 class="card-title ms-3">${question.questionId}</h5>
+                            <p class="card-text ms-3">${question.questionText}</p>
                             <form id="mcqForm">${optionsHTML}</form>
                         </div>
                     </div>
@@ -227,11 +257,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     function loadNewQuestion(question) {
         if (question.questionType === 'Fillups') {
             answerArea.innerHTML = `
-                <div class="card">
+                <div class="card" style="background:#ECECEC;">
                     <div class="card-body">
-                        <h5 class="card-title">${question.questionId}</h5>
-                        <p class="card-text">${question.questionText}</p>
-                        <div class="mb-3">
+                        <h5 class="card-title ms-3">${question.questionId}</h5>
+                        <p class="card-text ms-3">${question.questionText}</p>
+                        <div class="m-3 fill-ups-answer">
                             <input type="text" class="form-control" id="fillInput" placeholder="Enter your answer" required>
                         </div>
                     </div>
@@ -240,19 +270,19 @@ document.addEventListener('DOMContentLoaded', async function () {
         } else if (question.questionType === 'MultipleChoice') {
             if (question.options && Array.isArray(question.options)) {
                 let optionsHTML = question.options.map(option => `
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="mcqOptions" id="${option}" value="${option}">
-                        <label class="form-check-label" for="${option}">
+                    <div class="form-check m-3 p-2" style="background:#FF9398;">
+                        <input class="form-check-input ms-1" type="radio" name="mcqOptions" id="${option}" value="${option}">
+                        <label class="form-check-label ms-3" for="${option}">
                             ${option}
                         </label>
                     </div>
                 `).join('');
 
                 answerArea.innerHTML = `
-                    <div class="card">
+                    <div class="card" style="background:#ECECEC;">
                         <div class="card-body">
-                            <h5 class="card-title">${question.questionId}</h5>
-                            <p class="card-text">${question.questionText}</p>
+                            <h5 class="card-title ms-3">${question.questionId}</h5>
+                            <p class="card-text ms-3">${question.questionText}</p>
                             <form id="mcqForm">${optionsHTML}</form>
                         </div>
                     </div>
@@ -298,70 +328,73 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     //SUBMIT ANSWER
     submitAnswersBtn.addEventListener('click', async function () {
-        saveCurrentAnswer();
-        const unansweredQuestions = questions.filter(question => !Answers.hasOwnProperty(question.questionId));
-        if (unansweredQuestions.length > 0) {
-            alert(`Please answer all questions before submitting.`);
-            return;
-        }
-
-        const userId = localStorage.getItem('userID') || 0;
-
-        const questionAnswers = {};
-        questions.forEach(question => {
-            questionAnswers[question.questionId] = Answers[question.questionId];
-        });
-
-        const submittedAnswers = {
-            userId: parseInt(userId),
-            quizId: parseInt(quizId),
-            questionAnswers: questionAnswers
-        };
-
-        console.log('Submitted Answers:', JSON.stringify(submittedAnswers));
-
-        try {
-            const response = await fetch('http://localhost:5273/api/QuizAttempt/submitAllAnswer', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(submittedAnswers)
+        const confirmation = confirm("Are you sure you want to Restore this question?");
+        if(confirmation){
+            saveCurrentAnswer();
+            const unansweredQuestions = questions.filter(question => !Answers.hasOwnProperty(question.questionId));
+            if (unansweredQuestions.length > 0) {
+                alert(`Please answer all questions before submitting.`);
+                return;
+            }
+    
+            const userId = localStorage.getItem('userID') || 0;
+    
+            const questionAnswers = {};
+            questions.forEach(question => {
+                questionAnswers[question.questionId] = Answers[question.questionId];
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message);
-            }
-
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                const data = await response.json();
-                console.log(data);
-                localStorage.setItem("answersSubmitted", "true");
-                alert('Answers submitted successfully.');
-                window.location.href = '/LoggedInHome/StudentHome.html';
-            } else {
-                const data = await response.text();
-                console.log(data);
-                localStorage.setItem("answersSubmitted", "true");
-                alert(data);
-                window.location.href = '/LoggedInHome/StudentHome.html';
-            }
-        } catch (error) {
-            console.error('Error:', error.message);
-
-            if (error.message.includes('User has already answered')) {
-                answerArea.innerHTML = `
-                    <div class="alert alert-warning" role="alert">
-                        You have already submitted your answers for this quiz.
-                    </div>
-                `;
-
-                questionList.style.display = 'none';
-            } else {
-                console.log('Error message does not contain the substring.');
+    
+            const submittedAnswers = {
+                userId: parseInt(userId),
+                quizId: parseInt(quizId),
+                questionAnswers: questionAnswers
+            };
+    
+            console.log('Submitted Answers:', JSON.stringify(submittedAnswers));
+    
+            try {
+                const response = await fetch('http://localhost:5273/api/QuizAttempt/submitAllAnswer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(submittedAnswers)
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message);
+                }
+    
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
+                    console.log(data);
+                    localStorage.setItem("answersSubmitted", "true");
+                    alert('Answers submitted successfully.');
+                    window.location.href = '/LoggedInHome/StudentHome.html';
+                } else {
+                    const data = await response.text();
+                    console.log(data);
+                    localStorage.setItem("answersSubmitted", "true");
+                    alert(data);
+                    window.location.href = '/LoggedInHome/StudentHome.html';
+                }
+            } catch (error) {
+                console.error('Error:', error.message);
+    
+                if (error.message.includes('User has already answered')) {
+                    answerArea.innerHTML = `
+                        <div class="alert alert-warning" role="alert">
+                            You have already submitted your answers for this quiz.
+                        </div>
+                    `;
+    
+                    questionList.style.display = 'none';
+                } else {
+                    console.log('Error message does not contain the substring.');
+                }
             }
         }
     });
