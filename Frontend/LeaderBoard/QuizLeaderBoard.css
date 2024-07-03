@@ -1,0 +1,133 @@
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #90CCF4;
+}
+
+.container-fluid {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.leaderboard-table {
+    max-width: 100%;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0; /* Add this line to remove padding */
+}
+
+.table-header {
+    background: linear-gradient(45deg, #FF9398, #FFCBA3);
+    color: black;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+}
+
+.table th,
+.table td {
+    color: black;
+    background-color: #fcd7d8; 
+    vertical-align: middle;
+    text-align: center;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem; 
+}
+
+.table {
+    margin-bottom: 0; 
+}
+
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .leaderboard-table {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .leaderboard-table {
+        padding: 5px;
+    }
+}
+
+
+.rank-badge {
+    font-size: 1.25rem;
+    padding: 0.5em 1em;
+    border-radius: 10px;
+}
+
+.badge-gold {
+    background-color: gold;
+    color: black;
+}
+
+.badge-silver {
+    background-color: silver;
+    color: black;
+}
+
+.badge-bronze {
+    background-color: #cd7f32;
+    color: white;
+}
+
+nav {
+    background: #ECECEC;
+}
+
+@media (max-width : 200px) {
+    .navbar .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar .navbar-nav {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navbar .navbar-nav .nav-link {
+        padding: 0.5rem 0;
+        text-align: center;
+    }
+
+    .navbar .me-3 {
+        font-size: 0.875rem;
+        margin-bottom: 0;
+    }
+
+    .studentProfile {
+        background: #ECECEC;
+        color: #276792;
+        padding: 5px;
+    }
+}
+
+
+.navbar .fa-user-circle {
+    font-size: 1.5rem;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+
+.footer p,
+.footer h5,
+.footer ul {
+    font-size: calc(0.8rem + 0.2vw);
+    word-wrap: break-word;
+}

@@ -9,6 +9,12 @@ body {
     width: 100%;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 #navbarCreateQuiz{
     background: #ECECEC;
 }
@@ -61,6 +67,7 @@ body {
 .question-card:hover {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
+
 .pagination {
     margin-top: 20px;
 }
@@ -174,4 +181,44 @@ body {
 .footer ul {
     font-size: calc(0.8rem + 0.2vw);
     word-wrap: break-word;
+}
+
+.filter-section {
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-section .form-label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.filter-section .filterButton {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.filter-section .filterButton:hover {
+    background-color: #0056b3;
+}
+
+.sort-icon {
+    cursor: pointer;
+}
+
+@media (max-width: 576px) {
+    .filter-section {
+        padding: 0.5rem;
+    }
+
+    .filter-section .form-label {
+        font-size: 0.875rem;
+    }
+
+    .filter-section .filterButton {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
 }

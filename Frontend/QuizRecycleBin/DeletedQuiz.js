@@ -21,13 +21,13 @@ const renderQuizzes = (quizzesToRender) => {
                     <h5 class="card-title text-center">${quiz.quizName}</h5>
                     <p class="card-text text-center">${quiz.quizDescription}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
-                        <li class="list-group-item"><strong>Points:</strong> ${quiz.totalPoints}</li>
-                        <li class="list-group-item"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
+                        <li class="list-group-item justify-content-between"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
+                        <li class="list-group-item justify-content-between"><strong>Points:</strong> ${quiz.totalPoints}</li>
+                        <li class="list-group-item justify-content-between"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
                     </ul>
                 </div>
                 <div class="card-footer bg-white border-top-0 text-right text-center">
-                    <button class="btn btn-primary btn-sm restore-quiz-btn" data-quiz-id="${quiz.quizId}">Restore</button>
+                    <button class="btn quiz-bin-button-design btn-sm restore-quiz-btn" data-quiz-id="${quiz.quizId}">Restore</button>
                 </div>
             </div>
         `;

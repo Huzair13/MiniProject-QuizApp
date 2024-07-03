@@ -1,4 +1,4 @@
-const quizzesPerPage = 12;
+const quizzesPerPage = 6;
 let currentPage = 1;
 
 const token = localStorage.getItem('token');
@@ -21,14 +21,14 @@ const renderQuizzes = (quizzesToRender) => {
                     <h5 class="card-title text-center">${quiz.quizName}</h5>
                     <p class="card-text text-center">${quiz.quizDescription}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
-                        <li class="list-group-item"><strong>Points:</strong> ${quiz.totalPoints}</li>
-                        <li class="list-group-item"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
+                        <li class="list-group-item d-flex justify-content-between"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
+                        <li class="list-group-item d-flex justify-content-between"><strong>Points:</strong> ${quiz.totalPoints}</li>
+                        <li class="list-group-item d-flex justify-content-between"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
                     </ul>
                 </div>
                 <div class="card-footer bg-white border-top-0 text-right text-center">
-                    <button class="btn btn-primary btn-sm edit-quiz-btn" data-quiz-id="${quiz.quizId}">Edit Quiz</button>
-                    <button class="btn btn-primary btn-sm del-quiz-btn" data-quiz-id="${quiz.quizId}">Delete</button>
+                    <button class="btn btn-sm edit-quiz-btn edit-quiz-button-design mb-2" data-quiz-id="${quiz.quizId}">Edit Quiz</button>
+                    <button class="btn btn-sm del-quiz-btn edit-quiz-button-design" data-quiz-id="${quiz.quizId}">Delete</button>
                 </div>
             </div>
         `;

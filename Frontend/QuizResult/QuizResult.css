@@ -1,10 +1,67 @@
 body {
-    background-color: #f8f9fa;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+    background-color: #90CCF4 ;
+}
+
+nav {
+    background: #ECECEC;
+}
+
+.container-fluid {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.navbar .fa-user-circle {
+    font-size: 1.5rem;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+@media (max-width: 991.98px) {
+    .navbar .navbar-nav {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navbar .navbar-nav .nav-link {
+        padding: 0.5rem 0;
+        text-align: center;
+    }
+
+    .navbar .me-3 {
+        font-size: 0.875rem;
+        margin-bottom: 0;
+    }
+
+    .studentProfile {
+        background: #ECECEC;
+        color: #276792;
+        padding: 5px;
+    }
+}
+
+
+@media (max-width : 200px) {
+    .navbar .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.footer p,
+.footer h5,
+.footer ul {
+    font-size: calc(0.8rem + 0.2vw);
+    word-wrap: break-word;
 }
 
 .result-card {
-    max-width: 800px;
+    max-width: 600px;
     margin: 20px auto;
+    border-radius: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     border: none;
@@ -15,7 +72,7 @@ body {
 }
 
 .card-header {
-    background: linear-gradient(45deg, #007bff, #6610f2);
+    background: #FF9398;
     color: white;
     font-size: 1.5rem;
     text-align: center;
@@ -47,6 +104,8 @@ body {
 }
 
 .question-item {
+    background: #ECD06F;
+    margin-bottom: 5px;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

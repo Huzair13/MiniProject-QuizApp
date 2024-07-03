@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             return response.json();
         })
         .then(data => {
+            localStorage.removeItem(`answers${QuizId}`);
             localStorage.setItem(`questions${QuizId}`, JSON.stringify(data.questions));
             localStorage.setItem('answersSubmitted',false);
             localStorage.setItem('startedTime',new Date().getTime());
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             quizDataRetrived.startedTime = new Date().getTime();
             localStorage.setItem(`QuizData${QuizId}`, JSON.stringify(quizDataRetrived));
             window.location.href = `/StartQuiz/StartQuizSideBar.html?quizID=${QuizId}`;
+            
         })
         .catch(error => {
             if (error.status === 409) {

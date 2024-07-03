@@ -2,6 +2,13 @@ body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     background-color: #90CCF4;
 }
+
+.container-fluid {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
 .quiz-card {
     text-align: center;
     margin-bottom: 10px;
@@ -13,10 +20,6 @@ body {
     margin-left: 10px;
     vertical-align: middle;
     cursor: pointer;
-}
-
-#backgroundcolor {
-    background: #ECECEC;
 }
 
 .pagination .page-link {
@@ -34,6 +37,7 @@ body {
     color: #343a40;
     border-color: #ffc107;
 }
+
 
 .navbar .fa-user-circle {
     font-size: 1.5rem;
@@ -73,14 +77,7 @@ body {
     }
 }
 
-
-.container-fluid {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-}
-
-.filterButton{
+.search-button{
     background-color: #FF9398;
     color: white;
     transition: all 0.3s ease-in-out;
@@ -88,18 +85,10 @@ body {
     word-break: break-word;
 }
 
-.filterButton:hover{
+.search-button:hover{
     transform: scale(1.02);
     background-color: #de797e;
     color: white;
-}
-
-#quiz-id-input{
-    background-color: #ECECEC;
-}
-
-#quiz-id-input:focus{
-    background-color: #ECECEC;
 }
 
 .footer p,
@@ -109,8 +98,7 @@ body {
     word-wrap: break-word;
 }
 
-
-.edit-question-button-design{
+.restore-question-button-design{
     background-color: #FF9398;
     color: white;
     transition: all 0.3s ease-in-out;
@@ -119,12 +107,11 @@ body {
     width: 100%;
 }
 
-.edit-question-button-design:hover{
+.restore-question-button-design:hover{
     transform: scale(1.04);
     background-color: #de797e;
     color: white;
 }
-
 
 .filter-section {
     background-color: #f8f9fa;
@@ -138,9 +125,15 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.sort-icon {
-    cursor: pointer;
+.filter-section .filterButton {
+    background-color: #0d6efd;
+    color: white;
 }
+
+.filter-section .filterButton:hover {
+    background-color: #0056b3;
+}
+
 
 @media (max-width: 576px) {
     .filter-section {

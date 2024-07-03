@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const QuizId = params.get('quizID');
     const token = localStorage.getItem('token');
 
-    console.log("Heloo ",QuizId)
+    console.log("Heloo ", QuizId)
 
     if (!QuizId) {
         window.location.href = '/ViewAllQuizzes/ViewAllQuiz.html';
@@ -76,6 +76,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     const pagination = document.getElementById('pagination');
     const searchQueryInput = document.getElementById('search-query');
     const searchButton = document.getElementById('search-button');
+    const sortAZBtn = document.getElementById('sort-az');
+    const sortZABtn = document.getElementById('sort-za');
 
     const questionCategoryInput = document.getElementById('questionCategory');
     const questionTypeInput = document.getElementById('questionType');
@@ -86,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     let totalPages = 1;
     let filteredQuestions = [];
 
-    const questionsPerPage = 5;
+    const questionsPerPage = 8;
     let currentPage = 1;
 
     let selectedQuestions = [];
@@ -126,6 +128,38 @@ document.addEventListener('DOMContentLoaded', async function () {
         const query = searchQueryInput.value.trim();
         filterQuestions(query);
     });
+
+    //SORT BUTTONS
+    sortAZBtn.addEventListener('click', () => {
+        sortQuestions('az');
+    });
+
+    sortZABtn.addEventListener('click', () => {
+        sortQuestions('za');
+    });
+
+    //SORT FUNCTIONALITY
+    function sortQuestions(order) {
+        if (filteredQuestions.length === 0) {
+            filteredQuestions = allQuestions;
+        }
+        if (order === 'az') {
+            filteredQuestions.sort((a, b) => {
+                const QuestionA = a.questionText.toLowerCase();
+                const QuestionB = b.questionText.toLowerCase();
+                return QuestionA.localeCompare(QuestionB);
+            });
+        } else if (order === 'za') {
+            filteredQuestions.sort((a, b) => {
+                const QuestionA = a.questionText.toLowerCase();
+                const QuestionB = b.questionText.toLowerCase();
+                return QuestionB.localeCompare(QuestionA);
+            });
+        }
+        currentPage = 1;
+        renderPagination();
+        renderQuestions(currentPage);
+    }
 
 
     //FILTER BUTTONS

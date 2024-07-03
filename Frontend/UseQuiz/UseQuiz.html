@@ -5,101 +5,264 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .question-card {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
 
-        #questionSection {
-            display: none;
-        }
-    </style>
+    <!-- BOOTSRAP CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- FONT AWESOME  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!--  FONTS  -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="UseQuiz.css">
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h2 class="mb-4">Quiz Details</h2>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title" id="quizName">Edit Test</h5>
-                <p class="card-text" id="quizDescription">Test Quiz</p>
-                <p class="card-text"><strong>Type:</strong> <span id="quizType"></span></p>
-                <p class="card-text"><strong>Created On:</strong> <span id="createdOn"></span></p>
-                <p class="card-text"><strong>Number of Questions:</strong> <span id="numOfQuestions"></span></p>
-                <p class="card-text"><strong>Created By:</strong> <span id="quizCreatedBy"></span></p>
-                <p class="card-text"><strong>Multiple Attempts Allowed:</strong> <span id="isMultpleAllowed"></span></p>
-                <p class="card-text"><strong>Total Points:</strong> <span id="totalPoints"></span></p>
-                <p class="card-text"><strong>Time Limit:</strong> <span id="timelimit"></span></p>
-                <button class="btn btn-primary" id="addQuestionButton">Add Questions</button>
-            </div>
-        </div>
-
-        <div id="questionSection">
-            <h4 class="mt-4 mb-3">Select Questions</h4>
-            <div class="input-group input-group-sm mb-3">
-                <div>
-                    <label for="questionCategory">Category:</label>
-                    <select id="questionCategory">
-                        <option value="">All</option>
-                        <option value="Math">Math</option>
-                        <option value="Science">Science</option>
-                        <option value="General">General</option>
-                    </select>
-
-                    <label for="questionType">Type:</label>
-                    <select id="questionType">
-                        <option value="">All</option>
-                        <option value="MultipleChoice">Multiple Choice</option>
-                        <option value="Fillups">Fill Ups</option>
-                    </select>
-
-                    <label for="difficultyLevel">Difficulty:</label>
-                    <select id="difficultyLevel">
-                        <option value="">All</option>
-                        <option value="Easy">Easy</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Hard">Hard</option>
-                    </select>
-
-                    <button class="btn btn-primary" id="filter-button">Filter</button>
-                </div>
-                <input type="text" class="form-control" id="search-query" placeholder="Search for questions">
-                <button class="btn btn-primary" type="button" id="search-button">Search</button>
-                <div class="dropdown">
-                    <i class="fa fa-fw fa-sort sort-icon" id="filter-icon" data-bs-toggle="dropdown"></i>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" id="sort-az">Question <span><i
-                                        class="bi bi-arrow-up"></i></span></a></li>
-                        <li><a class="dropdown-item" id="sort-za">Question <span><i
-                                        class="bi bi-arrow-down"></i></span></a></li>
+    <div class="container-fluid">
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" id="navBarUseQuiz">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="Home.html">
+                    <img src="/Assets/Images/QuizzyNovaBlue.png" alt="Logo" width="200px" height="50px"
+                        class="d-inline-block align-text-top img-fluid ms-3">
+                </a>
+                <button class="navbar-toggler m-3" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3" style="font-family: 'Playfair Display', serif;">
+                        <li class="nav-item">
+                            <a class="nav-link" href="StudentHome.html" style="font-size: 18px; color: black;">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Home.html" style="font-size: 18px; color: black;">About</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav mb-2 mb-lg-0 me-3" style="font-family: 'Playfair Display', serif;">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" style="font-size: 18px; color: black;">
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
+        </nav>
 
-            <div class="question-grid" id="questionGrid">
-                <!-- QUESTIONS FROM DB WILL BE DISPLAYED HERE -->
+        <div class="container mt-5">
+            <h2 class="mb-4 text-center">Quiz Details</h2>
+            <div class="scroll-container">
+                <div class="card quiz-card ">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-2" id="quizName" style="background: #ECD06F;">Edit Test
+                        </h5>
+                        <p class="card-text text-center" style="background: #ECD06F;" id="quizDescription">Test Quiz</p>
+                        <p class="card-text d-flex justify-content-between flex-wrap"><strong>Type:</strong> <span
+                                id="quizType"></span></p>
+                        <p class="card-text d-flex justify-content-between flex-wrap"><strong>Created On:</strong> <span
+                                id="createdOn"></span></p>
+                        <p class="card-text d-flex justify-content-between flex-wrap"><strong>Number of
+                                Questions:</strong> <span id="numOfQuestions"></span></p>
+                        <p class="card-text d-flex justify-content-between flex-wrap"><strong>Created By:</strong> <span
+                                id="quizCreatedBy"></span></p>
+                        <p class="card-text d-flex justify-content-between flex-wrap"><strong>Multiple Attempts
+                                Allowed:</strong> <span id="isMultpleAllowed"></span></p>
+                        <p class="card-text d-flex justify-content-between flex-wrap"><strong>Total Points:</strong>
+                            <span id="totalPoints"></span>
+                        </p>
+                        <p class="card-text d-flex justify-content-between flex-wrap"><strong>Time Limit:</strong> <span
+                                id="timelimit"></span></p>
+                        <div class="d-flex justify-content-between text-center flex-wrap">
+                            <button class="btn use-quiz-button-design-2 m-2" id="addQuestionButton">Select Questions to
+                                Add</button>
+                            <button class="btn use-quiz-button-design-2 m-2" id="addQuestionButton">Back to
+                                Home</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="container-fluid mt-5" id="questionSection">
+                <div class="d-flex justify-content-between">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="search-query" placeholder="Search for questions">
+                        <button class="btn search-button" type="button" id="search-button">Search</button>
+                        <div class="dropdown d-flex align-items-center">
+                            <i class="fa fa-fw fa-sort sort-icon" id="filter-icon" data-bs-toggle="dropdown"></i>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" id="sort-az">Question <span><i
+                                                class="bi bi-arrow-up"></i></span></a></li>
+                                <li><a class="dropdown-item" id="sort-za">Question <span><i
+                                                class="bi bi-arrow-down"></i></span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#filterSection" aria-expanded="false" aria-controls="filterSection">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="collapse" id="filterSection">
+                    <div class="filter-section">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="questionCategory" class="form-label">Category:</label>
+                                <select id="questionCategory" class="form-select filter-input">
+                                    <option value="">All</option>
+                                    <option value="Math">Math</option>
+                                    <option value="Science">Science</option>
+                                    <option value="General">General</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="questionType" class="form-label">Type:</label>
+                                <select id="questionType" class="form-select filter-input">
+                                    <option value="">All</option>
+                                    <option value="MultipleChoice">Multiple Choice</option>
+                                    <option value="Fillups">Fill Ups</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="difficultyLevel" class="form-label">Difficulty:</label>
+                                <select id="difficultyLevel" class="form-select filter-input">
+                                    <option value="">All</option>
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Hard">Hard</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button class="btn use-quiz-button-design w-100" id="filter-button">Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-grid" id="questionGrid">
+                    <!-- QUESTIONS FROM DB WILL BE DISPLAYED HERE -->
+                </div>
+
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center" id="pagination">
+                        <li class="page-item disabled" id="prev-page">
+                            <a class="page-link" href="#">Previous</a>
+                        </li>
+                        <li class="page-item" id="next-page">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="d-flex justify-content-center mb-5">
+                    <button class="btn use-quiz-button-design-2" id="btnAddQuestions">Add Questions</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer bg-light text-center text-lg-start">
+            <div class="container p-4">
+                <div class="row">
+                    <!-- ABOUT -->
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase text-center">About Us</h5>
+                        <p class="text-center">
+                            QuizzyNova is a platform that allows tutors to create and share custom quizzes to make
+                            learning interactive and fun.
+                        </p>
+                    </div>
+
+                    <!-- QUICK LINK -->
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase text-center">Quick Links</h5>
+                        <ul class="list-unstyled mb-0 text-center">
+                            <li>
+                                <a href="Home.html" class="text-dark">Home</a>
+                            </li>
+                            <li>
+                                <a href="About.html" class="text-dark">About</a>
+                            </li>
+                            <li>
+                                <a href="Contact.html" class="text-dark">Contact</a>
+                            </li>
+                            <li>
+                                <a href="FAQ.html" class="text-dark">FAQ</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- CONTACT -->
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase text-center">Contact</h5>
+                        <ul class="list-unstyled mb-0 text-center">
+                            <li>
+                                <a href="mailto:quizzynova@gmail.com" class="text-dark">quizzynova@gmail.com</a>
+                            </li>
+                            <li>
+                                <a href="tel:+919677381857" class="text-dark">+919677381857</a>
+                            </li>
+                            <li>
+                                <p class="text-dark">123,QuizzyNova Block, Chennai</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- FOLLOW -->
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase text-center">Follow Us</h5>
+                        <ul class="list-unstyled d-flex justify-content-center mb-0">
+                            <li>
+                                <a href="#" class="text-dark me-3">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="text-dark me-3">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="text-dark me-3">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="text-dark">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center" id="pagination">
-                    <li class="page-item disabled" id="prev-page">
-                        <a class="page-link" href="#">Previous</a>
-                    </li>
-                    <li class="page-item" id="next-page">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
-
-            <button class="btn btn-primary" id="btnAddQuestions">Click me</button>
-        </div>
+            <div class="text-center p-3 text-black" style="background-color: #ECD06F;color: black;">
+                © 2024 QuizzyNova
+            </div>
+        </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="UseQuiz.js">
     </script>
 </body>

@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     let currentIndex = 0;
 
     //answers
-    let Answers = {};
+    // let Answers = {};
+    let Answers = JSON.parse(localStorage.getItem(`answers${quizId}`)) || {};
 
     // Timer variables
     const quizDataKey = `QuizData${quizId}`;
@@ -86,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             renderer: 'svg',
             loop: true,
             autoplay: true,
-            path: 'https://lottie.host/25ab4c6f-f452-4136-aaeb-711d766bdc0b/FPY7X1X5mw.json' // Replace with your Lottie animation URL
+            path: 'https://lottie.host/25ab4c6f-f452-4136-aaeb-711d766bdc0b/FPY7X1X5mw.json' 
         };
         lottie.loadAnimation(animationData);
 
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             return;
         }
 
-        const startTime = parseInt(startTimeStr, 10); // Ensure the start time is parsed as an integer
+        const startTime = parseInt(startTimeStr, 10);
         if (isNaN(startTime)) {
             timerDisplay.textContent = "Invalid start time.";
             return;
@@ -125,7 +126,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (distance < 0) {
                 clearInterval(timerInterval);
                 timerDisplay.textContent = "Time's up!";
-                submitAnswersBtn.click();
+                // submitAnswersBtn.click();
+                automaticSubmit();
             }
         }, 1000);
     }
@@ -148,41 +150,42 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function setQuizQuestionsFromLocalStorage() {
         questionList.innerHTML = '';
-    
+
         questions.forEach((question, index) => {
             const listItem = document.createElement('li');
             listItem.textContent = "Question " + question.questionId;
             listItem.classList.add('list-group-item');
             listItem.dataset.index = index;
             listItem.addEventListener('click', () => {
+                
                 saveCurrentAnswer();
-
-                // Remove 'selected-item' class from all list items
+                localStorage.setItem(`answers${quizId}`, JSON.stringify(Answers));
                 const listItems = document.querySelectorAll('.list-group-item');
                 listItems.forEach(item => item.classList.remove('selected-item'));
-    
+
                 listItem.classList.add('selected-item');
-    
+
                 listItems.forEach(item => {
                     item.style.background = "#ECD06F";
                 });
-    
+
                 listItem.style.background = "#343a40";
-    
+
                 showQuestion(index);
             });
-    
+
             listItem.style.background = "#ECD06F";
             listItem.style.border = "1px solid black";
             listItem.style.borderRadius = "0";
             listItem.type = "button";
-    
+
             questionList.appendChild(listItem);
+            
         });
-    
-        showQuestion(0); 
+
+        showQuestion(0);
     }
-    
+
 
     // QUESTIONS RENDERING
     if (questions.length > 0) {
@@ -309,10 +312,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 
-
+    
     //SAVE CURRENT ANSWER
     function saveCurrentAnswer() {
         const selectedQuestion = questions[currentIndex];
+
+        console.log(selectedQuestion);
 
         if (selectedQuestion.questionType === 'Fillups') {
             const fillInput = document.getElementById('fillInput');
@@ -323,35 +328,37 @@ document.addEventListener('DOMContentLoaded', async function () {
                 Answers[selectedQuestion.questionId] = selectedOption.value;
             }
         }
+
+        localStorage.setItem(`answers${quizId}`, JSON.stringify(Answers));
     }
 
 
     //SUBMIT ANSWER
     submitAnswersBtn.addEventListener('click', async function () {
-        const confirmation = confirm("Are you sure you want to Restore this question?");
-        if(confirmation){
+        const confirmation = confirm("Are you sure you want to submit the Quiz?");
+        if (confirmation) {
             saveCurrentAnswer();
             const unansweredQuestions = questions.filter(question => !Answers.hasOwnProperty(question.questionId));
             if (unansweredQuestions.length > 0) {
                 alert(`Please answer all questions before submitting.`);
                 return;
             }
-    
+
             const userId = localStorage.getItem('userID') || 0;
-    
+
             const questionAnswers = {};
             questions.forEach(question => {
                 questionAnswers[question.questionId] = Answers[question.questionId];
             });
-    
+
             const submittedAnswers = {
                 userId: parseInt(userId),
                 quizId: parseInt(quizId),
                 questionAnswers: questionAnswers
             };
-    
+
             console.log('Submitted Answers:', JSON.stringify(submittedAnswers));
-    
+
             try {
                 const response = await fetch('http://localhost:5273/api/QuizAttempt/submitAllAnswer', {
                     method: 'POST',
@@ -361,36 +368,39 @@ document.addEventListener('DOMContentLoaded', async function () {
                     },
                     body: JSON.stringify(submittedAnswers)
                 });
-    
+
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.message);
                 }
-    
+
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
                     console.log(data);
                     localStorage.setItem("answersSubmitted", "true");
                     alert('Answers submitted successfully.');
+                    localStorage.removeItem(`answers${quizId}`);
                     window.location.href = '/LoggedInHome/StudentHome.html';
                 } else {
                     const data = await response.text();
                     console.log(data);
                     localStorage.setItem("answersSubmitted", "true");
                     alert(data);
+                    localStorage.removeItem(`answers${quizId}`);
                     window.location.href = '/LoggedInHome/StudentHome.html';
                 }
             } catch (error) {
                 console.error('Error:', error.message);
-    
+                localStorage.removeItem(`answers${quizId}`);
+
                 if (error.message.includes('User has already answered')) {
                     answerArea.innerHTML = `
                         <div class="alert alert-warning" role="alert">
                             You have already submitted your answers for this quiz.
                         </div>
                     `;
-    
+
                     questionList.style.display = 'none';
                 } else {
                     console.log('Error message does not contain the substring.');
@@ -398,6 +408,55 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
     });
+
+    function automaticSubmit() {
+        // saveCurrentAnswer();
+        const answeredQuestions = questions.filter(question => Answers.hasOwnProperty(question.questionId));
+
+        // Prepare answers to submit
+        const questionAnswers = {};
+        answeredQuestions.forEach(question => {
+            questionAnswers[question.questionId] = Answers[question.questionId];
+        });
+
+        console.log(questionAnswers)
+
+        const userId = localStorage.getItem('userID') || 0;
+        const submittedAnswers = {
+            userId: parseInt(userId),
+            quizId: parseInt(quizId),
+            questionAnswers: questionAnswers
+        };
+
+        fetch('http://localhost:5273/api/QuizAttempt/submitAllAnswer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(submittedAnswers)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                localStorage.setItem("answersSubmitted", "true");
+                alert('Answers automatically submitted.');
+                localStorage.removeItem(`answers${quizId}`);
+                window.location.href = '/LoggedInHome/StudentHome.html';
+            })
+            .catch(error => {
+                localStorage.removeItem(`answers${quizId}`);
+                console.error('Error:', error.message);
+                showError(error.message);
+            });
+    }
 
     function showError(message) {
         console.error('Error:', message);

@@ -49,13 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     //VALIDATION ON ENTERING THE INPUT
-    const inputs = document.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
+    // const inputs = document.querySelectorAll('input, select, textarea');
+    const inputsToValidate = document.querySelectorAll('input:not(.filter-input), select:not(.filter-input), textarea:not(.filter-input)');
+
+    inputsToValidate.forEach(input => {
         input.addEventListener('input', function() {
             validateInput(input);
         });
     });
-     
 
 
     //VALIDATE THE INPUT
@@ -146,13 +147,11 @@ function filterQuestions(category, type, difficulty) {
     renderPagination(filteredQuestions, filteredQuestions.length, perPage, currentPage);
     renderQuestions(filteredQuestions.slice(0, perPage));
 }
-
     
-    
-    
-
     //FILTER BUTTONS
-    filterButton.addEventListener('click', () => {
+    filterButton.addEventListener('click', (event) => {
+        event.preventDefault();
+
         const category = questionCategoryInput.value;
         const type = questionTypeInput.value;
         const difficulty = difficultyLevelInput.value;
@@ -262,6 +261,15 @@ function filterQuestions(category, type, difficulty) {
         const quizType = document.getElementById('quizType').value;
         const isMultipleAttemptAllowed = document.getElementById('isMultipleAttemptAllowed').checked;
         const timeLimit = parseInt(document.getElementById('timeLimit').value);
+
+        let timelimitString =""
+
+        if(timeLimit<10){
+            timelimitString =`00:0${timeLimit}:00`;
+        }
+        else{
+            timelimitString = `00:${timeLimit}:00`;
+        }
         
         console.log(selectedQuestions); 
 
@@ -271,7 +279,7 @@ function filterQuestions(category, type, difficulty) {
             quizDescription: quizDescription,
             quizType: quizType,
             isMultipleAttemptAllowed: isMultipleAttemptAllowed,
-            timeLimit: `00:${timeLimit}:00`,
+            timeLimit: timelimitString,
             questionIds: selectedQuestions
         };
 

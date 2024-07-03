@@ -28,16 +28,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const option3 = document.getElementById('option3');
     const option4 = document.getElementById('option4');
 
-    const saveButton = document.getElementById('saveQuestionBtn');
-
-    function parseJwt(token) {
-        try {
-            return JSON.parse(atob(token.split('.')[1]));
-        } catch (e) {
-            return {};
+    categoryInputFillUps.addEventListener('change', function () {
+        if (this.value === 'Other') {
+            otherCategoryInputFillUps.style.display = 'block';
+        } else {
+            otherCategoryInputFillUps.style.display = 'none';
         }
-    }
+    });
 
+    categoryInputMCQ.addEventListener('change', function () {
+        if (this.value === 'Other') {
+            otherCategoryInputMCQ.style.display = 'block';
+        } else {
+            otherCategoryInputMCQ.style.display = 'none';
+        }
+    });
+
+    const saveButton = document.getElementById('saveQuestionBtn');
+    
     async function fetchQuestionData() {
         try {
             const response = await fetch(`http://localhost:5273/api/ViewQuestion/GetQuestionByQuestionID?questionID=${questionId}`, {

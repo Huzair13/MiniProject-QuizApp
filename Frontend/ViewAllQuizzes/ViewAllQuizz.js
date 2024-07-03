@@ -1,4 +1,4 @@
-const quizzesPerPage = 12;
+const quizzesPerPage = 6;
 let currentPage = 1;
 
 const token = localStorage.getItem('token');
@@ -21,9 +21,9 @@ const renderQuizzes = (quizzesToRender) => {
                     <h5 class="card-title text-center">${quiz.quizName}</h5>
                     <p class="card-text text-center">${quiz.quizDescription}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
-                        <li class="list-group-item"><strong>Points:</strong> ${quiz.totalPoints}</li>
-                        <li class="list-group-item"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
+                        <li class="list-group-item d-flex justify-content-between flex-wrap"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
+                        <li class="list-group-item d-flex justify-content-between flex-wrap"><strong>Points:</strong> ${quiz.totalPoints}</li>
+                        <li class="list-group-item d-flex justify-content-between flex-wrap"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
                     </ul>
                 </div>
                 <div class="card-footer bg-white border-top-0 text-right text-center">
@@ -54,7 +54,7 @@ const renderQuizzes = (quizzesToRender) => {
                     return response.json();
                 })
                 .then(data => {
-                    window.location.href = `/UseQuiz.html?quizID=${data.quizId}`;
+                    window.location.href = `/UseQuiz/UseQuiz.html?quizID=${data.quizId}`;
                 })
                 .catch(error => {
                     console.error('Error fetching quizzes:', error);

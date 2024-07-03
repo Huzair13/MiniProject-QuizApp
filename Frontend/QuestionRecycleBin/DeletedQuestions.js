@@ -1,4 +1,4 @@
-const questionsPerPage = 12;
+const questionsPerPage = 6;
 let currentPage = 1;
 
 const token = localStorage.getItem('token');
@@ -21,13 +21,13 @@ const renderQuestions = (questionsToRender) => {
                     <h5 class="card-title text-center">${question.questionText}</h5>
                     <p class="card-text text-center">${question.questionType}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Category:</strong> ${question.category}</li>
-                        <li class="list-group-item"><strong>Points:</strong> ${question.points}</li>
-                        <li class="list-group-item"><strong>Difficulty Level:</strong> ${question.difficultyLevel}</li>
+                        <li class="list-group-item justify-content-between"><strong>Category:</strong> ${question.category}</li>
+                        <li class="list-group-item justify-content-between"><strong>Points:</strong> ${question.points}</li>
+                        <li class="list-group-item justify-content-between"><strong>Difficulty Level:</strong> ${question.difficultyLevel}</li>
                     </ul>
                 </div>
                 <div class="card-footer bg-white border-top-0 text-right text-center">
-                    <button class="btn btn-primary btn-sm undo-delete-btn" data-quiz-id="${question.id}">Restore</button>
+                    <button class="btn restore-question-button-design btn-sm undo-delete-btn" data-quiz-id="${question.id}">Restore</button>
                 </div>
             </div>
         `;

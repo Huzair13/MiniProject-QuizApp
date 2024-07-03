@@ -1,3 +1,9 @@
+.container-fluid {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
 .edit-question-container {
     width: 100%;
     max-width: 700px;
@@ -8,3 +14,101 @@
     box-sizing: border-box;
 }
 
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #90CCF4;
+}
+
+.question {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+}
+
+.question textarea {
+    background: #ECD06F;
+    border: 1px solid black;
+    background-color: #ECD06F;
+    font-size: 1em;
+}
+
+.question textarea:focus {
+    background-color: #ECD06F;
+}
+
+.option {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.option input {
+    border: 1px solid black;
+    background-color: #FF9398;
+}
+
+.option input:focus {
+    background-color: #FF9398;
+}
+
+@media (max-width: 766px) {
+
+    .option:last-child {
+        margin-bottom: 30px;
+    }
+}
+
+
+#blankAnswer{
+    background-color: #FF9398;
+}
+#blankAnswer:focus{
+    background-color: #FF9398;
+}
+
+
+nav {
+    background: #ECECEC;
+}
+
+@media (max-width : 200px) {
+    .navbar .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar .navbar-nav {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navbar .navbar-nav .nav-link {
+        padding: 0.5rem 0;
+        text-align: center;
+    }
+
+    .navbar .me-3 {
+        font-size: 0.875rem;
+        margin-bottom: 0;
+    }
+
+    .studentProfile {
+        background: #ECECEC;
+        color: #276792;
+        padding: 5px;
+    }
+}
+.navbar .fa-user-circle {
+    font-size: 1.5rem;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+
+.footer p,
+.footer h5,
+.footer ul {
+    font-size: calc(0.8rem + 0.2vw);
+    word-wrap: break-word;
+}

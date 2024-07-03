@@ -20,16 +20,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 const card = document.createElement('div');
                 card.className = 'card result-card response-card';
                 card.innerHTML = `
-                            <div class="card-header">
-                                Quiz Attempt Result
+                            <div class="card-header text-center mb-4 d-flex justify-content-center align-items-center">
+                                <div id="lottie-animation" style="width: 100px; height: 100px;">
+                                    <lottie-player
+                                        src="https://lottie.host/67a1e489-faf7-40f1-b9fc-fd124a10512f/AlRiUBPX5B.json"
+                                        speed="1" style="width: 100%; height: auto;" loop autoplay direction="1"
+                                        mode="normal"></lottie-player>    
+                                </div>
+                                <span class="h4 ml-2">Quiz Result</span>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Quiz ID: ${result.quizId}</h5>
-                                <p class="card-text">
-                                    <strong>User ID:</strong> ${result.userId}<br>
-                                    <strong>Score:</strong> ${result.score}<br>
-                                    <strong>Time Taken:</strong> ${result.timeTaken}
-                                </p>
+                                <div class="d-flex justify-content-center text-right mb-3">
+                                    <div>
+                                        <h5 class="card-title text-center">Quiz ID: ${result.quizId}</h5>
+                                        <p class="card-text">
+                                            <strong>User ID:</strong> ${result.userId}<br>
+                                            <strong>Score:</strong> ${result.score}<br>
+                                            <strong>Time Taken:</strong> ${result.timeTaken}
+                                        </p>
+                                    </div>
+                                </div>
                                 <h5>Answered Questions</h5>
                                 <ul class="list-group">
                                     ${result.answeredQuestions.map(question => `

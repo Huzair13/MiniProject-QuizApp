@@ -61,112 +61,135 @@
                 </div>
             </div>
         </nav>
-        <div class="container mt-5 quiz-container shadow-lg">
-            <div class="row align-items-center">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <h2 class="mb-0">Create a Quiz</h2>
-                </div>
-                <div class="col-md-4 text-center mt-3 mt-md-0">
-                    <div class="lottie-container">
-                        <lottie-player src="https://lottie.host/8c5e18a9-1df8-4ad6-aabf-e72246fdaf01/IroSzIqWqy.json"
-                            speed="0.5" style="width: 100%; height: auto;" loop autoplay direction="1"
-                            mode="normal"></lottie-player>
+                    <div class="quiz-container shadow-lg">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="mb-0">Create a Quiz</h2>
+                            </div>
+                            <div class="col-md-4 text-center mt-3 mt-md-0">
+                                <div class="lottie-container">
+                                    <lottie-player src="https://lottie.host/8c5e18a9-1df8-4ad6-aabf-e72246fdaf01/IroSzIqWqy.json"
+                                        speed="0.5" style="width: 100%; height: auto;" loop autoplay direction="1"
+                                        mode="normal"></lottie-player>
+                                </div>
+                            </div>
+                        </div>
+                        <form id="quizForm" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="quizName" class="form-label">Quiz Name</label>
+                                <input type="text" class="form-control" id="quizName" placeholder="Enter quiz name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quizDescription" class="form-label">Quiz Description</label>
+                                <textarea class="form-control" id="quizDescription" rows="3" placeholder="Enter quiz description"
+                                    required></textarea>
+                            </div>
+                            <!-- <div class="mb-3">
+                                <label for="quizType" class="form-label">Quiz Type</label>
+                                <input type="text" class="form-control" id="quizType" placeholder="Enter quiz type" required>
+                            </div> -->
+            
+                            <div class="mb-3">
+                                <label for="quizType" class="form-label">Quiz Type</label>
+                                <select id="quizType" class="form-control" required>
+                                    <option value="">Select quiz type</option>
+                                    <option value="General">General</option>
+                                    <option value="Subject-based">Subject-based</option>
+                                    <option value="Custom">Custom</option>
+                                    <option value="Assessment">Assessment</option>
+                                    <option value="Practice">Practice</option>
+                                    <option value="Survey">Survey</option>
+                                    <option value="Diagnostic">Diagnostic</option>
+                                </select>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="isMultipleAttemptAllowed">
+                                <label class="form-check-label" for="isMultipleAttemptAllowed">Allow multiple attempts?</label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="timeLimit" class="form-label">Time Limit (minutes)</label>
+                                <input type="number" class="form-control" id="timeLimit" placeholder="Enter time limit" required>
+                            </div>
+            
+                            <h4 class="mt-4 mb-3">Select Questions</h4>
+            
+                            <div class="container-fluid mt-5">
+                                <div class="d-flex justify-content-between">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="search-query" placeholder="Search for quotes">
+                                        <button class="btn searchBtn" type="button" id="search-button">Search</button>
+                                        <div class="dropdown d-flex align-items-center">
+                                            <i class="fa fa-fw fa-sort sort-icon" id="filter-icon" data-bs-toggle="dropdown"></i>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" id="sort-az"> Question <span><i
+                                                                class="bi bi-arrow-up"></i></span></a></li>
+                                                <li><a class="dropdown-item" id="sort-za"> Question <span><i
+                                                                class="bi bi-arrow-down"></i></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#filterSection" aria-expanded="false" aria-controls="filterSection">
+                                            <i class="fas fa-filter"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="collapse" id="filterSection">
+                                <div class="filter-section">
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label for="questionCategory" class="form-label">Category:</label>
+                                            <select id="questionCategory" class="form-select filter-input">
+                                                <option value="">All</option>
+                                                <option value="Math">Math</option>
+                                                <option value="Science">Science</option>
+                                                <option value="General">General</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="questionType" class="form-label">Type:</label>
+                                            <select id="questionType" class="form-select filter-input">
+                                                <option value="">All</option>
+                                                <option value="MultipleChoice">Multiple Choice</option>
+                                                <option value="Fillups">Fill Ups</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="difficultyLevel" class="form-label">Difficulty:</label>
+                                            <select id="difficultyLevel" class="form-select filter-input">
+                                                <option value="">All</option>
+                                                <option value="Easy">Easy</option>
+                                                <option value="Medium">Medium</option>
+                                                <option value="Hard">Hard</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 d-flex align-items-end">
+                                            <button class="btn filter-btn" id="filter-button">Filter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class="question-grid" id="questionGrid">
+                                <!-- QUESTIONS FROM DB  -->
+                            </div>
+            
+                            <nav aria-label="Questions pagination">
+                                <ul class="pagination justify-content-center" id="pagination">
+                                    <!-- PAGINATION -->
+                                </ul>
+                            </nav>
+            
+                            <button class="btn mt-4 w-100 createQuizBtn" id="CreateMCQQuestion">Create Quiz</button>
+                        </form>
                     </div>
                 </div>
             </div>
-            <form id="quizForm" class="needs-validation" novalidate>
-                <div class="mb-3">
-                    <label for="quizName" class="form-label">Quiz Name</label>
-                    <input type="text" class="form-control" id="quizName" placeholder="Enter quiz name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="quizDescription" class="form-label">Quiz Description</label>
-                    <textarea class="form-control" id="quizDescription" rows="3" placeholder="Enter quiz description"
-                        required></textarea>
-                </div>
-                <!-- <div class="mb-3">
-                    <label for="quizType" class="form-label">Quiz Type</label>
-                    <input type="text" class="form-control" id="quizType" placeholder="Enter quiz type" required>
-                </div> -->
-
-                <div class="mb-3">
-                    <label for="quizType" class="form-label">Quiz Type</label>
-                    <select id="quizType" class="form-control" required>
-                        <option value="">Select quiz type</option>
-                        <option value="General">General</option>
-                        <option value="Subject-based">Subject-based</option>
-                        <option value="Custom">Custom</option>
-                        <option value="Assessment">Assessment</option>
-                        <option value="Practice">Practice</option>
-                        <option value="Survey">Survey</option>
-                        <option value="Diagnostic">Diagnostic</option>
-                    </select>
-                </div>
-                <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="isMultipleAttemptAllowed">
-                    <label class="form-check-label" for="isMultipleAttemptAllowed">Allow multiple attempts?</label>
-                </div>
-                <div class="mb-3">
-                    <label for="timeLimit" class="form-label">Time Limit (minutes)</label>
-                    <input type="number" class="form-control" id="timeLimit" placeholder="Enter time limit" required>
-                </div>
-
-                <h4 class="mt-4 mb-3">Select Questions</h4>
-                <div class="input-group input-group-sm mb-3 d-flex justify-content-center">
-                    <div>
-                        <label for="questionCategory">Category:</label>
-                        <select id="questionCategory">
-                            <option value="">All</option>
-                            <option value="Math">Math</option>
-                            <option value="Science">Science</option>
-                            <option value="General">General</option>
-                        </select>
-
-                        <label for="questionType">Type:</label>
-                        <select id="questionType">
-                            <option value="">All</option>
-                            <option value="MultipleChoice">Multiple Choice</option>
-                            <option value="Fillups">Fill Ups</option>
-                        </select>
-
-                        <label for="difficultyLevel">Difficulty:</label>
-                        <select id="difficultyLevel">
-                            <option value="">All</option>
-                            <option value="Easy">Easy</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Hard">Hard</option>
-                        </select>
-
-                        <button class="btn filter-btn" id="filter-button">Filter</button>
-                    </div>
-                </div>
-
-                <div class="input-group input-group-sm mb-3">
-                    <input type="text" class="form-control" id="search-query" placeholder="Search for quotes">
-                    <button class="btn searchBtn" type="button" id="search-button">Search</button>
-                    <div class="dropdown">
-                        <i class="fa fa-fw fa-sort sort-icon" id="filter-icon" data-bs-toggle="dropdown"></i>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" id="sort-az"> Question <span><i
-                                            class="bi bi-arrow-up"></i></span></a></li>
-                            <li><a class="dropdown-item" id="sort-za"> Question <span><i
-                                            class="bi bi-arrow-down"></i></span></a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="question-grid" id="questionGrid">
-                    <!-- QUESTIONS FROM DB  -->
-                </div>
-
-                <nav aria-label="Questions pagination">
-                    <ul class="pagination justify-content-center" id="pagination">
-                        <!-- PAGINATION -->
-                    </ul>
-                </nav>
-
-                <button class="btn mt-4 w-100 createQuizBtn" id="CreateMCQQuestion">Create Quiz</button>
-            </form>
         </div>
         <!-- FOOTER -->
         <footer class="footer bg-light text-center text-lg-start">
