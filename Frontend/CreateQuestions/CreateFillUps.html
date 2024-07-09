@@ -31,24 +31,34 @@
                     <img src="/Assets/Images/QuizzyNovaBlue.png" alt="Logo" width="200px" height="50px"
                         class="d-inline-block align-text-top img-fluid ms-3">
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                <button class="navbar-toggler m-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3" style="font-family: 'Playfair Display', serif;">
-                        <li class="nav-item">
-                            <a class="nav-link" href="StudentHome.html" style="font-size: 18px; color: black;">Home</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/LoggedInHome/LoggedInHome.html"
+                                style="font-size: 18px; color: black;">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Home.html" style="font-size: 18px; color: black;">About</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/Library/Library.html"
+                                style="font-size: 18px; color: black;">Library</a>
+                        </li>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="#about-section" style="font-size: 18px; color: black;">About</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0 me-3" style="font-family: 'Playfair Display', serif;">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" style="font-size: 18px; color: black;">
-                                <i class="fas fa-user-circle"></i>
+                            <a class="nav-link" href="/Profile/Profile.html" style="font-size: 18px; color: black;">
+                                <i class="ps-4 fas fa-user-circle"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="font-size: 18px; color: black;" id="logoutbtn">
+                                <i class="ps-4 fas fa-sign-out-alt"></i>
                             </a>
                         </li>
                     </ul>
@@ -61,9 +71,11 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="question-container shadow-lg p-4">
-                        <div class="row align-items-center">
-                            <div class="col-md-9">
-                                <h2 class="mb-0">Create a Quiz Question</h2>
+                        <div class="row align-items-center mb-1 mt-1">
+                            <div class="col-md-9" style="font-family: 'Playfair Display', serif;">
+                                <h2 class="mb-0"
+                                    style="word-wrap: break-word; word-break: break-all; white-space: normal;">Create a
+                                    Quiz Question</h2>
                             </div>
                             <div class="col-md-3 text-center mt-3 mt-md-0">
                                 <div class="lottie-container">
@@ -75,68 +87,144 @@
                             </div>
                         </div>
 
-                        <div class="question mb-3">
-                            <label for="questionInputFillups" class="form-label">Enter your question:</label>
-                            <textarea class="form-control" id="questionInputFillups"
-                                placeholder="Type your question here, use ___ for the blank"></textarea>
-                        </div>
-
-                        <div class="answer mb-3">
-                            <label for="blankAnswer" class="form-label">Answer for the blank:</label>
-                            <input type="text" class="form-control" id="blankAnswer" placeholder="Type the answer here">
-                        </div>
-
-                        <div class="additional-fields">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="pointsInputFillups" class="form-label">Points:</label>
-                                    <input type="number" class="form-control" id="pointsInputFillups"
-                                        placeholder="Enter points for the question">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="categoryInputFillUps" class="form-label">Category:</label>
-                                    <select class="form-select" id="categoryInputFillUps">
-                                        <option value="Math">Math</option>
-                                        <option value="Science">Science</option>
-                                        <option value="History">History</option>
-                                        <option value="Literature">Literature</option>
-                                        <option value="Geography">Geography</option>
-                                        <option value="Art">Art</option>
-                                        <option value="Music">Music</option>
-                                        <option value="Technology">Technology</option>
-                                        <option value="Sports">Sports</option>
-                                        <option value="Other">Others</option>
-                                    </select>
-                                    <input type="text" class="form-control mt-2" id="otherCategoryInputFillups"
-                                        placeholder="Enter custom category">
-                                </div>
+                        <form class="needs-validation" novalidate>
+                            <div class="question mb-3">
+                                <label for="questionInputFillups" class="form-label">Enter your question:</label>
+                                <textarea class="form-control" id="questionInputFillups" minlength="10"
+                                    placeholder="Type your question here, use ___ for the blank" required></textarea>
                             </div>
 
-                            <div class="row g-3 mt-3">
-                                <div class="col-md-6">
-                                    <label for="difficultyLevelInputFillUps" class="form-label">Difficulty
-                                        Level:</label>
-                                    <select class="form-select" id="difficultyLevelInputFillUps">
-                                        <option value="0" style="color: green;">Easy</option>
-                                        <option value="1" style="color: darkgoldenrod;">Medium</option>
-                                        <option value="2" style="color: red;">Hard</option>
-                                    </select>
+                            <div class="answer mb-3">
+                                <label for="blankAnswer" class="form-label">Answer for the blank:</label>
+                                <input type="text" class="form-control" id="blankAnswer"
+                                    placeholder="Type the answer here" required>
+                            </div>
+
+                            <div class="additional-fields">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="pointsInputFillups" class="form-label">Points:</label>
+                                        <input type="number" class="form-control" id="pointsInputFillups"
+                                            placeholder="Enter points for the question" min="0" step="0.01" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="categoryInputFillUps" class="form-label">Category:</label>
+                                        <select class="form-select" id="categoryInputFillUps" required>
+                                            <option value="" disabled selected>Select Category</option>
+                                            <option value="Math">Math</option>
+                                            <option value="Science">Science</option>
+                                            <option value="History">History</option>
+                                            <option value="Literature">Literature</option>
+                                            <option value="Geography">Geography</option>
+                                            <option value="Art">Art</option>
+                                            <option value="Music">Music</option>
+                                            <option value="Technology">Technology</option>
+                                            <option value="Sports">Sports</option>
+                                            <option value="Other">Others</option>
+                                        </select>
+                                        <input type="text" class="form-control mt-2" id="otherCategoryInputFillups"
+                                            placeholder="Enter custom category" required>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mt-3">
+                                    <div class="col-md-6">
+                                        <label for="difficultyLevelInputFillUps" class="form-label">Difficulty
+                                            Level:</label>
+                                        <select class="form-select" id="difficultyLevelInputFillUps" required>
+                                            <option value="" disabled selected>Select Difficulty Level</option>
+                                            <option value="0" style="color: green;">Easy</option>
+                                            <option value="1" style="color: darkgoldenrod;">Medium</option>
+                                            <option value="2" style="color: red;">Hard</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
 
                         <button class="btn btn-primary mt-4 w-100 createFillupsBtn" id="createFillUpsQuestions">Submit
                             Question</button>
                     </div>
                 </div>
             </div>
+            
+            <!-- LOADING MODAL  -->
+            <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content loading-model">
+                        <div class="modal-body text-center loading-body">
+                            <div id="loadingAnimation"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- MODAL  -->
+        <div class="modal fade" id="questionIDModal" tabindex="-1" aria-labelledby="questionIDModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="questionIDModalLabel">Fill Ups Question Created Successfully 🎉
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Created Question ID is : <span id="questionID"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout confirmation modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="confirmLogoutButton" type="button" class="btn btn-danger">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Fill Ups confirmation modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure to create the Question?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="confirmBtn" type="button" class="btn btn-danger">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- FOOTER -->
         <footer class="footer bg-light text-center text-lg-start">
             <div class="container p-4">
                 <div class="row">
                     <!-- ABOUT -->
-                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0" id="about-section">
                         <h5 class="text-uppercase text-center">About Us</h5>
                         <p class="text-center">
                             QuizzyNova is a platform that allows tutors to create and share custom quizzes to make
@@ -214,8 +302,7 @@
         </footer>
     </div>
 
-
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
@@ -224,6 +311,7 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.11/lottie.min.js"></script>
     <script src="CreateFillUps.js"></script>
 </body>
 

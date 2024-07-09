@@ -1,4 +1,15 @@
+
+const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+
     const params = new URLSearchParams(window.location.search);
     const token = localStorage.getItem('token');
     const responsesContainer = document.getElementById('responses-container');
@@ -8,6 +19,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const quizzesPerPage = 5; 
     let allResponses = []; 
     let currentPage = 1; 
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
 
     // Function to fetch all responses and populate initially
     function fetchAndPopulateResponses() {
@@ -20,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched responses:', data); 
+            // console.log('Fetched responses:', data); 
             allResponses = data; 
             displayResponses(allResponses.slice(0, quizzesPerPage)); 
             renderPagination(allResponses.length, quizzesPerPage, currentPage);
@@ -48,11 +74,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="d-flex justify-content-center text-right mb-3">
                         <div class="container">
                             <h5 class="card-title text-center">Quiz ID: ${response.quizId}</h5>
-                            <p class="card-text d-flex justify-content-between flex-wrap "><strong>User ID:</strong> ${response.userId}</p>
-                            <p class="card-text d-flex justify-content-between flex-wrap "><strong>Score:</strong> ${response.score}</p>
-                            <p class="card-text d-flex justify-content-between flex-wrap "><strong>Time Taken:</strong> ${response.timeTaken}</p>
-                            <p class="card-text d-flex justify-content-between flex-wrap "><strong>Start Time:</strong> ${response.startTime}</p>
-                            <p class="card-text d-flex justify-content-between flex-wrap "><strong>End Time:</strong> ${response.endTime}</p>
+                            <p class="card-text d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>User ID:</strong> ${response.userId}</p>
+                            <p class="card-text d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Score:</strong> ${response.score}</p>
+                            <p class="card-text d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Time Taken:</strong> ${response.timeTaken}</p>
+                            <p class="card-text d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Start Time:</strong> ${response.startTime}</p>
+                            <p class="card-text d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>End Time:</strong> ${response.endTime}</p>
                         </div>
                     </div>
                     <h5>Answered Questions</h5>

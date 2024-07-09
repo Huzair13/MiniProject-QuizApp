@@ -19,7 +19,7 @@ var openLoginPage = () =>{
 
 //OPEN REGISTER PAGE
 var openRegisterPage = () =>{
-  window.location.href = "RegisterOption.html"
+  window.location.href = "/Register/RegisterOption.html"
 }
 
 //INITIALIZE LANDING CAROUSEL

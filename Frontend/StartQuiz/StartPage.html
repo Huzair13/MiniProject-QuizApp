@@ -1,65 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Details</title>
     <!-- Bootstrap CSS -->
-    
-    
+
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!--  FONTS  -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="StartPage.css">
 </head>
-<body>
-<div class="container" style="background: yellow;">
-    <div class="centered-card" id="centeredCard">
-        <div class="card text-center" style="width: 25rem;">
-            <div class="card-body">
-                <h5 class="card-title text-center" id="quizName"></h5>
-                <p class="card-text text-center" id="quizDescription"></p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>Quiz Type:</strong> <span id="quizType"></span></li>
-                    <li class="list-group-item"><strong>Number of Questions:</strong> <span id="numOfQuestions"></span></li>
-                    <li class="list-group-item">
-                        <strong>Multiple Attempt Allowed:</strong>
-                        <span id="isMultipleAllowed">
-                            <i class="fas fa-check-circle icon" style="color: green;"></i>
-                        </span>
-                    </li>
-                    <li class="list-group-item"><strong>Total Points:</strong> <span id="totalPoints"></span></li>
-                    <li class="list-group-item">
-                        <strong>Time Limit:</strong>
-                        <span id="timeLimit">
-                            <i class="far fa-clock icon" style="color: #007bff;"></i>
-                        </span>
-                    </li>
-                    <div class="alert alert-danger" role="alert">
-                        To begin your quiz, click the "Start" button. Don't refresh the page before submitting it.
-                    </div>
-                    <button class="btn btn-primary" id="startQuizButtonStartPage">start</button>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div id="errorMessageDiv" class="centered-card hidden">
-        <div class="card text-center" style="width: 25rem;">
-            <div class="card-body">
-                <p class="card-text text-center text-danger" id="errorMessage"></p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+<body>
+    <div class="container">
+        <div class="centered-card" id="centeredCard">
+            <div class="card text-center" style="width: 30rem;">
+                <div class="card-body ">
+                    <h5 class="card-title text-center" id="quizName"></h5>
+                    <p class="card-text text-center" id="quizDescription"></p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between"><strong>Quiz Type:</strong> <span
+                                id="quizType"></span></li>
+                        <li class="list-group-item d-flex justify-content-between"><strong>Number of Questions:</strong>
+                            <span id="numOfQuestions"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Multiple Attempt Allowed:</strong>
+                            <span id="isMultipleAllowed">
+                                <i class="fas fa-check-circle icon" style="color: green;"></i>
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between"><strong>Total Points:</strong> <span
+                                id="totalPoints"></span></li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Time Limit:</strong>
+                            <span id="timeLimit">
+                                <i class="far fa-clock icon" style="color: #007bff;"></i>
+                            </span>
+                        </li>
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            To begin your quiz, click the "Start" button. Don't close or refresh the page before
+                            submitting it.
+                        </div>
+                        <button class="btn btn-primary" id="startQuizButtonStartPage">start</button>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content loading-model">
+                    <div class="modal-body text-center loading-body">
+                        <div id="loadingAnimation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorMessageDiv" class="centered-card hidden">
+            <div class="card text-center" style="width: 25rem;">
+                <div class="card-body">
+                    <p class="card-text text-center text-danger" id="errorMessage"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.11/lottie.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<script src="dummystartpage.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+    <script src="StartPage.js"></script>
 </body>
+
 </html>

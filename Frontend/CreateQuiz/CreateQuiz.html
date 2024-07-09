@@ -31,30 +31,40 @@
 <body>
     <div class="container-fluid" id="mainDiv">
         <!-- NAVBAR -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" id="navbarCreateQuiz">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="Home.html">
                     <img src="/Assets/Images/QuizzyNovaBlue.png" alt="Logo" width="200px" height="50px"
                         class="d-inline-block align-text-top img-fluid ms-3">
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                <button class="navbar-toggler m-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3" style="font-family: 'Playfair Display', serif;">
-                        <li class="nav-item">
-                            <a class="nav-link" href="StudentHome.html" style="font-size: 18px; color: black;">Home</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/LoggedInHome/LoggedInHome.html"
+                                style="font-size: 18px; color: black;">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Home.html" style="font-size: 18px; color: black;">About</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/Library/Library.html"
+                                style="font-size: 18px; color: black;">Library</a>
+                        </li>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="#about-section" style="font-size: 18px; color: black;">About</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0 me-3" style="font-family: 'Playfair Display', serif;">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" style="font-size: 18px; color: black;">
-                                <i class="fas fa-user-circle"></i>
+                            <a class="nav-link" href="/Profile/Profile.html" style="font-size: 18px; color: black;">
+                                <i class="ps-4 fas fa-user-circle"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="font-size: 18px; color: black;" id="logoutbtn">
+                                <i class="ps-4 fas fa-sign-out-alt"></i>
                             </a>
                         </li>
                     </ul>
@@ -66,12 +76,13 @@
                 <div class="col-md-8">
                     <div class="quiz-container shadow-lg">
                         <div class="row align-items-center">
-                            <div class="col-md-8">
+                            <div class="col-md-8" style="font-family: 'Playfair Display', serif;">
                                 <h2 class="mb-0">Create a Quiz</h2>
                             </div>
                             <div class="col-md-4 text-center mt-3 mt-md-0">
                                 <div class="lottie-container">
-                                    <lottie-player src="https://lottie.host/8c5e18a9-1df8-4ad6-aabf-e72246fdaf01/IroSzIqWqy.json"
+                                    <lottie-player
+                                        src="https://lottie.host/8c5e18a9-1df8-4ad6-aabf-e72246fdaf01/IroSzIqWqy.json"
                                         speed="0.5" style="width: 100%; height: auto;" loop autoplay direction="1"
                                         mode="normal"></lottie-player>
                                 </div>
@@ -80,18 +91,19 @@
                         <form id="quizForm" class="needs-validation" novalidate>
                             <div class="mb-3">
                                 <label for="quizName" class="form-label">Quiz Name</label>
-                                <input type="text" class="form-control" id="quizName" placeholder="Enter quiz name" required>
+                                <input type="text" class="form-control" id="quizName" placeholder="Enter quiz name"
+                                    minlength="5" maxlength="100" required>
                             </div>
                             <div class="mb-3">
                                 <label for="quizDescription" class="form-label">Quiz Description</label>
-                                <textarea class="form-control" id="quizDescription" rows="3" placeholder="Enter quiz description"
-                                    required></textarea>
+                                <textarea class="form-control" id="quizDescription" rows="3" minlength="10"
+                                    maxlength="500" placeholder="Enter quiz description" required></textarea>
                             </div>
                             <!-- <div class="mb-3">
                                 <label for="quizType" class="form-label">Quiz Type</label>
                                 <input type="text" class="form-control" id="quizType" placeholder="Enter quiz type" required>
                             </div> -->
-            
+
                             <div class="mb-3">
                                 <label for="quizType" class="form-label">Quiz Type</label>
                                 <select id="quizType" class="form-control" required>
@@ -107,22 +119,26 @@
                             </div>
                             <div class="form-check mb-3">
                                 <input type="checkbox" class="form-check-input" id="isMultipleAttemptAllowed">
-                                <label class="form-check-label" for="isMultipleAttemptAllowed">Allow multiple attempts?</label>
+                                <label class="form-check-label wrap-text" for="isMultipleAttemptAllowed">Allow multiple
+                                    attempts?</label>
                             </div>
                             <div class="mb-3">
                                 <label for="timeLimit" class="form-label">Time Limit (minutes)</label>
-                                <input type="number" class="form-control" id="timeLimit" placeholder="Enter time limit" required>
+                                <input type="number" class="form-control" id="timeLimit" placeholder="Enter time limit"
+                                    required>
                             </div>
-            
+
                             <h4 class="mt-4 mb-3">Select Questions</h4>
-            
+
                             <div class="container-fluid mt-5">
                                 <div class="d-flex justify-content-between">
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="search-query" placeholder="Search for quotes">
+                                        <input type="text" class="form-control filter-input" id="search-query"
+                                            placeholder="Search for Questions">
                                         <button class="btn searchBtn" type="button" id="search-button">Search</button>
                                         <div class="dropdown d-flex align-items-center">
-                                            <i class="fa fa-fw fa-sort sort-icon" id="filter-icon" data-bs-toggle="dropdown"></i>
+                                            <i class="fa fa-fw fa-sort sort-icon" id="filter-icon"
+                                                data-bs-toggle="dropdown"></i>
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item" id="sort-az"> Question <span><i
                                                                 class="bi bi-arrow-up"></i></span></a></li>
@@ -133,7 +149,8 @@
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#filterSection" aria-expanded="false" aria-controls="filterSection">
+                                            data-bs-target="#filterSection" aria-expanded="false"
+                                            aria-controls="filterSection">
                                             <i class="fas fa-filter"></i>
                                         </button>
                                     </div>
@@ -148,7 +165,14 @@
                                                 <option value="">All</option>
                                                 <option value="Math">Math</option>
                                                 <option value="Science">Science</option>
-                                                <option value="General">General</option>
+                                                <option value="History">History</option>
+                                                <option value="Literature">Literature</option>
+                                                <option value="Geography">Geography</option>
+                                                <option value="Art">Art</option>
+                                                <option value="Music">Music</option>
+                                                <option value="Technology">Technology</option>
+                                                <option value="Sports">Sports</option>
+                                                <option value="Other">Others</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -174,23 +198,95 @@
                                     </div>
                                 </div>
                             </div>
-            
+
                             <div class="question-grid" id="questionGrid">
                                 <!-- QUESTIONS FROM DB  -->
                             </div>
-            
+
                             <nav aria-label="Questions pagination">
                                 <ul class="pagination justify-content-center" id="pagination">
                                     <!-- PAGINATION -->
                                 </ul>
                             </nav>
-            
+
                             <button class="btn mt-4 w-100 createQuizBtn" id="CreateMCQQuestion">Create Quiz</button>
                         </form>
+                    </div>
+
+                    <!-- LOADING MODAL  -->
+                    <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content loading-model">
+                                <div class="modal-body text-center loading-body">
+                                    <div id="loadingAnimation"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MODAL  -->
+                    <div class="modal fade" id="quizIDModal" tabindex="-1" aria-labelledby="quizIDModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="quizIDModalLabel">Quiz Created Successfully 🎉
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Created Quiz ID is : <span id="quizID"></span>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Logout confirmation modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="confirmLogoutButton" type="button" class="btn btn-danger">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  confirmation modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure to create the Question?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="confirmBtn" type="button" class="btn btn-danger">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- FOOTER -->
         <footer class="footer bg-light text-center text-lg-start">
             <div class="container p-4">
@@ -283,6 +379,9 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.11/lottie.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script src="CreateQuiz.js"></script>
 
 </body>

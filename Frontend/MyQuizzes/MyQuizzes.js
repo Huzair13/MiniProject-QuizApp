@@ -3,6 +3,17 @@ let currentPage = 1;
 
 const token = localStorage.getItem('token');
 
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
+const userRole = localStorage.getItem('role')
+if (userRole === 'Student') {
+    alert('Unauthorized');
+    window.location.href = '/LoggedInHome/LoggedInHome.html';
+}
+
+
 const renderQuizzes = (quizzesToRender) => {
     const quizGrid = document.getElementById('quiz-grid');
     quizGrid.innerHTML = '';
@@ -21,9 +32,9 @@ const renderQuizzes = (quizzesToRender) => {
                     <h5 class="card-title text-center">${quiz.quizName}</h5>
                     <p class="card-text text-center">${quiz.quizDescription}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
-                        <li class="list-group-item d-flex justify-content-between"><strong>Points:</strong> ${quiz.totalPoints}</li>
-                        <li class="list-group-item d-flex justify-content-between"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row word-wrap-custom justify-content-between"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row word-wrap-custom justify-content-between"><strong>Points:</strong> ${quiz.totalPoints}</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row word-wrap-custom justify-content-between"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
                     </ul>
                 </div>
                 <div class="card-footer bg-white border-top-0 text-right text-center">
@@ -69,7 +80,7 @@ const renderQuizzes = (quizzesToRender) => {
                         }
                     }
                     const data = await response.json();
-                    console.log(data);
+                    // console.log(data);
                     window.location.reload();
                 }
                 catch (error) {
@@ -144,6 +155,26 @@ const sortAZBtn = document.getElementById('sort-az');
 const sortZABtn = document.getElementById('sort-za');
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
+
     let originalQuizzes = [];
     const apiUrl = 'http://localhost:5273/api/ViewQuiz/GetQuizzesBySpecificTeacher';
     fetch(apiUrl, {
@@ -162,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             originalQuizzes = data;
             quizzes = originalQuizzes.slice(0);
-            console.log(quizzes);
+            // console.log(quizzes);
             document.getElementById('pagination-container').style.display = 'block';
             renderQuizzes(quizzes.slice(0, quizzesPerPage));
             renderPagination(quizzes.length, quizzesPerPage, 1);

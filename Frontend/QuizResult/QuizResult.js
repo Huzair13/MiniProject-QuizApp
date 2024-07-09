@@ -1,9 +1,33 @@
 const params = new URLSearchParams(window.location.search);
 const QuizId = params.get('quizID');
+
 const token = localStorage.getItem('token');
-console.log(QuizId);
-console.log(token);
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
+// console.log(QuizId);
+// console.log(token);
 document.addEventListener('DOMContentLoaded', function () {
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
+
     fetch('http://localhost:5273/api/QuizAttempt/checkResult', {
         method: 'POST',
         headers: {
@@ -14,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            // console.log(data);
             const resultsContainer = document.getElementById('results-container');
             data.forEach(result => {
                 const card = document.createElement('div');

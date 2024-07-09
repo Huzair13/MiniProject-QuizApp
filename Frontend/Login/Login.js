@@ -8,16 +8,39 @@
         }
     }
 
-
     const form = document.querySelector('.needs-validation');
     const userIdInput = document.getElementById('loginUserID');
     const userPassInput = document.getElementById('loginUserPass');
 
-    userIdInput.addEventListener('input', function() {
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+
+    // Show loading modal
+    function showLoadingModal() {
+        const loadingAnimationContainer = document.getElementById('loadingAnimation');
+        loadingAnimationContainer.innerHTML = '';
+
+
+        const animation = bodymovin.loadAnimation({
+            container: loadingAnimationContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'https://lottie.host/c8bd9837-fcdf-4106-8906-b454da03b8b7/9qRpxRP31N.json'
+        });
+
+        loadingModal.show();
+    }
+
+    // Hide loading modal
+    function hideLoadingModal() {
+        loadingModal.hide();
+    }
+
+    userIdInput.addEventListener('input', function () {
         validateInput(userIdInput);
     });
 
-    userPassInput.addEventListener('input', function() {
+    userPassInput.addEventListener('input', function () {
         validateInput(userPassInput);
     });
 
@@ -26,7 +49,8 @@
             event.preventDefault();
             event.stopPropagation();
         } else {
-            event.preventDefault(); 
+            showLoadingModal();
+            event.preventDefault();
             const txtUid = userIdInput.value * 1;
             const txtPass = userPassInput.value;
 
@@ -40,30 +64,27 @@
                     password: txtPass
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('userID',data.userID);
-                localStorage.setItem('role',data.role);
-
-                const token = localStorage.getItem('token');
-                const decodedToken = parseJwt(token);
-                const userRole = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-
-                console.log(token);
-                console.log(decodedToken);
-                console.log(userRole);
-                // alert(data.userRole);
-                window.location.href = '/LoggedInHome/StudentHome.html'
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(res => res.json())
+                .then(data => {
+                    setTimeout(() => {
+                        login(data)
+                        hideLoadingModal();
+                        window.location.href = '/LoggedInHome/LoggedInHome.html'
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
         form.classList.add('was-validated');
     });
+
+    function login(data){
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userID', data.userID);
+        localStorage.setItem('role', data.role);
+    }
 
     function validateInput(input) {
         if (!input.checkValidity()) {

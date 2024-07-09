@@ -1,6 +1,11 @@
 const params = new URLSearchParams(window.location.search);
 const QuizId = params.get('quizID');
+
 const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
 
 let allQuestions = [];
 
@@ -13,9 +18,8 @@ async function fetchQuizDetails() {
             }
         });
         if (response.ok) {
-            console.log(response)
+            // console.log(response)
             quizData = await response.json();
-            console.log("Hello", quizData, "Welcome")
         } else {
             console.error('Failed to fetch quiz details');
         }
@@ -32,7 +36,7 @@ async function fetchQuestions() {
         });
         if (response.ok) {
             allQuestions = await response.json();
-            console.log(allQuestions)
+            // console.log(allQuestions)
         } else {
             console.error('Failed to fetch questions');
         }
@@ -44,27 +48,31 @@ async function fetchQuestions() {
 async function fetchData() {
     await fetchQuestions();
     await fetchQuizDetails();
-    console.log("After fetch, All Questions:", allQuestions);
-    console.log("After fetch, Quiz Data:", quizData);
+    // console.log("After fetch, All Questions:", allQuestions);
+    // console.log("After fetch, Quiz Data:", quizData);
 
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
 
     await fetchData();
-    console.log(allQuestions)
-    console.log(quizData)
+    // console.log(allQuestions)
+    // console.log(quizData)
 
     const params = new URLSearchParams(window.location.search);
     const QuizId = params.get('quizID');
     const token = localStorage.getItem('token');
 
-    console.log("Heloo ", QuizId)
+    // console.log("Heloo ", QuizId)
 
     if (!QuizId) {
         window.location.href = '/ViewAllQuizzes/ViewAllQuiz.html';
         return;
     }
+
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
 
     const questionGrid = document.getElementById('questionGrid');
     const addQuestionButton = document.getElementById('addQuestionButton');
@@ -83,6 +91,20 @@ document.addEventListener('DOMContentLoaded', async function () {
     const questionTypeInput = document.getElementById('questionType');
     const difficultyLevelInput = document.getElementById('difficultyLevel');
     const filterButton = document.getElementById('filter-button');
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
 
 
     let totalPages = 1;
@@ -103,6 +125,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('isMultpleAllowed').textContent = quizData.isMultpleAllowed ? 'Yes' : 'No';
     document.getElementById('totalPoints').textContent = quizData.totalPoints;
     document.getElementById('timelimit').textContent = quizData.timelimit;
+
+    document.getElementById('backtoHomeButton').addEventListener('click', function () {
+        window.location.href = '/LoggedInHome/LoggedInHome.html'
+    })
 
     function renderQuestions(page) {
         questionGrid.innerHTML = '';
@@ -172,21 +198,25 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // FILTER FUNCTIONALITY
     function filterQuestions2(category, type, difficulty) {
-        console.log("Filter Criteria:", category, type, difficulty);
+        // console.log("Filter Criteria:", category, type, difficulty);
         filteredQuestions = allQuestions.filter(question => {
-            console.log("Question Data:", question.category, question.questionType, question.difficultyLevel);
+            // console.log("Question Data:", question.category, question.questionType, question.difficultyLevel);
             const difficultyLevelInt = {
                 "Easy": 0,
                 "Medium": 1,
                 "Hard": 2
             }[difficulty];
 
-            return (category === "" || question.category === category) &&
+            const predefinedCategories = ["Math", "Science", "History", "Literature", "Geography", "Art", "Music", "Technology", "Sports"];
+
+            return (category === "" ||
+                (category === "Other" ? !predefinedCategories.includes(question.category) : question.category === category)) &&
                 (type === "" || question.questionType === type) &&
                 (difficulty === "" || question.difficultyLevel === difficultyLevelInt);
+
         });
 
-        console.log("Filtered Questions:", filteredQuestions);
+        // console.log("Filtered Questions:", filteredQuestions);
         totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
         currentPage = 1;
         renderPagination();
@@ -301,16 +331,20 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     addQuestionsBtn.addEventListener('click', async function () {
-        console.log(selectedQuestions);
-        const data = {
-            quizId: QuizId,
-            questionIds: selectedQuestions
+        const confirmation = confirm("Are you sure you want to submit the Quiz?");
+
+        if (confirmation) {
+            // console.log(selectedQuestions);
+            const data = {
+                quizId: QuizId,
+                questionIds: selectedQuestions
+            }
+            await addSelectQuestions(JSON.stringify(data));
         }
-        await addSelectQuestions(JSON.stringify(data));
     });
 
     async function addSelectQuestions(addedQuestions) {
-        console.log(addedQuestions)
+        // console.log(addedQuestions)
         try {
             const response = await fetch(`http://localhost:5273/api/Quiz/AddQuestions`, {
                 method: 'POST',

@@ -2,6 +2,10 @@ const quizzesPerPage = 6;
 let currentPage = 1;
 
 const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
 
 const renderQuizzes = (quizzesToRender) => {
     const quizGrid = document.getElementById('quiz-grid');
@@ -21,9 +25,10 @@ const renderQuizzes = (quizzesToRender) => {
                     <h5 class="card-title text-center">${quiz.quizName}</h5>
                     <p class="card-text text-center">${quiz.quizDescription}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between flex-wrap"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
-                        <li class="list-group-item d-flex justify-content-between flex-wrap"><strong>Points:</strong> ${quiz.totalPoints}</li>
-                        <li class="list-group-item d-flex justify-content-between flex-wrap"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Number of Questions:</strong> ${quiz.quizId}</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Points:</strong> ${quiz.totalPoints}</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
                     </ul>
                 </div>
                 <div class="card-footer bg-white border-top-0 text-right text-center">
@@ -36,29 +41,32 @@ const renderQuizzes = (quizzesToRender) => {
     });
     document.querySelectorAll('.use-quiz-btn').forEach(button => {
         button.addEventListener('click', function () {
-            const quizId = parseInt(this.getAttribute('data-quiz-id'));
-            fetch('http://localhost:5273/api/Quiz/CreateQuizByExistingQuiz', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    quizId: quizId
+            const confirmation = confirm("Are you sure you want to use the Quiz?");
+            if (confirmation) {
+                const quizId = parseInt(this.getAttribute('data-quiz-id'));
+                fetch('http://localhost:5273/api/Quiz/CreateQuizByExistingQuiz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        quizId: quizId
+                    })
                 })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    window.location.href = `/UseQuiz/UseQuiz.html?quizID=${data.quizId}`;
-                })
-                .catch(error => {
-                    console.error('Error fetching quizzes:', error);
-                });
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        window.location.href = `/UseQuiz/UseQuiz.html?quizID=${data.quizId}`;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching quizzes:', error);
+                    });
+            }
         });
     });
 };
@@ -122,6 +130,30 @@ const sortAZBtn = document.getElementById('sort-az');
 const sortZABtn = document.getElementById('sort-za');
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    const confirmButton = document.getElementById('confirmBtn');
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
+
+
     const useQuizButton = document.getElementById('useQuizBtn');
     let originalQuizzes = [];
     const apiUrl = 'http://localhost:5273/api/ViewQuiz/GetAllQuizzes';
@@ -141,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             originalQuizzes = data;
             quizzes = originalQuizzes.slice(0);
-            console.log(quizzes);
+            // console.log(quizzes);
             document.getElementById('pagination-container').style.display = 'block';
             renderQuizzes(quizzes.slice(0, quizzesPerPage));
             renderPagination(quizzes.length, quizzesPerPage, 1);

@@ -1,4 +1,9 @@
+
 const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
 const user = localStorage.getItem('userID');
 const role = localStorage.getItem('role');
 
@@ -17,7 +22,27 @@ const lottiePlayerElement = document.getElementById('profileLottiePlayer');
 const lottiePlayerDiv = document.getElementById('avatarDiv');
 
 document.addEventListener('DOMContentLoaded', async function () {
-    console.log(role);
+
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
+
+    // console.log(role);
     if (role === "Student") {
         fetch('http://localhost:5273/api/UserView/ViewStudentProfile', {
             method: 'GET',
@@ -28,9 +53,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 studentElement.style.display = "block";
                 teacherElement.style.display = "none";
+                nameElementProfile.style.fontWeight ="bold";
                 nameElementProfile.textContent = data.name;
                 ageElementProfile.textContent = data.age;
                 emailElementProfile.textContent = data.email;
@@ -63,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 studentElement.style.display = "none";
                 teacherElement.style.display = "block";
                 nameElementProfile.textContent = data.name;

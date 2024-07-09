@@ -70,3 +70,26 @@ body {
     background-color: #343a40;
     color: #ECD06F;
 }
+
+
+.loading-model {
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: transparent; 
+    border: none;
+    max-width: 350px; 
+    max-height: 350px; 
+    box-shadow: none;
+}
+
+
+.loading-body {
+    padding: 20px;
+}
+.loading-animation {
+    width: 50px; 
+    height: 50px; 
+    margin: auto; 
+}

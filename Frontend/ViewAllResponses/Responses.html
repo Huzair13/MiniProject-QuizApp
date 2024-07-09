@@ -21,7 +21,7 @@
 <body>
     <div class="container-fluid">
         <!-- NAVBAR -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" id="navBarUseQuiz">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="Home.html">
                     <img src="/Assets/Images/QuizzyNovaBlue.png" alt="Logo" width="200px" height="50px"
@@ -34,17 +34,27 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3" style="font-family: 'Playfair Display', serif;">
-                        <li class="nav-item">
-                            <a class="nav-link" href="StudentHome.html" style="font-size: 18px; color: black;">Home</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/LoggedInHome/LoggedInHome.html"
+                                style="font-size: 18px; color: black;">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Home.html" style="font-size: 18px; color: black;">About</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/Library/Library.html"
+                                style="font-size: 18px; color: black;">Library</a>
+                        </li>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="#about-section" style="font-size: 18px; color: black;">About</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0 me-3" style="font-family: 'Playfair Display', serif;">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" style="font-size: 18px; color: black;">
-                                <i class="fas fa-user-circle"></i>
+                            <a class="nav-link" href="/Profile/Profile.html" style="font-size: 18px; color: black;">
+                                <i class="ps-4 fas fa-user-circle"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="font-size: 18px; color: black;" id="logoutbtn">
+                                <i class="ps-4 fas fa-sign-out-alt"></i>
                             </a>
                         </li>
                     </ul>
@@ -52,8 +62,18 @@
             </div>
         </nav>
 
+        <!-- Page Heading -->
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="page-heading" style="font-family: 'Playfair Display', serif; ">
+                        <h3>My Responses</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <div class="container mt-5">
+        <div class="container mt-3">
             <div class="d-flex justify-content-between">
                 <div class="input-group mb-3">
                     <input type="text" id="quizIdInput" class="form-control" placeholder="Enter QuizID">
@@ -69,6 +89,25 @@
                         <!-- Pagination items will be inserted here -->
                     </ul>
                 </nav>
+            </div>
+        </div>
+
+        <!-- Logout confirmation modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="confirmLogoutButton" type="button" class="btn btn-danger">Logout</button>
+                    </div>
+                </div>
             </div>
         </div>
 

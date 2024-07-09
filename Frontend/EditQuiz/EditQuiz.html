@@ -30,30 +30,40 @@
     <div class="container-fluid" id="mainDiv">
 
         <!-- NAVBAR -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" id="editQuizNavBar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="Home.html">
                     <img src="/Assets/Images/QuizzyNovaBlue.png" alt="Logo" width="200px" height="50px"
                         class="d-inline-block align-text-top img-fluid ms-3">
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                <button class="navbar-toggler m-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3" style="font-family: 'Playfair Display', serif;">
-                        <li class="nav-item">
-                            <a class="nav-link" href="StudentHome.html" style="font-size: 18px; color: black;">Home</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/LoggedInHome/LoggedInHome.html"
+                                style="font-size: 18px; color: black;">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Home.html" style="font-size: 18px; color: black;">About</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/Library/Library.html"
+                                style="font-size: 18px; color: black;">Library</a>
+                        </li>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="#about-section" style="font-size: 18px; color: black;">About</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0 me-3" style="font-family: 'Playfair Display', serif;">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" style="font-size: 18px; color: black;">
-                                <i class="fas fa-user-circle"></i>
+                            <a class="nav-link" href="/Profile/Profile.html" style="font-size: 18px; color: black;">
+                                <i class="ps-4 fas fa-user-circle"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="font-size: 18px; color: black;" id="logoutbtn">
+                                <i class="ps-4 fas fa-sign-out-alt"></i>
                             </a>
                         </li>
                     </ul>
@@ -82,12 +92,13 @@
                             <div class="mb-3">
                                 <label for="quizName" class="form-label">Quiz Name</label>
                                 <input type="text" class="form-control" id="quizName" placeholder="Enter quiz name"
-                                    required>
+                                    minlength="5" maxlength="100" required>
                             </div>
                             <div class="mb-3">
                                 <label for="quizDescription" class="form-label">Quiz Description</label>
                                 <textarea class="form-control" id="quizDescription" rows="3"
-                                    placeholder="Enter quiz description" required></textarea>
+                                    placeholder="Enter quiz description" minlength="10" maxlength="500"
+                                    required></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="quizType" class="form-label">Quiz Type</label>
@@ -111,7 +122,7 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" id="search-query"
-                                            placeholder="Search for quotes">
+                                            placeholder="Search for Questions">
                                         <button class="btn searchBtn" type="button" id="search-button">Search</button>
                                         <div class="dropdown d-flex align-items-center">
                                             <i class="fa fa-fw fa-sort sort-icon" id="filter-icon"
@@ -143,7 +154,14 @@
                                                 <option value="">All</option>
                                                 <option value="Math">Math</option>
                                                 <option value="Science">Science</option>
-                                                <option value="General">General</option>
+                                                <option value="History">History</option>
+                                                <option value="Literature">Literature</option>
+                                                <option value="Geography">Geography</option>
+                                                <option value="Art">Art</option>
+                                                <option value="Music">Music</option>
+                                                <option value="Technology">Technology</option>
+                                                <option value="Sports">Sports</option>
+                                                <option value="Other">Others</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -181,6 +199,25 @@
 
                             <button type="submit" class="btn mt-4 w-100 edit-quiz-btn">Edit the Quiz</button>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout confirmation modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="confirmLogoutButton" type="button" class="btn btn-danger">Logout</button>
                     </div>
                 </div>
             </div>

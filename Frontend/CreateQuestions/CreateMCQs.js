@@ -1,4 +1,19 @@
+const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = './Home/Home.html'
+}
+
+const userRole = localStorage.getItem('role')
+if (userRole === 'student') {
+    alert('Unauthorized');
+    window.location.href = '/LoggedInHome/LoggedInHome.html'; // Redirect to home page
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
 
     const token = localStorage.getItem('token');
 
@@ -15,44 +30,57 @@ document.addEventListener('DOMContentLoaded', function () {
     const correctAnswerInput = document.getElementById('correctAnswerInput');
 
     const createButton = document.getElementById('CreateMCQQuestion');
+    const confirmButton = document.getElementById('confirmBtn');
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
 
 
     // Event listener for Category dropdown change
     QuestionCategory.addEventListener('change', function () {
         if (this.value === 'Other') {
+            otherCategoryInput.required = true;
             otherCategoryInput.style.display = 'block';
         } else {
+            otherCategoryInput.required = false;
             otherCategoryInput.style.display = 'none';
         }
+        validateInput(otherCategoryInput);
     });
-    
 
-    // function parseJwt(token) {
-    //     try {
-    //         return JSON.parse(atob(token.split('.')[1]));
-    //     } catch (e) {
-    //         return {};
-    //     }
-    // }
+    const form = document.querySelector('.needs-validation');
+    createButton.addEventListener('click', function (event) {
+        event.preventDefault();
 
-    // const printToken = () =>{
+        if (!form.checkValidity()) {
+            event.stopPropagation();
+            form.classList.add('was-validated');
+        } else {
+            confirmModal.show();
+        }
+    });
 
-    //     if (token) {
-    //         console.log("JWT Token:", token);
-    //         alert("JWT Token:\n" + token);
-    //     } else {
-    //         alert("No JWT token found in local storage.");
-    //     }
-    //     const decodedToken = parseJwt(token);
-    //     const userRole = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    confirmButton.addEventListener('click', function () {
+        confirmModal.hide();
+        showLoadingModal();
+        createQuestion();
+    });
 
-    //     console.log(token);
-    //     console.log(decodedToken);
-    //     console.log(userRole);
-
-    // }
-
-    createButton.addEventListener('click', function () {
+    const createQuestion = () => {
         const QuestionTxt = QuestionInputField.value;
         const option1 = Option1InputField.value;
         const option2 = Option2InputField.value;
@@ -86,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
             CorrectAnswer: correctAnswer
         };
 
-        console.log("Data to be sent:", data);
+        // console.log("Data to be sent:", data);
 
         fetch('http://localhost:5273/api/Question/AddMCQQuestion', {
             method: 'POST',
@@ -101,12 +129,65 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             return res.json();
         }).then(data => {
-            console.log("Response:", data);
-            // Handle response as needed
+            // console.log("Response:", data);
+            setTimeout(function () {
+                hideLoadingModal();
+                const questionID = data.id;
+                document.getElementById('questionID').textContent = questionID;
+                $('#questionIDModal').modal('show');
+            }, 2000);
         }).catch(error => {
             console.error('Error:', error);
         });
+    }
+
+    //REDIRECT TO HOME
+    $('#questionIDModal').on('hidden.bs.modal', function () {
+        window.location.href = "/LoggedInHome/LoggedInHome.html"
     });
 
+
+    // Show loading modal
+    function showLoadingModal() {
+        const loadingAnimationContainer = document.getElementById('loadingAnimation');
+        loadingAnimationContainer.innerHTML = '';
+
+
+        const animation = bodymovin.loadAnimation({
+            container: loadingAnimationContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'https://lottie.host/c8bd9837-fcdf-4106-8906-b454da03b8b7/9qRpxRP31N.json'
+        });
+
+        // $('#loadingModal').modal('show');
+        loadingModal.show();
+    }
+
+    // Hide loading modal
+    function hideLoadingModal() {
+        // $('#loadingModal').modal('hide');
+        loadingModal.hide();
+    }
+
+    // Validate input fields on input
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('input', function () {
+            validateInput(input);
+        });
+    });
+
+    // Function to validate input fields
+    function validateInput(input) {
+        if (input.checkValidity()) {
+            input.classList.remove('is-invalid');
+            input.classList.add('is-valid');
+        } else {
+            input.classList.remove('is-valid');
+            input.classList.add('is-invalid');
+        }
+    }
 })
 

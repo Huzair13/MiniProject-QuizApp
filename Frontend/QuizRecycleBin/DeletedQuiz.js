@@ -2,6 +2,10 @@ const quizzesPerPage = 12;
 let currentPage = 1;
 
 const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
 
 const renderQuizzes = (quizzesToRender) => {
     const quizGrid = document.getElementById('quiz-grid');
@@ -21,13 +25,15 @@ const renderQuizzes = (quizzesToRender) => {
                     <h5 class="card-title text-center">${quiz.quizName}</h5>
                     <p class="card-text text-center">${quiz.quizDescription}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item justify-content-between"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
-                        <li class="list-group-item justify-content-between"><strong>Points:</strong> ${quiz.totalPoints}</li>
-                        <li class="list-group-item justify-content-between"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Quiz ID:</strong> ${quiz.quizId}</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Number of Questions:</strong> ${quiz.numOfQuestions}</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Points:</strong> ${quiz.totalPoints}</li>
+                        <li class="list-group-item d-flex flex-wrap flex-column flex-sm-row justify-content-between word-wrap-custom"><strong>Time Limit:</strong> ${quiz.timelimit} minutes</li>
                     </ul>
                 </div>
                 <div class="card-footer bg-white border-top-0 text-right text-center">
-                    <button class="btn quiz-bin-button-design btn-sm restore-quiz-btn" data-quiz-id="${quiz.quizId}">Restore</button>
+                    <button class="btn mb-2 quiz-bin-button-design btn-sm restore-quiz-btn" data-quiz-id="${quiz.quizId}">Restore</button>
+                    <button class="btn quiz-bin-button-design btn-sm permanent-delete-quiz-btn" data-quiz-id="${quiz.quizId}">Delete Permanently</button>
                 </div>
             </div>
         `;
@@ -39,7 +45,7 @@ const renderQuizzes = (quizzesToRender) => {
             const quizId = parseInt(this.getAttribute('data-quiz-id'));
             const confirmation = confirm("Are you sure you want to delete this question?");
 
-            if(confirmation){
+            if (confirmation) {
                 try {
                     const response = await fetch('http://localhost:5273/api/Quiz/UndoSoftDelete', {
                         method: 'POST',
@@ -53,7 +59,7 @@ const renderQuizzes = (quizzesToRender) => {
                             }
                         )
                     })
-    
+
                     if (!response.ok) {
                         if (!response.ok) {
                             const errorData = await response.json();
@@ -67,7 +73,46 @@ const renderQuizzes = (quizzesToRender) => {
                     console.error('Error While Deleting quizzes:', error);
                 }
             }
-            else{
+            else {
+                alert("cencelled");
+            }
+        })
+    })
+
+    document.querySelectorAll('.permanent-delete-quiz-btn').forEach(button => {
+        button.addEventListener('click', async function () {
+            const quizId = parseInt(this.getAttribute('data-quiz-id'));
+            const confirmation = confirm("Are you sure you want to delete this question permanently?");
+
+            if (confirmation) {
+                try {
+                    const response = await fetch('http://localhost:5273/api/Quiz/DeleteQuiz', {
+                        method: 'DELETE',
+                        headers: {
+                            'content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(
+                            {
+                                quizId: quizId
+                            }
+                        )
+                    })
+
+                    if (!response.ok) {
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || 'Error Occured');
+                        }
+                    }
+                    const data = await response.json();
+                    window.location.reload();
+                }
+                catch (error) {
+                    console.error('Error While Deleting quizzes:', error);
+                }
+            }
+            else {
                 alert("cencelled");
             }
         })
@@ -133,6 +178,25 @@ const sortAZBtn = document.getElementById('sort-az');
 const sortZABtn = document.getElementById('sort-za');
 
 document.addEventListener('DOMContentLoaded', () => {
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
+
     const useQuizButton = document.getElementById('useQuizBtn');
     let originalQuizzes = [];
     const apiUrl = 'http://localhost:5273/api/ViewQuiz/GetAllSoftDeletedQuiz';

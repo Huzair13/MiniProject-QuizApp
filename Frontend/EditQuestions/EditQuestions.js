@@ -1,6 +1,26 @@
+const token = localStorage.getItem('token');
+if(!token){
+    window.location.href ='./Home/Home.html'
+}
+
+const userRole =localStorage.getItem('role')
+if (userRole === 'Student') {
+    alert('Unauthorized');
+    window.location.href = '/LoggedInHome/LoggedInHome.html';
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const token = localStorage.getItem('token');
     const questionId = new URLSearchParams(window.location.search).get('questionID');
+    if (!questionId) {
+        window.location.href = '/LoggedInHome/LoggedInHome.html';
+        return;
+    }
+
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
 
     const mcqForm = document.getElementById('mcqForm');
     const fillUpsForm = document.getElementById('fillUpsForm');
@@ -28,6 +48,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const option3 = document.getElementById('option3');
     const option4 = document.getElementById('option4');
 
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
+
     categoryInputFillUps.addEventListener('change', function () {
         if (this.value === 'Other') {
             otherCategoryInputFillUps.style.display = 'block';
@@ -45,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const saveButton = document.getElementById('saveQuestionBtn');
-    
+
     async function fetchQuestionData() {
         try {
             const response = await fetch(`http://localhost:5273/api/ViewQuestion/GetQuestionByQuestionID?questionID=${questionId}`, {
@@ -61,10 +96,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const questionData = await response.json();
-            console.log(questionData);
+            // console.log(questionData);
             autofillForm(questionData);
         } catch (error) {
-            console.error('Error fetching question data:', error);
+            // console.error('Error fetching question data:', error);
         }
     }
 
@@ -130,63 +165,101 @@ document.addEventListener('DOMContentLoaded', function () {
         otherInput.value = category;
     }
 
+    const form = document.querySelector('.needs-validation');
+    // Inside the event listener for form submission
 
-    saveButton.addEventListener('click', async function () {
-        const payload = {
-            id: parseInt(questionId),
-            questionText: '',
-            points: 0,
-            category: '',
-            difficultyLevel: '',
-            correctAnswer: '',
-            choice1: '',
-            choice2: '',
-            choice3: '',
-            choice4: ''
-        };
+    saveButton.addEventListener('click', async function (event) {
+        event.preventDefault();
 
-        if (mcqForm.style.display === 'block') {
-            payload.questionText = questionInputMCQ.value;
-            payload.points = parseFloat(pointsInputMCQ.value);
-            payload.category = categoryInputMCQ.value;
-            payload.difficultyLevel = parseInt(difficultyLevelInputMCQ.value);
-            payload.correctAnswer = correctAnswerInputMCQ.value;
-            payload.choice1 = option1MCQ.value;
-            payload.choice2 = option2MCQ.value;
-            payload.choice3 = option3MCQ.value;
-            payload.choice4 = option4MCQ.value;
-        } else if (fillUpsForm.style.display === 'block') {
-            delete payload.choice1;
-            delete payload.choice2;
-            delete payload.choice3;
-            delete payload.choice4;
-            payload.questionText = questionInputFillUps.value;
-            payload.points = parseFloat(pointsInputFillUps.value);
-            payload.category = categoryInputFillUps.value;
-            payload.difficultyLevel = parseInt(difficultyLevelInputFillUps.value);
-            payload.correctAnswer = blankAnswerFillUps.value;
+        if (!form.checkValidity()) {
+            event.stopPropagation();
+            form.classList.add('was-validated');
         }
-
-        try {
-            console.log(payload);
-            const response = await fetch(`http://localhost:5273/api/Question/EditQuestionByID`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            alert('Question updated successfully');
-        } catch (error) {
-            console.error('Error saving question data:', error);
+        else {
+            // showLoadingModal();
+            await saveEditedQuestion();
         }
     });
 
+    async function saveEditedQuestion() {
+        const confirmation = confirm("Are you sure to Edit the question?");
+        if (confirmation) {
+            const payload = {
+                id: parseInt(questionId),
+                questionText: '',
+                points: 0,
+                category: '',
+                difficultyLevel: '',
+                correctAnswer: '',
+                choice1: '',
+                choice2: '',
+                choice3: '',
+                choice4: ''
+            };
+
+            if (mcqForm.style.display === 'block') {
+                payload.questionText = questionInputMCQ.value;
+                payload.points = parseFloat(pointsInputMCQ.value);
+                payload.category = categoryInputMCQ.value;
+                payload.difficultyLevel = parseInt(difficultyLevelInputMCQ.value);
+                payload.correctAnswer = correctAnswerInputMCQ.value;
+                payload.choice1 = option1MCQ.value;
+                payload.choice2 = option2MCQ.value;
+                payload.choice3 = option3MCQ.value;
+                payload.choice4 = option4MCQ.value;
+            } else if (fillUpsForm.style.display === 'block') {
+                delete payload.choice1;
+                delete payload.choice2;
+                delete payload.choice3;
+                delete payload.choice4;
+                payload.questionText = questionInputFillUps.value;
+                payload.points = parseFloat(pointsInputFillUps.value);
+                payload.category = categoryInputFillUps.value;
+                payload.difficultyLevel = parseInt(difficultyLevelInputFillUps.value);
+                payload.correctAnswer = blankAnswerFillUps.value;
+            }
+
+            try {
+                // console.log(payload);
+                const response = await fetch(`http://localhost:5273/api/Question/EditQuestionByID`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                alert('Question updated successfully');
+            } catch (error) {
+                console.error('Error saving question data:', error);
+            }
+        }
+    }
+
     fetchQuestionData();
+
+
+    // Validate input fields on input
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('input', function () {
+            validateInput(input);
+        });
+    });
+
+    // Function to validate input fields
+    function validateInput(input) {
+        if (input.checkValidity()) {
+            input.classList.remove('is-invalid');
+            input.classList.add('is-valid');
+        } else {
+            input.classList.remove('is-valid');
+            input.classList.add('is-invalid');
+        }
+    }
 });

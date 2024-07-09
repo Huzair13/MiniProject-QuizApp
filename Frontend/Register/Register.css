@@ -27,3 +27,14 @@ input::placeholder {
     display: none;
 }
 
+.loading-model {
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: transparent; 
+    border: none;
+    max-width: 350px; 
+    max-height: 350px; 
+    box-shadow: none;
+}

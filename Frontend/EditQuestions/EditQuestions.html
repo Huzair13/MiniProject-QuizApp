@@ -36,24 +36,34 @@
                     <img src="/Assets/Images/QuizzyNovaBlue.png" alt="Logo" width="200px" height="50px"
                         class="d-inline-block align-text-top img-fluid ms-3">
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                <button class="navbar-toggler m-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3" style="font-family: 'Playfair Display', serif;">
-                        <li class="nav-item">
-                            <a class="nav-link" href="StudentHome.html" style="font-size: 18px; color: black;">Home</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/LoggedInHome/LoggedInHome.html"
+                                style="font-size: 18px; color: black;">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Home.html" style="font-size: 18px; color: black;">About</a>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="/Library/Library.html"
+                                style="font-size: 18px; color: black;">Library</a>
+                        </li>
+                        <li class="nav-item m-2">
+                            <a class="nav-link" href="#about-section" style="font-size: 18px; color: black;">About</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0 me-3" style="font-family: 'Playfair Display', serif;">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" style="font-size: 18px; color: black;">
-                                <i class="fas fa-user-circle"></i>
+                            <a class="nav-link" href="/Profile/Profile.html" style="font-size: 18px; color: black;">
+                                <i class="ps-4 fas fa-user-circle"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="font-size: 18px; color: black;" id="logoutbtn">
+                                <i class="ps-4 fas fa-sign-out-alt"></i>
                             </a>
                         </li>
                     </ul>
@@ -78,117 +88,142 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div id="mcqForm" style="display: none;">
-                            <!-- MCQ Form -->
-                            <div class="question">
-                                <label for="questionInputMCQ" class="form-label">Enter your question:</label>
-                                <textarea class="form-control large-input" id="questionInputMCQ"
-                                    placeholder="Type your question here"></textarea>
-                            </div>
-                            <div class="options">
-                                <div class="row g-3">
-                                    <div class="col-md-6 option">
-                                        <input type="text" class="form-control" id="option1MCQ"
-                                            placeholder="Type option 1 here">
+                        <form class="needs-validation" novalidate>
+                            <div id="mcqForm" style="display: none;">
+                                <!-- MCQ Form -->
+                                <div class="question">
+                                    <label for="questionInputMCQ" class="form-label">Enter your question:</label>
+                                    <textarea class="form-control large-input" id="questionInputMCQ"
+                                        placeholder="Type your question here" minlength="10" maxlength="100"
+                                        required></textarea>
+                                </div>
+                                <div class="options">
+                                    <div class="row g-3">
+                                        <div class="col-md-6 option">
+                                            <input type="text" class="form-control" id="option1MCQ"
+                                                placeholder="Type option 1 here" maxlength="100" required>
+                                        </div>
+                                        <div class="col-md-6 option">
+                                            <input type="text" class="form-control" id="option2MCQ"
+                                                placeholder="Type option 2 here" maxlength="100" required>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 option">
-                                        <input type="text" class="form-control" id="option2MCQ"
-                                            placeholder="Type option 2 here">
+                                    <div class="row g-3">
+                                        <div class="col-md-6 option">
+                                            <input type="text" class="form-control" id="option3MCQ"
+                                                placeholder="Type option 3 here" maxlength="100" required>
+                                        </div>
+                                        <div class="col-md-6 option">
+                                            <input type="text" class="form-control" id="option4MCQ"
+                                                placeholder="Type option 4 here" maxlength="100" required>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row g-3">
-                                    <div class="col-md-6 option">
-                                        <input type="text" class="form-control" id="option3MCQ"
-                                            placeholder="Type option 3 here">
-                                    </div>
-                                    <div class="col-md-6 option">
-                                        <input type="text" class="form-control" id="option4MCQ"
-                                            placeholder="Type option 4 here">
-                                    </div>
+                                <div class="additional-fields">
+                                    <label for="pointsInput" class="form-label">Points:</label>
+                                    <input type="number" class="form-control" id="pointsInput"
+                                        placeholder="Enter points for the question" min="0" step="0.01" required>
+
+                                    <label for="categoryInput" class="form-label">Category:</label>
+                                    <select class="form-select" id="categoryInput" required>
+                                        <option value="Math">Math</option>
+                                        <option value="Science">Science</option>
+                                        <option value="History">History</option>
+                                        <option value="Literature">Literature</option>
+                                        <option value="Geography">Geography</option>
+                                        <option value="Art">Art</option>
+                                        <option value="Music">Music</option>
+                                        <option value="Technology">Technology</option>
+                                        <option value="Sports">Sports</option>
+                                        <option value="Other">Others</option>
+                                    </select>
+                                    <input type="text" class="form-control" id="otherCategoryInput"
+                                        placeholder="Enter custom category">
+
+                                    <label for="difficultyLevelInput" class="form-label">Difficulty Level:</label>
+                                    <select class="form-select" id="difficultyLevelInput" required>
+                                        <option value="0" style="color: green;">Easy</option>
+                                        <option value="1" style="color: darkgoldenrod;">Medium</option>
+                                        <option value="2" style="color: red;">Hard</option>
+                                    </select>
+
+                                    <label for="correctAnswerInput" class="form-label">Correct Answer:</label>
+                                    <select class="form-select" id="correctAnswerInput" required>
+                                        <option value="option1" id="option1">Option 1</option>
+                                        <option value="option2" id="option2">Option 2</option>
+                                        <option value="option3" id="option3">Option 3</option>
+                                        <option value="option4" id="option4">Option 4</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="additional-fields">
-                                <label for="pointsInput" class="form-label">Points:</label>
-                                <input type="number" class="form-control" id="pointsInput"
-                                    placeholder="Enter points for the question">
+                        </form>
 
-                                <label for="categoryInput" class="form-label">Category:</label>
-                                <select class="form-select" id="categoryInput">
-                                    <option value="Math">Math</option>
-                                    <option value="Science">Science</option>
-                                    <option value="History">History</option>
-                                    <option value="Literature">Literature</option>
-                                    <option value="Geography">Geography</option>
-                                    <option value="Art">Art</option>
-                                    <option value="Music">Music</option>
-                                    <option value="Technology">Technology</option>
-                                    <option value="Sports">Sports</option>
-                                    <option value="Other">Others</option>
-                                </select>
-                                <input type="text" class="form-control" id="otherCategoryInput"
-                                    placeholder="Enter custom category">
+                        <form class="needs-validation" novalidate>
 
-                                <label for="difficultyLevelInput" class="form-label">Difficulty Level:</label>
-                                <select class="form-select" id="difficultyLevelInput">
-                                    <option value="0" style="color: green;">Easy</option>
-                                    <option value="1" style="color: darkgoldenrod;">Medium</option>
-                                    <option value="2" style="color: red;">Hard</option>
-                                </select>
+                            <div id="fillUpsForm" style="display: none;">
+                                <!-- FillUps Form -->
+                                <div class="question">
+                                    <label for="questionInputFillups" class="form-label">Enter your question:</label>
+                                    <textarea class="form-control large-input" id="questionInputFillups"
+                                        placeholder="Type your question here, use ___ for the blank" minlength="10"
+                                        required></textarea>
+                                </div>
+                                <div class="answer">
+                                    <label for="blankAnswer" class="form-label">Answer for the blank:</label>
+                                    <input type="text" class="form-control" id="blankAnswer"
+                                        placeholder="Type the answer here" required>
+                                </div>
+                                <div class="additional-fields">
+                                    <label for="pointsInputFillups" class="form-label">Points:</label>
+                                    <input type="number" class="form-control" id="pointsInputFillups"
+                                        placeholder="Enter points for the question" min="0" step="0.01" required>
 
-                                <label for="correctAnswerInput" class="form-label">Correct Answer:</label>
-                                <select class="form-select" id="correctAnswerInput">
-                                    <option value="option1" id="option1">Option 1</option>
-                                    <option value="option2" id="option2">Option 2</option>
-                                    <option value="option3" id="option3">Option 3</option>
-                                    <option value="option4" id="option4">Option 4</option>
-                                </select>
+                                    <label for="categoryInputFillUps" class="form-label">Category:</label>
+                                    <select class="form-select" id="categoryInputFillUps" required>
+                                        <option value="Math">Math</option>
+                                        <option value="Science">Science</option>
+                                        <option value="History">History</option>
+                                        <option value="Literature">Literature</option>
+                                        <option value="Geography">Geography</option>
+                                        <option value="Art">Art</option>
+                                        <option value="Music">Music</option>
+                                        <option value="Technology">Technology</option>
+                                        <option value="Sports">Sports</option>
+                                        <option value="Other">Others</option>
+                                    </select>
+                                    <input type="text" class="form-control" id="otherCategoryInputFillups"
+                                        placeholder="Enter custom category">
+
+                                    <label for="difficultyLevelInputFillUps" class="form-label">Difficulty
+                                        Level:</label>
+                                    <select class="form-select" id="difficultyLevelInputFillUps" required>
+                                        <option value="0" style="color: green;">Easy</option>
+                                        <option value="1" style="color: darkgoldenrod;">Medium</option>
+                                        <option value="2" style="color: red;">Hard</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        <div id="fillUpsForm" style="display: none;">
-                            <!-- FillUps Form -->
-                            <div class="question">
-                                <label for="questionInputFillups" class="form-label">Enter your question:</label>
-                                <textarea class="form-control large-input" id="questionInputFillups"
-                                    placeholder="Type your question here, use ___ for the blank"></textarea>
-                            </div>
-                            <div class="answer">
-                                <label for="blankAnswer" class="form-label">Answer for the blank:</label>
-                                <input type="text" class="form-control" id="blankAnswer"
-                                    placeholder="Type the answer here">
-                            </div>
-                            <div class="additional-fields">
-                                <label for="pointsInputFillups" class="form-label">Points:</label>
-                                <input type="number" class="form-control" id="pointsInputFillups"
-                                    placeholder="Enter points for the question">
-
-                                <label for="categoryInputFillUps" class="form-label">Category:</label>
-                                <select class="form-select" id="categoryInputFillUps">
-                                    <option value="Math">Math</option>
-                                    <option value="Science">Science</option>
-                                    <option value="History">History</option>
-                                    <option value="Literature">Literature</option>
-                                    <option value="Geography">Geography</option>
-                                    <option value="Art">Art</option>
-                                    <option value="Music">Music</option>
-                                    <option value="Technology">Technology</option>
-                                    <option value="Sports">Sports</option>
-                                    <option value="Other">Others</option>
-                                </select>
-                                <input type="text" class="form-control" id="otherCategoryInputFillups"
-                                    placeholder="Enter custom category">
-
-                                <label for="difficultyLevelInputFillUps" class="form-label">Difficulty Level:</label>
-                                <select class="form-select" id="difficultyLevelInputFillUps">
-                                    <option value="0" style="color: green;">Easy</option>
-                                    <option value="1" style="color: darkgoldenrod;">Medium</option>
-                                    <option value="2" style="color: red;">Hard</option>
-                                </select>
-                            </div>
-                        </div>
-
+                        </form>
                         <button class="btn btn-primary mt-4 w-100" id="saveQuestionBtn">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout confirmation modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="confirmLogoutButton" type="button" class="btn btn-danger">Logout</button>
                     </div>
                 </div>
             </div>
@@ -277,8 +312,6 @@
         </footer>
 
     </div>
-
-
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

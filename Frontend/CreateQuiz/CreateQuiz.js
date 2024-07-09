@@ -1,4 +1,21 @@
-document.addEventListener('DOMContentLoaded', function() {
+
+const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
+const userRole = localStorage.getItem('role')
+if (userRole === 'Student') {
+    alert('Unauthorized');
+    window.location.href = '/LoggedInHome/LoggedInHome.html';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+
     const QuizNameInput = document.getElementById('quizName');
     const QuizDescriptionInput = document.getElementById('quizDescription');
     const searchQueryInput = document.getElementById('search-query');
@@ -11,13 +28,59 @@ document.addEventListener('DOMContentLoaded', function() {
     const difficultyLevelInput = document.getElementById('difficultyLevel');
     const filterButton = document.getElementById('filter-button');
 
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    const confirmButton = document.getElementById('confirmBtn');
+
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+
+
     let currentPage = 1;
-    const perPage = 8; 
-    let totalQuestions = 0; 
+    const perPage = 8;
+    let totalQuestions = 0;
     const token = localStorage.getItem('token');
     let questions = [];
-    let selectedQuestions = []; 
+    let selectedQuestions = [];
     let filteredQuestions = [];
+
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
+
+    // Show loading modal
+    function showLoadingModal() {
+        const loadingAnimationContainer = document.getElementById('loadingAnimation');
+        loadingAnimationContainer.innerHTML = '';
+
+
+        const animation = bodymovin.loadAnimation({
+            container: loadingAnimationContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'https://lottie.host/c8bd9837-fcdf-4106-8906-b454da03b8b7/9qRpxRP31N.json'
+        });
+
+        // $('#loadingModal').modal('show');
+        loadingModal.show();
+    }
+
+    // Hide loading modal
+    function hideLoadingModal() {
+        // $('#loadingModal').modal('hide');
+        loadingModal.hide();
+    }
 
     //INITIAL FETCH 
     fetchQuestions();
@@ -25,27 +88,33 @@ document.addEventListener('DOMContentLoaded', function() {
     //VALIDATION -- ON SUBMIT
     const forms = document.querySelectorAll('.needs-validation');
     forms.forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); 
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
 
             if (!form.checkValidity()) {
-                event.preventDefault(); 
+                event.preventDefault();
                 event.stopPropagation();
             }
             else if (QuizDescriptionInput.value === '') {
                 validateInput(QuizDescriptionInput);
-            }  
+            }
             else if (selectedQuestions.length === 0) {
                 alert('Please select at least one question.');
                 return;
-            } 
+            }
             else {
-                event.preventDefault(); 
-                createQuiz();
+                event.preventDefault();
+                confirmModal.show();
             }
 
             form.classList.add('was-validated');
         });
+    });
+
+    confirmButton.addEventListener('click', function () {
+        confirmModal.hide();
+        showLoadingModal();
+        createQuiz();
     });
 
     //VALIDATION ON ENTERING THE INPUT
@@ -53,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputsToValidate = document.querySelectorAll('input:not(.filter-input), select:not(.filter-input), textarea:not(.filter-input)');
 
     inputsToValidate.forEach(input => {
-        input.addEventListener('input', function() {
+        input.addEventListener('input', function () {
             validateInput(input);
         });
     });
@@ -72,11 +141,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //SEARCH QUESTION FUNCTIONALITY
     function SortQuestions(query) {
-        console.log(query);
+        // console.log(query);
         if (query) {
-            console.log("if reached");
+            // console.log("if reached");
             filteredQuestions = questions.filter(question => question.questionText.toLowerCase().includes(query.toLowerCase()));
-            console.log(filteredQuestions);
+            // console.log(filteredQuestions);
         } else {
             filteredQuestions = questions;
         }
@@ -88,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //SEARCH BUTTON
     searchButton.addEventListener('click', () => {
-        console.log(questions);
+        // console.log(questions);
         const query = searchQueryInput.value.trim();
         SortQuestions(query);
     });
@@ -125,29 +194,29 @@ document.addEventListener('DOMContentLoaded', function() {
         sortQuestions('za');
     });
 
-// FILTER FUNCTIONALITY
-function filterQuestions(category, type, difficulty) {
-    console.log("Filter Criteria:", category, type, difficulty);
-    filteredQuestions = questions.filter(question => {
-        console.log("Question Data:", question.category, question.questionType, question.difficultyLevel);
-        const difficultyLevelInt = {
-            "Easy": 0,
-            "Medium": 1,
-            "Hard": 2
-        }[difficulty];
+    // FILTER FUNCTIONALITY
+    function filterQuestions(category, type, difficulty) {
+        // console.log("Filter Criteria:", category, type, difficulty);
+        filteredQuestions = questions.filter(question => {
+            // console.log("Question Data:", question.category, question.questionType, question.difficultyLevel);
+            const difficultyLevelInt = {
+                "Easy": 0,
+                "Medium": 1,
+                "Hard": 2
+            }[difficulty];
 
-        return (category === "" || question.category === category) &&
-               (type === "" || question.questionType === type) &&
-               (difficulty === "" || question.difficultyLevel === difficultyLevelInt);
-    });
+            return (category === "" || question.category === category) &&
+                (type === "" || question.questionType === type) &&
+                (difficulty === "" || question.difficultyLevel === difficultyLevelInt);
+        });
 
-    console.log("Filtered Questions:", filteredQuestions); 
-    totalPages = Math.ceil(filteredQuestions.length / perPage);
-    currentPage = 1;
-    renderPagination(filteredQuestions, filteredQuestions.length, perPage, currentPage);
-    renderQuestions(filteredQuestions.slice(0, perPage));
-}
-    
+        // console.log("Filtered Questions:", filteredQuestions);
+        totalPages = Math.ceil(filteredQuestions.length / perPage);
+        currentPage = 1;
+        renderPagination(filteredQuestions, filteredQuestions.length, perPage, currentPage);
+        renderQuestions(filteredQuestions.slice(0, perPage));
+    }
+
     //FILTER BUTTONS
     filterButton.addEventListener('click', (event) => {
         event.preventDefault();
@@ -162,36 +231,36 @@ function filterQuestions(category, type, difficulty) {
     //FETCH QUESTIONS
     function fetchQuestions() {
         const apiUrl = `http://localhost:5273/api/ViewQuestion/GetAllQuestions`;
-    
+
         fetch(apiUrl, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            questions = data;
-            totalQuestions = data.total;
-            filteredQuestions = questions; 
-            renderQuestions(questions.slice(0, perPage));
-            renderPagination(questions, questions.length, perPage, currentPage);
-        })
-        .catch(error => {
-            console.error('Error fetching questions:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                questions = data;
+                totalQuestions = data.total;
+                filteredQuestions = questions;
+                renderQuestions(questions.slice(0, perPage));
+                renderPagination(questions, questions.length, perPage, currentPage);
+            })
+            .catch(error => {
+                console.error('Error fetching questions:', error);
+            });
     }
-    
+
     //RENDER QUESTIONS
     function renderQuestions(questions) {
         const questionGrid = document.getElementById('questionGrid');
         questionGrid.innerHTML = '';
-    
+
         if (!Array.isArray(questions)) {
             console.error('Invalid questions data:', questions);
             return;
@@ -200,7 +269,7 @@ function filterQuestions(category, type, difficulty) {
             const questionCard = document.createElement('div');
             questionCard.className = 'question-card';
             questionCard.classList.add('shadow')
-            const isChecked = selectedQuestions.includes(question.id); 
+            const isChecked = selectedQuestions.includes(question.id);
             questionCard.innerHTML = `
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="question${question.id}" value="${question.id}" ${isChecked ? 'checked' : ''} onchange="updateSelectedQuestions(${question.id}, this.checked)">
@@ -216,33 +285,33 @@ function filterQuestions(category, type, difficulty) {
         const paginationContainer = document.querySelector('.pagination');
         paginationContainer.innerHTML = '';
         const pageCount = Math.ceil(totalQuizzes / quizzesPerPage);
-    
+
         if (currentPage > 1) {
             const prevItem = document.createElement('li');
             prevItem.className = 'page-item';
             prevItem.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>`;
             paginationContainer.appendChild(prevItem);
         }
-    
+
         const startPage = Math.max(1, currentPage - 1);
         const endPage = Math.min(pageCount, currentPage + 1);
-    
+
         for (let i = startPage; i <= endPage; i++) {
             const pageItem = document.createElement('li');
             pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
             pageItem.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
             paginationContainer.appendChild(pageItem);
         }
-    
+
         if (currentPage < pageCount) {
             const nextItem = document.createElement('li');
             nextItem.className = 'page-item';
             nextItem.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>`;
             paginationContainer.appendChild(nextItem);
         }
-    
+
         document.querySelectorAll('.page-link').forEach(link => {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', function (e) {
                 e.preventDefault();
                 const page = parseInt(this.getAttribute('data-page'));
                 currentPage = page;
@@ -253,7 +322,7 @@ function filterQuestions(category, type, difficulty) {
             });
         });
     };
-    
+
     //CREATE QUIZ
     function createQuiz() {
         const quizName = QuizNameInput.value;
@@ -262,16 +331,16 @@ function filterQuestions(category, type, difficulty) {
         const isMultipleAttemptAllowed = document.getElementById('isMultipleAttemptAllowed').checked;
         const timeLimit = parseInt(document.getElementById('timeLimit').value);
 
-        let timelimitString =""
+        let timelimitString = ""
 
-        if(timeLimit<10){
-            timelimitString =`00:0${timeLimit}:00`;
+        if (timeLimit < 10) {
+            timelimitString = `00:0${timeLimit}:00`;
         }
-        else{
+        else {
             timelimitString = `00:${timeLimit}:00`;
         }
-        
-        console.log(selectedQuestions); 
+
+        // console.log(selectedQuestions);
 
         //QUIZ JSON DATA
         const quizData = {
@@ -292,28 +361,40 @@ function filterQuestions(category, type, difficulty) {
             },
             body: JSON.stringify(quizData)
         })
-        .then(response => {
-            console.log(quizData);
-            console.log(response);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Quiz created successfully:', data);
-            document.getElementById('quizForm').reset(); 
-            selectedQuestions = []; 
-            renderQuestions(questions.slice(0, perPage)); 
-            renderPagination(questions, totalQuestions, perPage, currentPage);
-        })
-        .catch(error => {
-            console.error('Error creating quiz:', error);
-        });
+            .then(response => {
+                // console.log(quizData);
+                // console.log(response);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // console.log('Quiz created successfully:', data);
+                // document.getElementById('quizForm').reset();
+                // selectedQuestions = [];
+                // renderQuestions(questions.slice(0, perPage));
+                // renderPagination(questions, totalQuestions, perPage, currentPage);
+                setTimeout(function () {
+                    hideLoadingModal();
+                    const quizID = data.quizId;
+                    document.getElementById('quizID').textContent = quizID;
+                    $('#quizIDModal').modal('show');
+                }, 2000);
+            })
+            .catch(error => {
+                hideLoadingModal();
+                console.error('Error creating quiz:', error);
+            });
     }
 
+    //REDIRECT TO HOME
+    $('#quizIDModal').on('hidden.bs.modal', function () {
+        window.location.href = "/LoggedInHome/LoggedInHome.html"
+    });
+
     //UPDATE CHECKED QUESTIONS
-    window.updateSelectedQuestions = function(questionId, isChecked) {
+    window.updateSelectedQuestions = function (questionId, isChecked) {
         if (isChecked) {
             selectedQuestions.push(questionId);
         } else {

@@ -1,11 +1,11 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     const params = new URLSearchParams(window.location.search);
     const type = params.get('type');
 
     if (!type || (type !== 'student' && type !== 'teacher')) {
-        window.location.href = 'RegisterOption.html'; 
-        return; 
+        window.location.href = 'RegisterOption.html';
+        return;
     }
 
     //INPUTS
@@ -18,12 +18,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const userPass1 = document.getElementById('registerPass1');
     const userPass2 = document.getElementById('registerPass2');
 
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+
+    // Show loading modal
+    function showLoadingModal() {
+        const loadingAnimationContainer = document.getElementById('loadingAnimation');
+        loadingAnimationContainer.innerHTML = '';
+
+
+        const animation = bodymovin.loadAnimation({
+            container: loadingAnimationContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'https://lottie.host/c8bd9837-fcdf-4106-8906-b454da03b8b7/9qRpxRP31N.json'
+        });
+
+        loadingModal.show();
+    }
+
+    // Hide loading modal
+    function hideLoadingModal() {
+        loadingModal.hide();
+    }
+
 
     //STUDENT EDUCATION QUALIFICATION
-    var studentFields = document.getElementById('studentFields'); 
+    var studentFields = document.getElementById('studentFields');
 
     //TEACHER DESIGNATION
-    var teacherFields = document.getElementById('teacherFields'); 
+    var teacherFields = document.getElementById('teacherFields');
 
     //DISPLAYING BASED ON ROLE
     if (type === 'student') {
@@ -51,14 +75,24 @@ document.addEventListener('DOMContentLoaded', function() {
     //FORM VALIDATION ---- ON SUBMIT
     const forms = document.querySelectorAll('.needs-validation');
     forms.forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); 
+        form.addEventListener('submit', function (event) {
+            const txtPass = userPass1.value.trim();
+            const txtPass2 = userPass2.value.trim();
+
+            // showLoadingModal();
+            event.preventDefault();
 
             if (!form.checkValidity()) {
-                event.preventDefault(); 
+                event.preventDefault();
                 event.stopPropagation();
             } else {
-                event.preventDefault(); 
+                event.preventDefault();
+
+                if (txtPass !== txtPass2) {
+                    hideLoadingModal();
+                    alert("PassWord Not Matched");
+                    return;
+                }
                 Register();
             }
 
@@ -67,24 +101,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     var Register = () => {
-        const txtUserName = userName.value.trim(); 
-        const txtEmail = userEmail.value.trim(); 
+        const txtUserName = userName.value.trim();
+        const txtEmail = userEmail.value.trim();
         const txtMobile = userMobile.value.trim();
         const txtDOB = userDOB.value;
         const txtPass = userPass1.value.trim();
-    
+        const txtPass2 = userPass2.value.trim();
+
         var txtDesignation = "";
         var txtEducationQualification = "";
         var txtType = "";
-    
+
         if (type === "student") {
-            txtEducationQualification = userEducation.value.trim(); 
+            txtEducationQualification = userEducation.value.trim();
             txtType = "Student";
         } else if (type === "teacher") {
-            txtDesignation = userDesignation.value.trim(); 
+            txtDesignation = userDesignation.value.trim();
             txtType = "Teacher";
         }
-    
+
         const jsonInput = {
             name: txtUserName,
             email: txtEmail,
@@ -95,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
             designation: txtDesignation,
             userType: txtType
         };
-    
+
         fetch('http://localhost:5273/api/User/Register', {
             method: 'POST',
             headers: {
@@ -103,33 +138,37 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(jsonInput)
         })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return res.json();
-        })
-        .then(data => {
-            const userID = data.id;
-            console.log('Generated User ID:', userID);
-            document.getElementById('userID').textContent = userID;
-            $('#userIDModal').modal('show');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then(data => {
+                hideLoadingModal();
+                setTimeout(() => {
+                    const userID = data.id;
+                    document.getElementById('userID').textContent = userID;
+                    $('#userIDModal').modal('show');
+                }, 1500);
+
+            })
+            .catch(error => {
+                hideLoadingModal();
+                console.error('Error:', error);
+            });
     };
-    
+
 
     //REDIRECT TO LOGIN AFTER REGISTER
     $('#userIDModal').on('hidden.bs.modal', function () {
-        window.location.href = '/Login/Login.html'; 
+        window.location.href = '/Login/Login.html';
     });
 
     //VALIDATION ON ENTERING THE INPUT
     const inputs = document.querySelectorAll('input, select');
     inputs.forEach(input => {
-        input.addEventListener('input', function() {
+        input.addEventListener('input', function () {
             validateInput(input);
         });
     });

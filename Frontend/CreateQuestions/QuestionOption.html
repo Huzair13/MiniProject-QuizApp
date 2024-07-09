@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Question</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="QuestionOption.css">
+</head>
+
+  <body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-10 col-md-6 mb-4">
+                <div class="card text-center student-background h-100" onclick="CreateMCQ()">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <lottie-player src="https://lottie.host/9a28d047-e3ec-445a-84c8-2dff11931273/2hKXt8Xgbq.json" speed="1" style="width: auto; height: 200px;" loop autoplay direction="1" mode="normal"></lottie-player>
+                        <h5 class="card-title p-4"  style="font-family: 'Playfair Display', serif;">Multiple Choice</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-10 col-md-6 mb-4">
+                <div class="card text-center teacher-background h-100" onclick="CreateFillUps()">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <lottie-player src="https://lottie.host/91dddb93-0c07-43cf-9cd8-83b4b105b7bb/tI8x3nFQWO.json" speed="1" loop autoplay direction="1" style="width: auto; height: 200px;" clasa="card-img-top" mode="normal"></lottie-player>
+                        <h5 class="card-title p-4"  style="font-family: 'Playfair Display', serif;">Fill Ups</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var CreateMCQ = () =>{
+            window.location.href = "CreateMCQs.html";
+        }
+
+        var CreateFillUps = () =>{
+            window.location.href="CreateFillUps.html"
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.11/lottie.min.js"></script>
+  </body>
+</html>

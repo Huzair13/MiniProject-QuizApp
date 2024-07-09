@@ -113,7 +113,7 @@ nav {
 
 @media (max-width: 991.98px) {
     .navbar .navbar-nav {
-        flex-direction: row;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
     }
@@ -134,8 +134,33 @@ nav {
         padding: 5px;
     }
 }
+
+
+
 .navbar .fa-user-circle {
     font-size: 1.5rem;
     margin-top: auto;
     margin-bottom: auto;
+}
+
+.loading-model {
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: transparent; 
+    border: none;
+    max-width: 350px; 
+    max-height: 350px; 
+    box-shadow: none;
+}
+
+
+.loading-body {
+    padding: 20px;
+}
+.loading-animation {
+    width: 50px; 
+    height: 50px; 
+    margin: auto; 
 }

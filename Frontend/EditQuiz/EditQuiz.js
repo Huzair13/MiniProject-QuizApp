@@ -2,6 +2,17 @@ const params = new URLSearchParams(window.location.search);
 const QuizId = params.get('quizID');
 const token = localStorage.getItem('token');
 
+if (!token) {
+    window.location.href = '/Home/Home.html'
+}
+
+const userRole = localStorage.getItem('role')
+if (userRole === 'Student') {
+    alert('Unauthorized');
+    window.location.href = '/LoggedInHome/LoggedInHome.html';
+}
+
+
 let quizData = {};
 async function fetchQuizDetails() {
     try {
@@ -12,9 +23,9 @@ async function fetchQuizDetails() {
             }
         });
         if (response.ok) {
-            console.log(response)
+            // console.log(response)
             quizData = await response.json();
-            console.log("Hello", quizData, "Welcome")
+            // console.log("Hello", quizData, "Welcome")
             updateQuizDetails();
             return quizData;
         } else {
@@ -43,12 +54,21 @@ function updateQuizDetails() {
 
 }
 
-document.addEventListener('DOMContentLoaded',async function () {
+document.addEventListener('DOMContentLoaded', async function () {
+
+    const logoutButton = document.getElementById('logoutbtn');
+    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+
     const quizData = await fetchQuizDetails();
 
     const token = localStorage.getItem('token');
     const params = new URLSearchParams(window.location.search);
     const QuizId = params.get('quizID');
+    if (!QuizId) {
+        window.location.href = '/LoggedInHome/LoggedInHome.html';
+        return;
+    }
 
     const QuizNameInput = document.getElementById('quizName');
     const QuizDescriptionInput = document.getElementById('quizDescription');
@@ -67,6 +87,21 @@ document.addEventListener('DOMContentLoaded',async function () {
 
     document.getElementById('quizType').innerText = quizData.quizType;
     document.getElementById('isMultipleAttemptAllowed').textContent = quizData.isMultipleAttemptAllowed
+
+    logoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        logoutModal.show();
+    });
+
+    confirmLogoutButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('userID');
+        localStorage.removeItem('role');
+
+        window.location.href = '/Login/Login.html';
+    });
+
 
 
     let currentPage = 1;
@@ -130,11 +165,11 @@ document.addEventListener('DOMContentLoaded',async function () {
 
     //SEARCH QUESTION FUNCTIONALITY
     function SortQuestions(query) {
-        console.log(query);
+        // console.log(query);
         if (query) {
-            console.log("if reached");
+            // console.log("if reached");
             filteredQuestions = questions.filter(question => question.questionText.toLowerCase().includes(query.toLowerCase()));
-            console.log(filteredQuestions);
+            // console.log(filteredQuestions);
         } else {
             filteredQuestions = questions;
         }
@@ -146,7 +181,7 @@ document.addEventListener('DOMContentLoaded',async function () {
 
     //SEARCH BUTTON
     searchButton.addEventListener('click', () => {
-        console.log(questions);
+        // console.log(questions);
         const query = searchQueryInput.value.trim();
         SortQuestions(query);
     });
@@ -185,9 +220,9 @@ document.addEventListener('DOMContentLoaded',async function () {
 
     // FILTER FUNCTIONALITY
     function filterQuestions(category, type, difficulty) {
-        console.log("Filter Criteria:", category, type, difficulty);
+        // console.log("Filter Criteria:", category, type, difficulty);
         filteredQuestions = questions.filter(question => {
-            console.log("Question Data:", question.category, question.questionType, question.difficultyLevel);
+            // console.log("Question Data:", question.category, question.questionType, question.difficultyLevel);
             const difficultyLevelInt = {
                 "Easy": 0,
                 "Medium": 1,
@@ -199,7 +234,7 @@ document.addEventListener('DOMContentLoaded',async function () {
                 (difficulty === "" || question.difficultyLevel === difficultyLevelInt);
         });
 
-        console.log("Filtered Questions:", filteredQuestions);
+        // console.log("Filtered Questions:", filteredQuestions);
         totalPages = Math.ceil(filteredQuestions.length / perPage);
         currentPage = 1;
         renderPagination(filteredQuestions, filteredQuestions.length, perPage, currentPage);
@@ -257,7 +292,7 @@ document.addEventListener('DOMContentLoaded',async function () {
             return;
         }
 
-        
+
 
         questions.forEach(question => {
             const questionCard = document.createElement('div');
@@ -318,62 +353,64 @@ document.addEventListener('DOMContentLoaded',async function () {
 
     //CREATE QUIZ
     function editQuiz() {
+        const confirmation = confirm("Are you sure to Edit the Quiz?");
+        if (confirmation) {
+            const quizName = QuizNameInput.value;
+            const quizDescription = QuizDescriptionInput.value;
+            const quizType = document.getElementById('quizType').value;
+            const isMultipleAttemptAllowed = document.getElementById('isMultipleAttemptAllowed').checked;
+            const timeLimit = parseInt(document.getElementById('timeLimit').value);
+            let timelimitString = ""
 
-        const quizName = QuizNameInput.value;
-        const quizDescription = QuizDescriptionInput.value;
-        const quizType = document.getElementById('quizType').value;
-        const isMultipleAttemptAllowed = document.getElementById('isMultipleAttemptAllowed').checked;
-        const timeLimit = parseInt(document.getElementById('timeLimit').value);
-        let timelimitString =""
+            // console.log(selectedQuestions);
 
-        console.log(selectedQuestions);
+            if (timeLimit < 10) {
+                timelimitString = `00:0${timeLimit}:00`;
+            }
+            else {
+                timelimitString = `00:${timeLimit}:00`;
+            }
 
-        if(timeLimit<10){
-            timelimitString =`00:0${timeLimit}:00`;
-        }
-        else{
-            timelimitString = `00:${timeLimit}:00`;
-        }
+            //QUIZ JSON DATA
+            const quizData = {
+                quizID: parseInt(QuizId),
+                quizName: quizName,
+                quizDescription: quizDescription,
+                quizType: quizType,
+                isMultipleAttemptAllowed: isMultipleAttemptAllowed,
+                timeLimit: timelimitString,
+                questionIds: selectedQuestions
+            };
 
-        //QUIZ JSON DATA
-        const quizData = {
-            quizID : parseInt(QuizId),
-            quizName: quizName,
-            quizDescription: quizDescription,
-            quizType: quizType,
-            isMultipleAttemptAllowed: isMultipleAttemptAllowed,
-            timeLimit: timelimitString,
-            questionIds: selectedQuestions
-        };
-
-        const apiUrl = 'http://localhost:5273/api/Quiz/EditQuiz';
-        fetch(apiUrl, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(quizData)
-        })
-            .then(response => {
-                console.log(quizData);
-                console.log(response);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
+            const apiUrl = 'http://localhost:5273/api/Quiz/EditQuiz';
+            fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(quizData)
             })
-            .then(data => {
-                console.log('Quiz created successfully:', data);
-                window.location.href = "/MyQuizzes/MyQuizzes.html"
-                // document.getElementById('quizForm').reset();
-                // selectedQuestions = [];
-                // renderQuestions(questions.slice(0, perPage));
-                // renderPagination(questions, totalQuestions, perPage, currentPage);
-            })
-            .catch(error => {
-                console.error('Error creating quiz:', error);
-            });
+                .then(response => {
+                    // console.log(quizData);
+                    // console.log(response);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // console.log('Quiz created successfully:', data);
+                    window.location.href = "/MyQuizzes/MyQuizzes.html"
+                    // document.getElementById('quizForm').reset();
+                    // selectedQuestions = [];
+                    // renderQuestions(questions.slice(0, perPage));
+                    // renderPagination(questions, totalQuestions, perPage, currentPage);
+                })
+                .catch(error => {
+                    console.error('Error creating quiz:', error);
+                });
+        }
     }
 
     //UPDATE CHECKED QUESTIONS
